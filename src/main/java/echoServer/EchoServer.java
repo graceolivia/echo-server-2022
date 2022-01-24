@@ -41,6 +41,7 @@ public class EchoServer {
             }
             System.err.println("Closing connection.");
             clientSocket.close();
+            serverSocket.close();
         }
 
     }
