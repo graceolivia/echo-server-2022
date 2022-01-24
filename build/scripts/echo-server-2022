@@ -201,7 +201,7 @@ fi
 
 set -- \
         -classpath "$CLASSPATH" \
-        echoServer \
+        echoServer.Main \
         "$@"
 
 # Use "xargs" to parse quoted args.
