@@ -19,4 +19,4 @@ test {
     useJUnitPlatform()
 }
 
-mainClassName = "echoServer.Main"
+mainClassName = "echoServer.EchoServer"

@@ -1,48 +1,36 @@
 package echoServer;
+import echoServer.outputManagement.ClientWriteable;
+import echoServer.outputManagement.ClientWriterFactory;
+import echoServer.socketManagement.Listenable;
+import echoServer.socketManagement.Listener;
+
 import java.io.*;
 import java.net.Socket;
-import java.net.ServerSocket;
-import java.net.*;
 
 public class EchoServer {
-    Listenable serverSocketWrapper;
-    public EchoServer(echoServer.Listenable serverSocketWrapper) {
-        this.serverSocketWrapper = serverSocketWrapper;
-    }
-//    public static void main(String args[]) {
-//
-//    }
 
-    public void run() throws IOException {
-        ServerSocketWrapper serverSocket = new ServerSocketWrapper();
-        int port = 8080;
-        serverSocket.bind(port);
-        System.err.println("Started server on port " + port);
+    public static void main(String[] args) throws IOException {
+        Listenable serverSocket = new Listener();
+        ClientWriteable clientWriterFactory = new ClientWriterFactory();
+        ClientReadable clientReaderFactory = new ClientReaderFactory();
+        Echoable echoer = new Echoer(serverSocket, clientReaderFactory, clientWriterFactory);
+        Socket clientSocket = echoer.startServer();
 
 
-        while (true) {
-            Socket clientSocket = serverSocket.serverSocket.accept();
-            System.err.println("Connected to client.");
-            InputStream in = clientSocket.getInputStream();
-            BufferedReader bufferReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            PrintWriter printer = new PrintWriter(clientSocket.getOutputStream(),true);
-            String message;
-            while((message = bufferReader.readLine()) != null) {
-                if (!message.equals("byebye")) {
-                    System.out.println("Echo :"+message);
-                    printer.println(message);
-
-                }
-                else {
-                    System.out.println("Byebye: "+message);
-                    break;
-                }
-
+        boolean should_loop_continue = true;
+        try {
+            while (should_loop_continue == true) {
+                should_loop_continue = echoer.readClientInput();
             }
-            System.err.println("Closing connection.");
-            clientSocket.close();
-            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
+        closeSockets(clientSocket, serverSocket);
     }
+
+    public static void closeSockets(Socket clientSocket, Listenable serverSocket) throws IOException {
+        System.err.println("Closing connection.");
+        clientSocket.close();
+        serverSocket.close();
+    };
 }
