@@ -5,9 +5,10 @@ import java.net.Socket;
 import java.net.*;
 
 public class Listener implements Listenable {
-    public ServerSocket serverSocket = new ServerSocket();
+    public ServerSocketInterface serverSocket;
 
-    public Listener() throws IOException {
+    public Listener(ServerSocketInterface serverSocket) throws IOException {
+        this.serverSocket = serverSocket;
     }
 
 
@@ -16,10 +17,11 @@ public class Listener implements Listenable {
         return serverSocket.accept();
     }
 
+
     public void bind(int port) throws IOException {
-        InetAddress address=InetAddress.getByName("localhost");
-        SocketAddress socketAddress=new InetSocketAddress(address, port);
-        serverSocket.bind(socketAddress);
+        //InetAddress address = InetAddress.getByName("localhost");
+        //SocketAddress socketAddress = new InetSocketAddress(address, port);
+        serverSocket.bind(port);
     }
 
 
