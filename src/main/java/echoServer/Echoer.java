@@ -1,32 +1,38 @@
 package echoServer;
+
 import echoServer.outputManagement.ClientWriteable;
-import echoServer.socketManagement.Listenable;
+import echoServer.socketManagement.ServerSocketInterface;
 
 import java.io.*;
 import java.net.Socket;
 
 public class Echoer implements Echoable {
-    Listenable listener;
+    ServerSocketInterface serverSocket;
     ClientReadable clientReaderFactory;
     ClientWriteable clientWriterFactory;
 
-    public Echoer(Listenable listener, ClientReadable clientReaderFactory, ClientWriteable clientWriterFactory) throws IOException {
-        this.listener = listener;
+    public Echoer(ServerSocketInterface serverSocket, ClientReadable clientReaderFactory, ClientWriteable clientWriterFactory) throws IOException {
+        this.serverSocket = serverSocket;
         this.clientWriterFactory = clientWriterFactory;
         this.clientReaderFactory = clientReaderFactory;
     }
 
     public Socket startServer() throws IOException {
         int port = 8080;
-        listener.bind(port);
+        serverSocket.bind(port);
         System.err.println("Started server on port " + port);
-        Socket clientSocket = listener.accept();
+        Socket clientSocket = serverSocket.accept();
         System.err.println("Connected to client.");
         return clientSocket;
     }
 
-    public boolean readClientInput() throws IOException {
+
+    public boolean readClientInput(Socket clientSocket) throws IOException {
+
+        BufferedReader bufferedReader = clientReaderFactory.makeReader(clientSocket);
+        PrintWriter printer = clientWriterFactory.makePrinter(clientSocket);
         String message;
+
         while((message = bufferedReader.readLine()) != null) {
             return interpretClientMessage(message, printer);
         }
