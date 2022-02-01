@@ -1,7 +1,5 @@
 package echoServer;
-
 import echoServer.socketManagement.ServerSocketInterface;
-
 import java.io.IOException;
 import java.net.Socket;
 
