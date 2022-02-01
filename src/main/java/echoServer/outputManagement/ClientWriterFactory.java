@@ -8,8 +8,9 @@ public class ClientWriterFactory implements ClientWriteable {
     public ClientWriterFactory() {
     }
 
-    public PrintWriter makePrinter(Socket clientSocket) throws IOException {
-        return new PrintWriter(clientSocket.getOutputStream(),true);
+    public ClientWriterInterface makePrinter(Socket clientSocket) throws IOException {
+        return new PrintWriterWrapper(clientSocket);
+
     }
 
 

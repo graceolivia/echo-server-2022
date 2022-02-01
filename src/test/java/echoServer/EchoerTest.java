@@ -1,9 +1,7 @@
 package echoServer;
-import echoServer.outputManagement.ClientWriteable;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,7 +14,7 @@ public class EchoerTest {
         Socket socket = new Socket();
         MockServerSocketWrapper mockServerSocket = new MockServerSocketWrapper(socket);
         MockClientWriterFactory mockClientWriterFactory = new MockClientWriterFactory();
-        MockClientReader mockClientReader = new MockClientReader();
+        MockClientReaderFactory mockClientReader = new MockClientReaderFactory();
         Echoer echoer = new Echoer(mockServerSocket, mockClientReader, mockClientWriterFactory);
 
 
@@ -28,20 +26,21 @@ public class EchoerTest {
 
     @Test
     void testReadClientInputCallsPrintWriterPrintLn() throws IOException {
-
-        Socket socket = new Socket();
-        MockServerSocketWrapper mockServerSocket = new MockServerSocketWrapper(socket);
-        MockClientWriterFactory mockClientWriterFactory = new MockClientWriterFactory();
-        MockClientReader mockClientReader = new MockClientReader();
-
-        Echoer echoer = new Echoer(mockServerSocket, mockClientReader, mockClientWriterFactory);
-        //Socket clientSocket = echoer.startServer();
-        ServerSocket server = new ServerSocket(8080);
-        Socket theSocket = new Socket("localhost", 8080);
-        echoer.readClientInput(theSocket);
-        // assertEquals(socket, clientSocket);
-
-        assert(mockClientWriterFactory.printWriterWasCalled);
+    String input = "string";
+    ClientWriterInterface mockPrintWriter =
+//        Socket socket = new Socket();
+//        MockServerSocketWrapper mockServerSocket = new MockServerSocketWrapper(socket);
+//        MockClientWriterFactory mockClientWriterFactory = new MockClientWriterFactory();
+//        MockClientReader mockClientReader = new MockClientReader();
+//
+//        Echoer echoer = new Echoer(mockServerSocket, mockClientReader, mockClientWriterFactory);
+//        //Socket clientSocket = echoer.startServer();
+//        ServerSocket server = new ServerSocket(8080);
+//        Socket theSocket = new Socket("localhost", 8080);
+//        echoer.readClientInput(theSocket);
+//        // assertEquals(socket, clientSocket);
+//
+//        assert(mockClientWriterFactory.printWriterWasCalled);
 
 
     }

@@ -5,7 +5,8 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class ClientReaderFactory implements ClientReadable {
-    public BufferedReader makeReader(Socket clientSocket) throws IOException {
-       return new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+    public ClientReaderInterface makeReader(Socket clientSocket) throws IOException {
+        ClientReaderInterface  bufferedReaderWrapper = new BufferedReaderWrapper(clientSocket);
+       return bufferedReaderWrapper;
     }
 }

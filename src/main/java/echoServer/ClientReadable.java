@@ -5,5 +5,5 @@ import java.net.Socket;
 
 public interface ClientReadable {
 
-    public BufferedReader makeReader(Socket clientSocket) throws IOException;
+    public ClientReaderInterface makeReader(Socket clientSocket) throws IOException;
 }
