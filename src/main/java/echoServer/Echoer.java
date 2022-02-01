@@ -1,6 +1,7 @@
 package echoServer;
 
 import echoServer.outputManagement.ClientWriteable;
+import echoServer.outputManagement.ClientWriterInterface;
 import echoServer.socketManagement.ServerSocketInterface;
 
 import java.io.*;
@@ -29,8 +30,8 @@ public class Echoer implements Echoable {
 
     public boolean readClientInput(Socket clientSocket) throws IOException {
 
-        BufferedReader bufferedReader = clientReaderFactory.makeReader(clientSocket);
-        PrintWriter printer = clientWriterFactory.makePrinter(clientSocket);
+        ClientReaderInterface bufferedReader = clientReaderFactory.makeReader(clientSocket);
+        ClientWriterInterface printer = clientWriterFactory.makePrinter(clientSocket);
         String message;
 
         while((message = bufferedReader.readLine()) != null) {
@@ -39,7 +40,7 @@ public class Echoer implements Echoable {
         return false;
     }
 
-    private boolean interpretClientMessage(String message, PrintWriter printer) throws IOException {
+    private boolean interpretClientMessage(String message, ClientWriterInterface printer) throws IOException {
         if (!message.equals("byebye")) {
             System.out.println("Echo: "+message);
             printer.println("Echo: "+message);
