@@ -2,7 +2,7 @@ package echoServer;
 
 public class MockBufferedReaderWrapper implements ClientReaderInterface {
     private String input;
-    public boolean readlineWasCalled = false;
+    public boolean readLineWasCalled = false;
 
 //    MockBufferedReaderWrapper should have a constructor/initializer
 //    that takes some String
@@ -17,7 +17,7 @@ public class MockBufferedReaderWrapper implements ClientReaderInterface {
 
     @Override
     public String readLine() {
-        readlineWasCalled = true;
+        readLineWasCalled = true;
         return input;
     }
 }
