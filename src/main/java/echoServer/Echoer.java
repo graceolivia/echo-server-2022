@@ -27,7 +27,6 @@ public class Echoer implements Echoable {
         return clientSocket;
     }
 
-
     public boolean readClientInput(Socket clientSocket) throws IOException {
 
         ClientReaderInterface bufferedReader = clientReaderFactory.makeReader(clientSocket);
@@ -51,5 +50,4 @@ public class Echoer implements Echoable {
             return false;
         }
     }
-
 }

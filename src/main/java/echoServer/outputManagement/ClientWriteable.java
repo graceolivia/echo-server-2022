@@ -1,5 +1,4 @@
 package echoServer.outputManagement;
-
 import java.io.IOException;
 import java.net.Socket;
 

@@ -71,7 +71,7 @@ set CLASSPATH=%APP_HOME%\lib\echo-server-2022-1.0-SNAPSHOT.jar
 
 
 @rem Execute echo-server-2022
-"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %ECHO_SERVER_2022_OPTS%  -classpath "%CLASSPATH%" echoServer.Main %*
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %ECHO_SERVER_2022_OPTS%  -classpath "%CLASSPATH%" echoServer.EchoServer %*
 
 :end
 @rem End local scope for the variables with windows NT shell

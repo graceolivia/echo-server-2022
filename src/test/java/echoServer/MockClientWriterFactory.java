@@ -4,7 +4,6 @@ import echoServer.outputManagement.ClientWriteable;
 import echoServer.outputManagement.ClientWriterInterface;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.Socket;
 
 public class MockClientWriterFactory implements ClientWriteable {
@@ -20,7 +19,7 @@ public class MockClientWriterFactory implements ClientWriteable {
     @Override
     public ClientWriterInterface makePrinter(Socket clientSocket) throws IOException {
         boolean printWriterWasCalled = true;
-        return null;
+        return printer;
     }
 
 }

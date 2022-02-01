@@ -1,5 +1,4 @@
 package echoServer;
-
 import java.io.IOException;
 import java.net.Socket;
 
@@ -13,6 +12,6 @@ class MockClientReaderFactory implements ClientReadable {
 
     @Override
     public ClientReaderInterface makeReader(Socket clientSocket) throws IOException {
-        return null;
+        return bufferedReader;
     }
 }
