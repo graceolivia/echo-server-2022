@@ -4,7 +4,7 @@ import echoServer.outputManagement.ClientWriteable;
 import echoServer.outputManagement.ClientWriterInterface;
 import echoServer.socketManagement.ServerSocketInterface;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.Socket;
 
 public class Echoer implements Echoable {
