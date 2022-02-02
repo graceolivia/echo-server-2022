@@ -6,12 +6,11 @@ import java.net.Socket;
 
 public class BufferedReaderWrapper implements ClientReadable {
 
-    public Socket clientSocket;
+
     public BufferedReader bufferedReader;
 
-    public BufferedReaderWrapper(Socket clientSocket) throws IOException {
-        this.clientSocket = clientSocket;
-        this.bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+    public BufferedReaderWrapper(BufferedReader bufferedReader) throws IOException {
+        this.bufferedReader = bufferedReader;
     }
 
     @Override
