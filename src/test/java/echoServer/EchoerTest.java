@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class EchoerTest {
 
     @Test
-    void testReadClientInputCallsBufferedReaderReadLine() throws IOException {
+    void testThatStartServerReturnsASocket() throws IOException {
         Socket socket = new Socket();
         String input = "hello";
         MockServerSocketWrapper mockServerSocket = new MockServerSocketWrapper(socket);
