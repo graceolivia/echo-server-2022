@@ -9,8 +9,7 @@ import java.net.Socket;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EchoerTest {
-    // a mock for ClientSocket
-    // a mock for ClientWriter
+
     @Test
     void testReadClientInputCallsBufferedReaderReadLine() throws IOException {
         Socket socket = new Socket();

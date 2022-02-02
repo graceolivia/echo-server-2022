@@ -19,13 +19,6 @@ public class EchoServer {
         Echoable echoer = new Echoer(serverSocket, clientReaderFactory, clientWriterFactory);
         Socket clientSocket = echoer.startServer();
 
-
-//        PrintWriter clientWriter = clientWriterFactory.makePrinter(clientSocket);
-//
-
-//        BufferedReader clientReader = clientReaderFactory.makeReader(clientSocket);
-
-
         boolean should_loop_continue = true;
         try {
             while (should_loop_continue == true) {

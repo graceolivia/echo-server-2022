@@ -1,5 +1,4 @@
 package echoServer;
-
 import java.io.IOException;
 
 public interface ClientReaderInterface {
