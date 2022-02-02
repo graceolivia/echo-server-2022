@@ -20,7 +20,7 @@ public class MockClientWriterFactory implements ClientWriteable {
     @Override
     public ClientWriterInterface makePrinter(Socket clientSocket) throws IOException {
         boolean printWriterWasCalled = true;
-        return null;
+        return printer;
     }
 
 }

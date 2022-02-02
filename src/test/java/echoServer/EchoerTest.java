@@ -13,16 +13,19 @@ public class EchoerTest {
     // a mock for ClientWriter
     @Test
     void testReadClientInputCallsBufferedReaderReadLine() throws IOException {
-//        Socket socket = new Socket();
-//        MockServerSocketWrapper mockServerSocket = new MockServerSocketWrapper(socket);
-//        MockClientWriterFactory mockClientWriterFactory = new MockClientWriterFactory();
-//        MockClientReaderFactory mockClientReader = new MockClientReaderFactory();
-//        Echoer echoer = new Echoer(mockServerSocket, mockClientReader, mockClientWriterFactory);
-//
-//
-//        Socket clientSocket = echoer.startServer();
-//        assertEquals(socket, clientSocket);
-//        assert(mockServerSocket.acceptHasBeenCalled);
+        Socket socket = new Socket();
+        String input = "hello";
+        MockServerSocketWrapper mockServerSocket = new MockServerSocketWrapper(socket);
+        MockPrintWriterWrapper mockPrintWriter =  new MockPrintWriterWrapper();
+        MockBufferedReaderWrapper mockBufferedReader = new MockBufferedReaderWrapper(input);
+        MockClientWriterFactory mockClientWriterFactory = new MockClientWriterFactory(mockPrintWriter);
+        MockClientReaderFactory mockClientReader = new MockClientReaderFactory(mockBufferedReader);
+        Echoer echoer = new Echoer(mockServerSocket, mockClientReader, mockClientWriterFactory);
+
+
+        Socket clientSocket = echoer.startServer();
+        assertEquals(socket, clientSocket);
+        assert(mockServerSocket.acceptHasBeenCalled);
 
     }
 
@@ -40,7 +43,7 @@ public class EchoerTest {
     echoer.readClientInput(socket);
 
     assertTrue(mockBufferedReader.readLineWasCalled);
-    assertEquals(mockPrintWriter.printlnWasCalledWith, input);
+    assertEquals(mockPrintWriter.printlnWasCalledWith, "Echo: " + input);
 //        Socket socket = new Socket();
 //        MockServerSocketWrapper mockServerSocket = new MockServerSocketWrapper(socket);
 //        MockClientWriterFactory mockClientWriterFactory = new MockClientWriterFactory();
