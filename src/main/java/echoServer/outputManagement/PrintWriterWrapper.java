@@ -10,7 +10,7 @@ public class PrintWriterWrapper implements ClientWriterInterface {
 
     public PrintWriterWrapper(Socket clientSocket) throws IOException {
         this.clientSocket = clientSocket;
-        this.printer = new PrintWriter(clientSocket.getOutputStream(),true);
+        this.printer = new PrintWriter(clientSocket.getOutputStream(), true);
     }
 
     public void println(String message) throws IOException {
