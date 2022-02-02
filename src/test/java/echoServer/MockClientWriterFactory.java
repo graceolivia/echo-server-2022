@@ -1,23 +1,23 @@
 package echoServer;
 
+import echoServer.outputManagement.ClientWriteableFactory;
 import echoServer.outputManagement.ClientWriteable;
-import echoServer.outputManagement.ClientWriterInterface;
 
 import java.io.IOException;
 import java.net.Socket;
 
-public class MockClientWriterFactory implements ClientWriteable {
+public class MockClientWriterFactory implements ClientWriteableFactory {
     
     public static Socket socket;
-    private final ClientWriterInterface printer;
+    private final ClientWriteable printer;
     boolean printWriterWasCalled = false;
 
-    public MockClientWriterFactory(ClientWriterInterface printer) {
+    public MockClientWriterFactory(ClientWriteable printer) {
         this.printer = printer;
     }
 
     @Override
-    public ClientWriterInterface makePrinter(Socket clientSocket) throws IOException {
+    public ClientWriteable makePrinter(Socket clientSocket) throws IOException {
         boolean printWriterWasCalled = true;
         return printer;
     }

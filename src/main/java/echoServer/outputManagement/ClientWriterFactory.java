@@ -2,15 +2,10 @@ package echoServer.outputManagement;
 import java.io.IOException;
 import java.net.Socket;
 
-public class ClientWriterFactory implements ClientWriteable {
+public class ClientWriterFactory implements ClientWriteableFactory {
 
-    public ClientWriterFactory() {
-    }
-
-    public ClientWriterInterface makePrinter(Socket clientSocket) throws IOException {
+    public ClientWriteable makePrinter(Socket clientSocket) throws IOException {
         return new PrintWriterWrapper(clientSocket);
-
     }
-
 
 }

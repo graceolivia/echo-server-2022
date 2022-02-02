@@ -1,7 +1,7 @@
 package echoServer;
-import echoServer.outputManagement.ClientWriteable;
+import echoServer.outputManagement.ClientWriteableFactory;
 import echoServer.outputManagement.ClientWriterFactory;
-import echoServer.outputManagement.ClientWriterInterface;
+import echoServer.outputManagement.ClientWriteable;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -16,8 +16,8 @@ public class ClientWriterFactoryTest {
     void testMakePrinterReturnsAPrintWriter() throws IOException {
         ServerSocket server = new ServerSocket(8080);
         Socket socket = new Socket("localhost", 8080);
-        ClientWriteable clientWriterFactory = new ClientWriterFactory();
-        ClientWriterInterface printer = clientWriterFactory.makePrinter(socket);
-        assertInstanceOf(ClientWriterInterface.class, printer);
+        ClientWriteableFactory clientWriterFactory = new ClientWriterFactory();
+        ClientWriteable printer = clientWriterFactory.makePrinter(socket);
+        assertInstanceOf(ClientWriteable.class, printer);
     }
 }

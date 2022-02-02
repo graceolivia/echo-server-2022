@@ -1,6 +1,5 @@
 package echoServer;
-import echoServer.outputManagement.ClientWriteable;
-import echoServer.outputManagement.ClientWriterInterface;
+import echoServer.outputManagement.ClientWriteableFactory;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -35,8 +34,8 @@ public class EchoerTest {
         MockServerSocketWrapper mockServerSocket = new MockServerSocketWrapper(socket);
         MockPrintWriterWrapper mockPrintWriter =  new MockPrintWriterWrapper();
         MockBufferedReaderWrapper mockBufferedReader = new MockBufferedReaderWrapper(input);
-        ClientWriteable mockClientWriterFactory = new MockClientWriterFactory(mockPrintWriter);
-        ClientReadable mockClientReaderFactory = new MockClientReaderFactory(mockBufferedReader);
+        ClientWriteableFactory mockClientWriterFactory = new MockClientWriterFactory(mockPrintWriter);
+        ClientReadableFactory mockClientReaderFactory = new MockClientReaderFactory(mockBufferedReader);
         Echoer echoer = new Echoer(mockServerSocket, mockClientReaderFactory, mockClientWriterFactory);
 
         echoer.readClientInput(socket);

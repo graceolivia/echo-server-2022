@@ -1,5 +1,5 @@
 package echoServer;
-import echoServer.outputManagement.ClientWriteable;
+import echoServer.outputManagement.ClientWriteableFactory;
 import echoServer.outputManagement.ClientWriterFactory;
 
 import echoServer.socketManagement.ServerSocketInterface;
@@ -12,8 +12,8 @@ public class EchoServer {
 
     public static void main(String[] args) throws IOException {
         ServerSocketInterface serverSocket = new ServerSocketWrapper();
-        ClientWriteable clientWriterFactory = new ClientWriterFactory();
-        ClientReadable clientReaderFactory = new ClientReaderFactory();
+        ClientWriteableFactory clientWriterFactory = new ClientWriterFactory();
+        ClientReadableFactory clientReaderFactory = new ClientReaderFactory();
         Echoable echoer = new Echoer(serverSocket, clientReaderFactory, clientWriterFactory);
         Socket clientSocket = echoer.startServer();
 

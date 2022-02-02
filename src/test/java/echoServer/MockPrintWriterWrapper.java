@@ -1,11 +1,11 @@
 package echoServer;
 
-import echoServer.outputManagement.ClientWriterInterface;
+import echoServer.outputManagement.ClientWriteable;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class MockPrintWriterWrapper implements ClientWriterInterface {
+public class MockPrintWriterWrapper implements ClientWriteable {
     String printlnWasCalledWith = new String();
     public PrintWriter printer;
 
