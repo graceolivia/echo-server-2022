@@ -1,6 +1,6 @@
 package echoServer;
 
-public class MockBufferedReaderWrapper implements ClientReaderInterface {
+public class MockBufferedReaderWrapper implements ClientReadable {
     private String input;
     public boolean readLineWasCalled = false;
 

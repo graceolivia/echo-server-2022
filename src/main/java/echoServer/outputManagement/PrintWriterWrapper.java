@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class PrintWriterWrapper implements ClientWriterInterface {
+public class PrintWriterWrapper implements ClientWriteable {
 
     public Socket clientSocket;
     public PrintWriter printer;

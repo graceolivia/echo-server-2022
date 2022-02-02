@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-public class BufferedReaderWrapper implements ClientReaderInterface {
+public class BufferedReaderWrapper implements ClientReadable {
 
     public Socket clientSocket;
     public BufferedReader bufferedReader;

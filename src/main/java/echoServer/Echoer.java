@@ -1,7 +1,7 @@
 package echoServer;
 
+import echoServer.outputManagement.ClientWriteableFactory;
 import echoServer.outputManagement.ClientWriteable;
-import echoServer.outputManagement.ClientWriterInterface;
 import echoServer.socketManagement.ServerSocketInterface;
 
 import java.io.IOException;
@@ -9,10 +9,10 @@ import java.net.Socket;
 
 public class Echoer implements Echoable {
     ServerSocketInterface serverSocket;
-    ClientReadable clientReaderFactory;
-    ClientWriteable clientWriterFactory;
+    ClientReadableFactory clientReaderFactory;
+    ClientWriteableFactory clientWriterFactory;
 
-    public Echoer(ServerSocketInterface serverSocket, ClientReadable clientReaderFactory, ClientWriteable clientWriterFactory) throws IOException {
+    public Echoer(ServerSocketInterface serverSocket, ClientReadableFactory clientReaderFactory, ClientWriteableFactory clientWriterFactory) throws IOException {
         this.serverSocket = serverSocket;
         this.clientWriterFactory = clientWriterFactory;
         this.clientReaderFactory = clientReaderFactory;
@@ -29,8 +29,8 @@ public class Echoer implements Echoable {
 
     public boolean readClientInput(Socket clientSocket) throws IOException {
 
-        ClientReaderInterface bufferedReader = clientReaderFactory.makeReader(clientSocket);
-        ClientWriterInterface printer = clientWriterFactory.makePrinter(clientSocket);
+        ClientReadable bufferedReader = clientReaderFactory.makeReader(clientSocket);
+        ClientWriteable printer = clientWriterFactory.makePrinter(clientSocket);
         String message;
 
         while((message = bufferedReader.readLine()) != null) {
@@ -39,7 +39,7 @@ public class Echoer implements Echoable {
         return false;
     }
 
-    private boolean interpretClientMessage(String message, ClientWriterInterface printer) throws IOException {
+    private boolean interpretClientMessage(String message, ClientWriteable printer) throws IOException {
         if (!message.equals("byebye")) {
             System.out.println("Echo: "+message);
             printer.println("Echo: "+message);
