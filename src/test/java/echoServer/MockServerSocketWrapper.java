@@ -8,6 +8,7 @@ public class MockServerSocketWrapper implements ServerSocketInterface {
     public boolean acceptHasBeenCalled = false;
     public int bindHasBeenCalledWith;
     public boolean closeHasBeenCalled = false;
+
     public MockServerSocketWrapper(Socket clientSocket) throws IOException {
         this.clientSocket = clientSocket;
     }
