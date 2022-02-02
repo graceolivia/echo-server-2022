@@ -13,6 +13,6 @@ class MockClientReaderFactory implements ClientReadable {
 
     @Override
     public ClientReaderInterface makeReader(Socket clientSocket) throws IOException {
-        return null;
+        return bufferedReader;
     }
 }
