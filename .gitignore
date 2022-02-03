@@ -48,3 +48,5 @@ gradlew*
 build/*
 /.idea/
 /gradle/
+.gradle/
+.idea/
