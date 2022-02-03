@@ -1,4 +1,6 @@
+
 # Echo Server
+
 An echo server which opens a server socket and client socket and allows messages typed into the terminal to be bounced back to the user.
 
 ## Instructions For Running With Gradle
