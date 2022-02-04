@@ -9,8 +9,6 @@ import echoServer.socketManagement.ServerSocketInterface;
 import java.io.IOException;
 import java.net.Socket;
 
-import static echoServer.HTTP.StatusCode.PAGE_NOT_FOUND;
-
 public class Echoer implements Echoable {
     ServerSocketInterface serverSocket;
     ClientReadableFactory clientReaderFactory;
@@ -36,18 +34,28 @@ public class Echoer implements Echoable {
         ClientReadable bufferedReader = clientReaderFactory.makeReader(clientSocket);
         ClientWriteable printer = clientWriterFactory.makePrinter(clientSocket);
         String message;
+        message = bufferedReader.readLine();
+        System.out.println(message);
+        StatusCode statusCode = StatusCode.PAGE_NOT_FOUND;
+        HTTPResponse response = new HTTPResponse(statusCode);
+        String responseText = response.toString(statusCode);
+        return interpretClientMessage(responseText, printer);
 
-        while((message = bufferedReader.readLine()) != null) {
-            StatusCode statusCode = StatusCode.PAGE_NOT_FOUND;
-            HTTPResponse response = new HTTPResponse(statusCode);
-            String responseText = response.buildResponse(statusCode);
-            return interpretClientMessage(responseText, printer);
-        }
-        return false;
+
+
+//
+//        while((message = bufferedReader.readLine()) != null) {
+//            System.out.println(message);
+//            StatusCode statusCode = StatusCode.PAGE_NOT_FOUND;
+//            HTTPResponse response = new HTTPResponse(statusCode);
+//            String responseText = response.toString(statusCode);
+//            return interpretClientMessage(responseText, printer);
+//        }
+//        return false;
     }
 
     private boolean interpretClientMessage(String message, ClientWriteable printer) throws IOException {
-        if (!message.equals("byebye")) {
+        if (!message.equals("Connection: close")) {
             System.out.println(message);
             printer.println(message);
             return true;

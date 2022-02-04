@@ -29,7 +29,7 @@ public class EchoerTest {
 
     @Test
     void testReadClientInputCallsPrintWriterPrintLn() throws IOException {
-        String input = "string";
+        String input = "HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\n";
         Socket socket = new Socket();
         MockServerSocketWrapper mockServerSocket = new MockServerSocketWrapper(socket);
         MockPrintWriterWrapper mockPrintWriter =  new MockPrintWriterWrapper();
@@ -41,7 +41,7 @@ public class EchoerTest {
         echoer.readClientInput(socket);
 
         assertTrue(mockBufferedReader.readLineWasCalled);
-        assertEquals(mockPrintWriter.printlnWasCalledWith, "Echo: " + input);
+        assertEquals(mockPrintWriter.printlnWasCalledWith, input);
 
     }
 }
