@@ -48,8 +48,8 @@ public class Echoer implements Echoable {
 
     private boolean interpretClientMessage(String message, ClientWriteable printer) throws IOException {
         if (!message.equals("byebye")) {
-            System.out.println("Response: "+message);
-            printer.println("Response: "+message);
+            System.out.println(message);
+            printer.println(message);
             return true;
         }
         else {
