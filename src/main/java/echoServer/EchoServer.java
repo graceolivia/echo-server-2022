@@ -19,13 +19,15 @@ public class EchoServer {
 
         boolean should_loop_continue = true;
         try {
-            while (should_loop_continue == true) {
-                should_loop_continue = echoer.readClientInput(clientSocket);
+           while (should_loop_continue == true) {
+            // while (true) {
+                should_loop_continue = true;
+                echoer.readClientInput(clientSocket);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        closeSockets(clientSocket, serverSocket);
+       // closeSockets(clientSocket, serverSocket);
     }
 
     public static void closeSockets(Socket clientSocket, ServerSocketInterface serverSocket) throws IOException {
