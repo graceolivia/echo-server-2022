@@ -23,12 +23,14 @@ public class BufferedReaderWrapper implements ClientReadable {
         String line;
         String message = null;
         try {
+            StringBuilder sb = new StringBuilder();
             while ((line = bufferedReader.readLine()) != null)
             {
-                String[] tokens = line.split("\\s");
-                message = Arrays.toString(tokens);
+                sb.append(line);
+                if (line.equals("")) { break; }
             }
             bufferedReader.close();
+            return sb.toString();
         } catch (IOException e) {
             e.printStackTrace();
         }
