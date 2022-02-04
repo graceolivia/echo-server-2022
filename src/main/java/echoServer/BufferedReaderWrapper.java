@@ -1,6 +1,7 @@
 package echoServer;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class BufferedReaderWrapper implements ClientReadable {
@@ -19,8 +20,19 @@ public class BufferedReaderWrapper implements ClientReadable {
 
     @Override
     public String readAllLines() throws IOException {
-        return bufferedReader.lines()
-                .collect(Collectors.joining(System.lineSeparator()));
+        String line;
+        String message = null;
+        try {
+            while ((line = bufferedReader.readLine()) != null)
+            {
+                String[] tokens = line.split("\\s");
+                message = Arrays.toString(tokens);
+            }
+            bufferedReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return message;
     }
 
 }
