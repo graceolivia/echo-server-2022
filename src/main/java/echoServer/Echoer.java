@@ -40,7 +40,10 @@ public class Echoer implements Echoable {
         ClientWriteable printer = clientWriterFactory.makePrinter(clientSocket);
         String message;
         message = bufferedReader.readAllLines();
-        if (!message.equals("")) {
+        if (message == null) {
+            return interpretClientMessage("error", printer);
+        }
+            if (!message.equals("")) {
             StatusCode statusCode = StatusCode.PAGE_NOT_FOUND;
             String responseText = statusCode.httpResponse;
             return interpretClientMessage(responseText, printer);
