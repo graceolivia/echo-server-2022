@@ -17,17 +17,14 @@ public class EchoServer {
         Echoable echoer = new Echoer(serverSocket, clientReaderFactory, clientWriterFactory);
         Socket clientSocket = echoer.startServer();
 
-        boolean should_loop_continue = true;
         try {
-           while (should_loop_continue == true) {
-            // while (true) {
-                should_loop_continue = true;
-                echoer.readClientInput(clientSocket);
+           while (true) {
+               echoer.readClientInput(clientSocket);
+               clientSocket = echoer.keepListening();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-       // closeSockets(clientSocket, serverSocket);
     }
 
     public static void closeSockets(Socket clientSocket, ServerSocketInterface serverSocket) throws IOException {

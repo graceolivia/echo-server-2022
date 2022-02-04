@@ -1,11 +1,8 @@
 package echoServer;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class BufferedReaderWrapper implements ClientReadable {
-
 
     public BufferedReader bufferedReader;
 
@@ -20,21 +17,21 @@ public class BufferedReaderWrapper implements ClientReadable {
 
     @Override
     public String readAllLines() throws IOException {
+        String CRLF = "\r\n";
         String line;
-        String message = null;
+        StringBuilder sb = new StringBuilder();
         try {
-            StringBuilder sb = new StringBuilder();
             while ((line = bufferedReader.readLine()) != null)
             {
                 sb.append(line);
+                sb.append(CRLF);
                 if (line.equals("")) { break; }
             }
-            bufferedReader.close();
             return sb.toString();
         } catch (IOException e) {
             e.printStackTrace();
+            return sb.toString();
         }
-        return message;
     }
 
 }
