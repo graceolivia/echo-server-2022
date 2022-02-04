@@ -34,7 +34,7 @@ public class Echoer implements Echoable {
         ClientReadable bufferedReader = clientReaderFactory.makeReader(clientSocket);
         ClientWriteable printer = clientWriterFactory.makePrinter(clientSocket);
         String message;
-        message = bufferedReader.readLine();
+        message = bufferedReader.readAllLines();
         System.out.println(message);
         StatusCode statusCode = StatusCode.PAGE_NOT_FOUND;
         HTTPResponse response = new HTTPResponse(statusCode);

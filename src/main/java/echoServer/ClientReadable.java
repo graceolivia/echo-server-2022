@@ -5,5 +5,5 @@ import java.io.IOException;
 public interface ClientReadable {
 
     public String readLine() throws IOException;
-    String readAllLines() throws IOException;
+    public String readAllLines() throws IOException;
 }

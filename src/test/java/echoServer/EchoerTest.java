@@ -27,21 +27,21 @@ public class EchoerTest {
 
     }
 
-    @Test
-    void testReadClientInputCallsPrintWriterPrintLn() throws IOException {
-        String input = "HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\n";
-        Socket socket = new Socket();
-        MockServerSocketWrapper mockServerSocket = new MockServerSocketWrapper(socket);
-        MockPrintWriterWrapper mockPrintWriter =  new MockPrintWriterWrapper();
-        MockBufferedReaderWrapper mockBufferedReader = new MockBufferedReaderWrapper(input);
-        ClientWriteableFactory mockClientWriterFactory = new MockClientWriterFactory(mockPrintWriter);
-        ClientReadableFactory mockClientReaderFactory = new MockClientReaderFactory(mockBufferedReader);
-        Echoer echoer = new Echoer(mockServerSocket, mockClientReaderFactory, mockClientWriterFactory);
-
-        echoer.readClientInput(socket);
-
-        assertTrue(mockBufferedReader.readLineWasCalled);
-        assertEquals(mockPrintWriter.printlnWasCalledWith, input);
-
-    }
+//    @Test
+//    void testReadClientInputCallsPrintWriterPrintLn() throws IOException {
+//        String input = "HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\n";
+//        Socket socket = new Socket();
+//        MockServerSocketWrapper mockServerSocket = new MockServerSocketWrapper(socket);
+//        MockPrintWriterWrapper mockPrintWriter =  new MockPrintWriterWrapper();
+//        MockBufferedReaderWrapper mockBufferedReader = new MockBufferedReaderWrapper(input);
+//        ClientWriteableFactory mockClientWriterFactory = new MockClientWriterFactory(mockPrintWriter);
+//        ClientReadableFactory mockClientReaderFactory = new MockClientReaderFactory(mockBufferedReader);
+//        Echoer echoer = new Echoer(mockServerSocket, mockClientReaderFactory, mockClientWriterFactory);
+//
+//        echoer.readClientInput(socket);
+//
+//        assertTrue(mockBufferedReader.readLineWasCalled);
+//        assertEquals(mockPrintWriter.printlnWasCalledWith, input);
+//
+//    }
 }
