@@ -13,12 +13,12 @@ public class HTTPResponse {
     }
 
 
-    public String buildResponse(StatusCode statusCode){
+    public static String buildResponse(StatusCode statusCode){
         switch(statusCode){
             case PAGE_NOT_FOUND:
                 return "HTTP/1.0 404 Not Found\n";
         }
-        return "Meow";
+        return "This shouldn't happen.";
     }
 
 }
