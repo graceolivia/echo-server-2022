@@ -10,10 +10,6 @@ public class BufferedReaderWrapper implements ClientReadable {
         this.bufferedReader = bufferedReader;
     }
 
-    @Override
-    public String readLine() throws IOException {
-        return bufferedReader.readLine();
-    }
 
     @Override
     public String readAllLines() throws IOException {

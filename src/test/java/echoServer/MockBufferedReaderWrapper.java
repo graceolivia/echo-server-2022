@@ -12,13 +12,8 @@ public class MockBufferedReaderWrapper implements ClientReadable {
     }
 
     @Override
-    public String readLine() {
-        readLineWasCalled = true;
-        return input;
-    }
-
-    @Override
     public String readAllLines() throws IOException {
+        readLineWasCalled = true;
         return null;
     }
 }
