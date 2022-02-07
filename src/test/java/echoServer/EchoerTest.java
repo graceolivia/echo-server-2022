@@ -1,6 +1,8 @@
 package echoServer;
+import echoServer.http.StatusCode;
 import echoServer.outputManagement.ClientWriteableFactory;
 import org.junit.jupiter.api.Test;
+
 
 import java.io.IOException;
 import java.net.Socket;
@@ -29,7 +31,13 @@ public class EchoerTest {
 
     @Test
     void testReadClientInputCallsPrintWriterPrintLn() throws IOException {
-        String input = "string";
+
+        String expectedResult = StatusCode.PAGE_NOT_FOUND.httpResponse;
+
+        String input = "GET / HTTP/1.1\r\n" +
+                "Host: localhost:5000\r\n" +
+                "User-Agent: curl/7.64.1\r\n" +
+                "Accept: */*\r\n\r\n";
         Socket socket = new Socket();
         MockServerSocketWrapper mockServerSocket = new MockServerSocketWrapper(socket);
         MockPrintWriterWrapper mockPrintWriter =  new MockPrintWriterWrapper();
@@ -41,7 +49,6 @@ public class EchoerTest {
         echoer.readClientInput(socket);
 
         assertTrue(mockBufferedReader.readLineWasCalled);
-        assertEquals(mockPrintWriter.printlnWasCalledWith, "Echo: " + input);
-
+        assertEquals(expectedResult, mockPrintWriter.printlnWasCalledWith);
     }
 }

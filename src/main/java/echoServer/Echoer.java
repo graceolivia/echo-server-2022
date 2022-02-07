@@ -1,5 +1,6 @@
 package echoServer;
 
+import echoServer.http.StatusCode;
 import echoServer.outputManagement.ClientWriteableFactory;
 import echoServer.outputManagement.ClientWriteable;
 import echoServer.socketManagement.ServerSocketInterface;
@@ -19,35 +20,61 @@ public class Echoer implements Echoable {
     }
 
     public Socket startServer() throws IOException {
-        int port = 8080;
+        int port = 5000;
         serverSocket.bind(port);
         System.err.println("Started server on port " + port);
+        return keepListening();
+
+    }
+
+    public Socket keepListening() throws IOException {
         Socket clientSocket = serverSocket.accept();
         System.err.println("Connected to client.");
         return clientSocket;
     }
 
-    public boolean readClientInput(Socket clientSocket) throws IOException {
+    public void readClientInput(Socket clientSocket) throws IOException {
 
         ClientReadable bufferedReader = clientReaderFactory.makeReader(clientSocket);
         ClientWriteable printer = clientWriterFactory.makePrinter(clientSocket);
-        String message;
-
-        while((message = bufferedReader.readLine()) != null) {
-            return interpretClientMessage(message, printer);
+        String httpRequest;
+        httpRequest = readAllLines(bufferedReader);
+        if (httpRequest == null) {
+            StatusCode statusCode = StatusCode.BAD_REQUEST;
+            String responseText = statusCode.httpResponse;
+            printServerResponse(responseText, printer);
         }
-        return false;
+        if (!httpRequest.equals("")) {
+                System.out.println(httpRequest);
+            StatusCode statusCode = StatusCode.PAGE_NOT_FOUND;
+            String responseText = statusCode.httpResponse;
+            printServerResponse(responseText, printer);
+        }
+
     }
 
-    private boolean interpretClientMessage(String message, ClientWriteable printer) throws IOException {
-        if (!message.equals("byebye")) {
-            System.out.println("Echo: "+message);
-            printer.println("Echo: "+message);
-            return true;
-        }
-        else {
-            System.out.println("Shutdown code received: "+message);
-            return false;
+    private void printServerResponse(String message, ClientWriteable printer) throws IOException {
+
+            System.out.println(message);
+            printer.println(message);
+
+    }
+
+    private String readAllLines(ClientReadable bufferedReader)  {
+        String CRLF = "\r\n";
+        String line;
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            while ((line = bufferedReader.readLine()) != null)
+            {
+                stringBuilder.append(line);
+                stringBuilder.append(CRLF);
+                if (line.equals("")) { break; }
+            }
+            return stringBuilder.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return stringBuilder.toString();
         }
     }
 }

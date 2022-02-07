@@ -5,7 +5,7 @@ import echoServer.outputManagement.ClientWriterFactory;
 import echoServer.socketManagement.ServerSocketInterface;
 import echoServer.socketManagement.ServerSocketWrapper;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.Socket;
 
 public class EchoServer {
@@ -17,15 +17,14 @@ public class EchoServer {
         Echoable echoer = new Echoer(serverSocket, clientReaderFactory, clientWriterFactory);
         Socket clientSocket = echoer.startServer();
 
-        boolean should_loop_continue = true;
         try {
-            while (should_loop_continue == true) {
-                should_loop_continue = echoer.readClientInput(clientSocket);
+           while (true) {
+               echoer.readClientInput(clientSocket);
+               clientSocket = echoer.keepListening();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        closeSockets(clientSocket, serverSocket);
     }
 
     public static void closeSockets(Socket clientSocket, ServerSocketInterface serverSocket) throws IOException {
