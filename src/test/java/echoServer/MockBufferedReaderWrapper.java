@@ -5,22 +5,25 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Stack;
 
-public class MockBufferedReaderWrapper<inputArray> implements ClientReadable {
-    private String input;
+public class MockBufferedReaderWrapper implements ClientReadable {
+
+    private String[] inputArray;
+    private Stack<String> inputStack;
+    public String input;
     public boolean readLineWasCalled = false;
-    private String[] inputArray = input.split("\r\n");
-    Stack<String> inputStack = toStack(inputArray);
 
     public MockBufferedReaderWrapper(String input) {
         this.input = input;
+        this.inputArray = input.split("\r\n");
+        inputStack = toStack(inputArray);
     }
-
-
-
 
     public String readLine() throws IOException {
         readLineWasCalled = true;
-        return inputStack.pop();
+        if ( inputStack.size() > 0) {
+            return inputStack.pop();
+        }
+        return null;
     }
 
     private Stack<String> toStack(String[] inputArray){
