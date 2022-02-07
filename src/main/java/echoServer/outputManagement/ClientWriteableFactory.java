@@ -6,5 +6,4 @@ public interface ClientWriteableFactory {
 
     public ClientWriteable makePrinter(Socket clientSocket) throws IOException;
 
-
 }

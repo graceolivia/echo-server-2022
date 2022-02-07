@@ -29,7 +29,10 @@ public class EchoerTest {
 
     @Test
     void testReadClientInputCallsPrintWriterPrintLn() throws IOException {
-        String input = "error";
+        String input = "GET / HTTP/1.1\r\n" +
+                "Host: localhost:5000\r\n" +
+                "User-Agent: curl/7.64.1\r\n" +
+                "Accept: */*\r\n";
         Socket socket = new Socket();
         MockServerSocketWrapper mockServerSocket = new MockServerSocketWrapper(socket);
         MockPrintWriterWrapper mockPrintWriter =  new MockPrintWriterWrapper();
