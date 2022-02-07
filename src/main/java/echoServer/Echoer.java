@@ -44,6 +44,7 @@ public class Echoer implements Echoable {
             return interpretClientMessage("error", printer);
         }
             if (!message.equals("")) {
+                System.out.println(message);
             StatusCode statusCode = StatusCode.PAGE_NOT_FOUND;
             String responseText = statusCode.httpResponse;
             return interpretClientMessage(responseText, printer);

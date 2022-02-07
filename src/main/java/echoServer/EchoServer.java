@@ -5,7 +5,7 @@ import echoServer.outputManagement.ClientWriterFactory;
 import echoServer.socketManagement.ServerSocketInterface;
 import echoServer.socketManagement.ServerSocketWrapper;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.Socket;
 
 public class EchoServer {
