@@ -23,9 +23,8 @@ public class Echoer implements Echoable {
         int port = 5000;
         serverSocket.bind(port);
         System.err.println("Started server on port " + port);
-        Socket clientSocket = serverSocket.accept();
-        System.err.println("Connected to client.");
-        return clientSocket;
+        return keepListening();
+
     }
 
     public Socket keepListening() throws IOException {
@@ -34,33 +33,48 @@ public class Echoer implements Echoable {
         return clientSocket;
     }
 
-    public boolean readClientInput(Socket clientSocket) throws IOException {
+    public void readClientInput(Socket clientSocket) throws IOException {
 
         ClientReadable bufferedReader = clientReaderFactory.makeReader(clientSocket);
         ClientWriteable printer = clientWriterFactory.makePrinter(clientSocket);
-        String message;
-        message = bufferedReader.readAllLines();
-        if (message == null) {
-            return interpretClientMessage("error", printer);
+        String httpRequest;
+        httpRequest = readAllLines(bufferedReader);
+        if (httpRequest == null) {
+            StatusCode statusCode = StatusCode.BAD_REQUEST;
+            String responseText = statusCode.httpResponse;
+            printServerResponse(responseText, printer);
         }
-            if (!message.equals("")) {
-                System.out.println(message);
+        if (!httpRequest.equals("")) {
+                System.out.println(httpRequest);
             StatusCode statusCode = StatusCode.PAGE_NOT_FOUND;
             String responseText = statusCode.httpResponse;
-            return interpretClientMessage(responseText, printer);
+            printServerResponse(responseText, printer);
         }
-        else return false;
+
     }
 
-    private boolean interpretClientMessage(String message, ClientWriteable printer) throws IOException {
-        if (!message.equals("Connection: close\r\n")) {
+    private void printServerResponse(String message, ClientWriteable printer) throws IOException {
+
             System.out.println(message);
             printer.println(message);
-            return true;
-        }
-        else {
-            System.out.println("Shutdown code received: "+message);
-            return false;
+
+    }
+
+    private String readAllLines(ClientReadable bufferedReader)  {
+        String CRLF = "\r\n";
+        String line;
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            while ((line = bufferedReader.readLine()) != null)
+            {
+                stringBuilder.append(line);
+                stringBuilder.append(CRLF);
+                if (line.equals("")) { break; }
+            }
+            return stringBuilder.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return stringBuilder.toString();
         }
     }
 }

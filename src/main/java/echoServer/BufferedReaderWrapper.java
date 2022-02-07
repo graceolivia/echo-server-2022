@@ -10,22 +10,8 @@ public class BufferedReaderWrapper implements ClientReadable {
         this.bufferedReader = bufferedReader;
     }
 
-    public String readAllLines() throws IOException {
-        String CRLF = "\r\n";
-        String line;
-        StringBuilder stringBuilder = new StringBuilder();
-        try {
-            while ((line = bufferedReader.readLine()) != null)
-            {
-                stringBuilder.append(line);
-                stringBuilder.append(CRLF);
-                if (line.equals("")) { break; }
-            }
-            return stringBuilder.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return stringBuilder.toString();
-        }
+    public String readLine() throws IOException {
+        return bufferedReader.readLine();
     }
 
 }
