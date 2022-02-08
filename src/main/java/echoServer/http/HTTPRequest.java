@@ -2,15 +2,14 @@ package echoServer.HTTP;
 
 public class HTTPRequest {
 
+    String requestType;
+    String route;
     String httpType;
-    String code;
-    String message;
 
-    public HTTPRequest(String httpType, String code, String message) {
+    public HTTPRequest(String requestType, String route, String httpType) {
+        this.requestType = requestType;
+        this.route = route;
         this.httpType = httpType;
-        this.code = code;
-        this.message = message;
     }
-
 
 }
