@@ -1,5 +1,7 @@
 package echoServer;
 
+import echoServer.HTTP.HTTPRequest;
+import echoServer.HTTP.RequestParser;
 import echoServer.http.StatusCode;
 import echoServer.outputManagement.ClientWriteableFactory;
 import echoServer.outputManagement.ClientWriteable;
@@ -39,6 +41,10 @@ public class Echoer implements Echoable {
         ClientWriteable printer = clientWriterFactory.makePrinter(clientSocket);
         String httpRequest;
         httpRequest = readAllLines(bufferedReader);
+        HTTPRequest request = RequestParser.parser(httpRequest);
+        System.out.println(request.requestType);
+        System.out.println(request.route);
+        System.out.println(request.httpType);
         if (httpRequest == null) {
             StatusCode statusCode = StatusCode.BAD_REQUEST;
             String responseText = statusCode.httpResponse;
