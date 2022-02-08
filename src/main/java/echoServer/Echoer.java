@@ -1,5 +1,8 @@
 package echoServer;
 
+import echoServer.HTTP.HTTPRequest;
+import echoServer.HTTP.RequestParser;
+import echoServer.HTTP.Routes;
 import echoServer.http.StatusCode;
 import echoServer.outputManagement.ClientWriteableFactory;
 import echoServer.outputManagement.ClientWriteable;
@@ -44,6 +47,12 @@ public class Echoer implements Echoable {
             String responseText = statusCode.httpResponse;
             printServerResponse(responseText, printer);
         }
+//        else {
+//            HTTPRequest request = RequestParser.parser(httpRequest);
+//            StatusCode statusCode = Routes.router(request);
+//            String responseText = statusCode.httpResponse;
+//            printServerResponse(responseText, printer);
+//        }
         if (!httpRequest.equals("")) {
                 System.out.println(httpRequest);
             StatusCode statusCode = StatusCode.PAGE_NOT_FOUND;
