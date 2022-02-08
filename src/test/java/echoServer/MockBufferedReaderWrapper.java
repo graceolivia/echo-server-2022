@@ -16,8 +16,7 @@ public class MockBufferedReaderWrapper implements ClientReadable {
     public MockBufferedReaderWrapper(String input) {
         this.input = input;
         this.inputArray = input.split("\r\n");
-        this.reversedInputArray = reverseArray(inputArray);
-        //inputStack = toStack(reversedInputArray);
+        inputStack = toStack(inputArray);
     }
 
     public String readLine() throws IOException {
@@ -26,16 +25,6 @@ public class MockBufferedReaderWrapper implements ClientReadable {
             return inputStack.pop();
         }
         return null;
-    }
-
-    private String[] reverseArray(String[] inputArray){
-        String[] newArray = new String[];
-        int j = 0;
-        for (int i = (inputArray.length - 1); i >= 0; i--) {
-            newArray[j] = inputArray[i];
-            j += 1;
-        }
-        return newArray;
     }
 
     private Stack<String> toStack(String[] inputArray){
