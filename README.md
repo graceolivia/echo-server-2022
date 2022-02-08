@@ -22,4 +22,4 @@ Open another terminal window. Make sure you have `netcat` installed.
 Run:
 `curl -v  http://localhost:5000/`
 
-You can add any url you want after the slash.
+You can add any url you want after the slash, and will receive a response.

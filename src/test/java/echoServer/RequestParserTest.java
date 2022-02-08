@@ -28,5 +28,4 @@ public class RequestParserTest {
         assertEquals(httpRequestExpected.route, httpParsed.route);
         assertEquals(httpRequestExpected.httpType, httpParsed.httpType);
     }
-
 }
