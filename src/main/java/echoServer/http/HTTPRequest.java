@@ -1,15 +1,15 @@
-package echoServer.HTTP;
+package echoServer.http;
 
 public class HTTPRequest {
 
-    public String requestType;
-    public String route;
-    public String httpType;
+    public String method;
+    public String resource;
+    public String httpVersionNumber;
 
-    public HTTPRequest(String requestType, String route, String httpType) {
-        this.requestType = requestType;
-        this.route = route;
-        this.httpType = httpType;
+    public HTTPRequest(String method, String resource, String httpVersionNumber) {
+        this.method = method;
+        this.resource = resource;
+        this.httpVersionNumber = httpVersionNumber;
     }
 
 }

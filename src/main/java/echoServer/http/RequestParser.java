@@ -1,16 +1,17 @@
-package echoServer.HTTP;
+package echoServer.http;
+
+
+import echoServer.CRLF;
 
 public class RequestParser {
 
-    public static HTTPRequest parser(String rawRequest) {
+    public static HTTPRequest parse(String rawRequest) {
 
-        String[] rows = rawRequest.split("\r\n");
-        String[] firstRequestRow = rows[0].split(" ");
+        String[] lines = rawRequest.split(CRLF.CRLF);
+        String[] requestLine = lines[0].split(" ");
 
-        HTTPRequest httpRequest = new HTTPRequest(firstRequestRow[0], firstRequestRow[1], firstRequestRow[2]);
+        HTTPRequest httpRequest = new HTTPRequest(requestLine[0], requestLine[1], requestLine[2]);
         return httpRequest;
 
     }
-
-
 }

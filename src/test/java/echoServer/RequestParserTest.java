@@ -1,12 +1,10 @@
 package echoServer;
 
-import echoServer.HTTP.HTTPRequest;
-import echoServer.HTTP.RequestParser;
-import echoServer.outputManagement.ClientWriteableFactory;
+import echoServer.http.HTTPRequest;
+import echoServer.http.RequestParser;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.net.Socket;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -17,16 +15,15 @@ public class RequestParserTest {
     void testRequestParserReturnsCorrectHTTPResponseObject() throws IOException {
 
         HTTPRequest httpRequestExpected = new HTTPRequest("GET", "/", "HTTP/1.1");
-        String request = "GET / HTTP/1.1\r\n" +
-                "Host: localhost:5000\r\n" +
-                "User-Agent: curl/7.64.1\r\n" +
-                "Accept: */*\r\n";
+        String request = "GET / HTTP/1.1" + CRLF.CRLF +
+                "Host: localhost:5000" + CRLF.CRLF +
+                "User-Agent: cur/7.64.1" + CRLF.CRLF +
+                "Accept: */*" + CRLF.CRLF;
 
-        HTTPRequest httpParsed = RequestParser.parser(request);
+        HTTPRequest httpParsed = RequestParser.parse(request);
 
-        assertEquals(httpRequestExpected.requestType, httpParsed.requestType);
-        assertEquals(httpRequestExpected.route, httpParsed.route);
-        assertEquals(httpRequestExpected.httpType, httpParsed.httpType);
+        assertEquals(httpRequestExpected.method, httpParsed.method);
+        assertEquals(httpRequestExpected.resource, httpParsed.resource);
+        assertEquals(httpRequestExpected.httpVersionNumber, httpParsed.httpVersionNumber);
     }
-
 }

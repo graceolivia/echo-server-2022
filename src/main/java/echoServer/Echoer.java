@@ -1,8 +1,8 @@
 package echoServer;
 
-import echoServer.HTTP.HTTPRequest;
-import echoServer.HTTP.RequestParser;
-import echoServer.HTTP.Router;
+import echoServer.http.HTTPRequest;
+import echoServer.http.RequestParser;
+import echoServer.routes.Router;
 import echoServer.http.StatusCode;
 import echoServer.outputManagement.ClientWriteableFactory;
 import echoServer.outputManagement.ClientWriteable;
@@ -15,11 +15,13 @@ public class Echoer implements Echoable {
     ServerSocketInterface serverSocket;
     ClientReadableFactory clientReaderFactory;
     ClientWriteableFactory clientWriterFactory;
+    Router router;
 
-    public Echoer(ServerSocketInterface serverSocket, ClientReadableFactory clientReaderFactory, ClientWriteableFactory clientWriterFactory) throws IOException {
+    public Echoer(ServerSocketInterface serverSocket, ClientReadableFactory clientReaderFactory, ClientWriteableFactory clientWriterFactory, Router router) throws IOException {
         this.serverSocket = serverSocket;
         this.clientWriterFactory = clientWriterFactory;
         this.clientReaderFactory = clientReaderFactory;
+        this.router = router;
     }
 
     public Socket startServer() throws IOException {
@@ -48,12 +50,9 @@ public class Echoer implements Echoable {
             printServerResponse(responseText, printer);
         }
         if (!httpRequest.equals("")) {
-            HTTPRequest request = RequestParser.parser(httpRequest);
-            System.out.println(request.requestType);
-            System.out.println(request.route);
+            HTTPRequest request = RequestParser.parse(httpRequest);
                 System.out.println(httpRequest);
-            StatusCode statusCode = Router.router(request);
-            System.out.println(statusCode.httpResponse);
+            StatusCode statusCode = router.getResponse(request);
             String responseText = statusCode.httpResponse;
             printServerResponse(responseText, printer);
         }

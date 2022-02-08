@@ -1,6 +1,8 @@
 package echoServer;
 import echoServer.http.StatusCode;
 import echoServer.outputManagement.ClientWriteableFactory;
+import echoServer.routes.Router;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
@@ -11,16 +13,30 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class EchoerTest {
 
+    Socket socket;
+    Echoer echoer;
+    MockServerSocketWrapper mockServerSocket;
+    MockBufferedReaderWrapper mockBufferedReader;
+    MockPrintWriterWrapper mockPrintWriter;
+
+    @BeforeEach
+    void setUp() throws IOException {
+        String input = "Accept: */*" + CRLF.CRLF +
+                "User-Agent: jUnit" + CRLF.CRLF +
+                "Host: localhost:5000" + CRLF.CRLF +
+                "GET / HTTP/1.1" + CRLF.CRLF + CRLF.CRLF;
+        socket = new Socket();
+        Router router = new Router(EchoServer.getRoutes());
+        mockServerSocket = new MockServerSocketWrapper(socket);
+        mockPrintWriter =  new MockPrintWriterWrapper();
+        mockBufferedReader = new MockBufferedReaderWrapper(input);
+        ClientWriteableFactory mockClientWriterFactory = new MockClientWriterFactory(mockPrintWriter);
+        ClientReadableFactory mockClientReaderFactory = new MockClientReaderFactory(mockBufferedReader);
+        echoer = new Echoer(mockServerSocket, mockClientReaderFactory, mockClientWriterFactory, router);
+    }
+
     @Test
     void testThatStartServerReturnsASocket() throws IOException {
-        Socket socket = new Socket();
-        String input = "hello";
-        MockServerSocketWrapper mockServerSocket = new MockServerSocketWrapper(socket);
-        MockPrintWriterWrapper mockPrintWriter =  new MockPrintWriterWrapper();
-        MockBufferedReaderWrapper mockBufferedReader = new MockBufferedReaderWrapper(input);
-        MockClientWriterFactory mockClientWriterFactory = new MockClientWriterFactory(mockPrintWriter);
-        MockClientReaderFactory mockClientReader = new MockClientReaderFactory(mockBufferedReader);
-        Echoer echoer = new Echoer(mockServerSocket, mockClientReader, mockClientWriterFactory);
 
         Socket clientSocket = echoer.startServer();
 
@@ -31,20 +47,7 @@ public class EchoerTest {
 
     @Test
     void testReadClientInputCallsPrintWriterPrintLn() throws IOException {
-
         String expectedResult = StatusCode.PAGE_NOT_FOUND.httpResponse;
-
-        String input = "Accept: */*\r\n" +
-                "User-Agent: curl/7.64.1\r\n" +
-                "Host: localhost:5000\r\n" +
-                "GET / HTTP/1.1\r\n\r\n";
-        Socket socket = new Socket();
-        MockServerSocketWrapper mockServerSocket = new MockServerSocketWrapper(socket);
-        MockPrintWriterWrapper mockPrintWriter =  new MockPrintWriterWrapper();
-        MockBufferedReaderWrapper mockBufferedReader = new MockBufferedReaderWrapper(input);
-        ClientWriteableFactory mockClientWriterFactory = new MockClientWriterFactory(mockPrintWriter);
-        ClientReadableFactory mockClientReaderFactory = new MockClientReaderFactory(mockBufferedReader);
-        Echoer echoer = new Echoer(mockServerSocket, mockClientReaderFactory, mockClientWriterFactory);
 
         echoer.readClientInput(socket);
 
