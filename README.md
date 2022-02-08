@@ -17,9 +17,9 @@ This will start the server socket. It will be listening on socket 8080 of localh
 
 ### Starting the client
 
-Open another terminal window. Make sure you have `netcat` installed. 
+Open another terminal window. Make sure you have `curl` installed. 
 
 Run:
 `curl -v  http://localhost:5000/`
 
-You can add any url you want after the slash.
+You can add any url you want after the slash, and will receive a response.
