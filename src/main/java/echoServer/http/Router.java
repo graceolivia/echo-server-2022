@@ -5,7 +5,7 @@ import echoServer.http.StatusCode;
 public class Router {
 
     public static echoServer.http.StatusCode router(HTTPRequest request) {
-        if (request.requestType == "GET" && request.route == "/simple_get"){
+        if (request.requestType.equals("GET") && request.route.equals("/simple_get")){
             return StatusCode.OK;
         }
         else {
