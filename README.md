@@ -20,6 +20,6 @@ This will start the server socket. It will be listening on socket 8080 of localh
 Open another terminal window. Make sure you have `netcat` installed. 
 
 Run:
-`nc localhost 8080`
+`curl -v  http://localhost:5000/`
 
-From this window, you can put in a message and have it echoed back to you. If you use the token `byebye` on the client side, the server will shut down.
+You can add any url you want after the slash.
