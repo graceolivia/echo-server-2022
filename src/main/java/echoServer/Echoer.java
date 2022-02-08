@@ -2,6 +2,7 @@ package echoServer;
 
 import echoServer.HTTP.HTTPRequest;
 import echoServer.HTTP.RequestParser;
+import echoServer.HTTP.Router;
 import echoServer.http.StatusCode;
 import echoServer.outputManagement.ClientWriteableFactory;
 import echoServer.outputManagement.ClientWriteable;
@@ -41,18 +42,18 @@ public class Echoer implements Echoable {
         ClientWriteable printer = clientWriterFactory.makePrinter(clientSocket);
         String httpRequest;
         httpRequest = readAllLines(bufferedReader);
-        HTTPRequest request = RequestParser.parser(httpRequest);
-        System.out.println(request.requestType);
-        System.out.println(request.route);
-        System.out.println(request.httpType);
         if (httpRequest == null) {
             StatusCode statusCode = StatusCode.BAD_REQUEST;
             String responseText = statusCode.httpResponse;
             printServerResponse(responseText, printer);
         }
         if (!httpRequest.equals("")) {
+            HTTPRequest request = RequestParser.parser(httpRequest);
+            System.out.println(request.requestType);
+            System.out.println(request.route);
                 System.out.println(httpRequest);
-            StatusCode statusCode = StatusCode.PAGE_NOT_FOUND;
+            StatusCode statusCode = Router.router(request);
+            System.out.println(statusCode.httpResponse);
             String responseText = statusCode.httpResponse;
             printServerResponse(responseText, printer);
         }
