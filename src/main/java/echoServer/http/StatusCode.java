@@ -7,7 +7,6 @@ public enum StatusCode {
 
     public final String httpResponse;
 
-
     private StatusCode(String httpResponse) {
         this.httpResponse = httpResponse;
     }
