@@ -28,14 +28,14 @@ public class Router {
             for (int i = 0; i < allowedRoutesAsList.size(); i++) {
                 String methodAllowed = String.valueOf(allowedRoutesAsList.get(0));
                 if (request.method.equals(methodAllowed)) {
-                    return responseBuilder.buildResponse(StatusCodes.OK, allowedRoutesAsList);
+                    return responseBuilder.buildResponse(StatusCodes.OK, allowedRoutesAsList, request);
                 }
                 else {
-                    return responseBuilder.buildResponse(StatusCodes.NOT_ACCEPTABLE, allowedRoutesAsList);
+                    return responseBuilder.buildResponse(StatusCodes.NOT_ACCEPTABLE, allowedRoutesAsList, request);
                 }
             }
 
         }
-        return responseBuilder.buildResponse(StatusCodes.PAGE_NOT_FOUND, allowedRoutesAsList);
+        return responseBuilder.buildResponse(StatusCodes.PAGE_NOT_FOUND, allowedRoutesAsList, request);
     }
 }
