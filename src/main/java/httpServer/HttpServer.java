@@ -12,7 +12,7 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EchoServer {
+public class HttpServer {
 
     public static void main(String[] args) throws IOException {
         Router router = new Router(getRoutes());

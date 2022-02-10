@@ -7,15 +7,15 @@ import java.io.IOException;
 import java.net.Socket;
 import static org.junit.jupiter.api.Assertions.*;
 
-class EchoServerTest {
+class HttpServerTest {
 
     @Test
     void testClientSocketClosesWhenCloseSocketIsCalled() throws IOException {
         Socket clientSocket = new Socket();
         ServerSocketInterface serverSocket = new ServerSocketWrapper();
-        EchoServer echoServer = new EchoServer();
+        HttpServer httpServer = new HttpServer();
 
-        echoServer.closeSockets(clientSocket, serverSocket);
+        httpServer.closeSockets(clientSocket, serverSocket);
 
         assertTrue(clientSocket.isClosed());
     }
