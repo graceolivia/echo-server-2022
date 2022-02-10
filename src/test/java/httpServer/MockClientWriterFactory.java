@@ -1,7 +1,7 @@
-package echoServer;
+package httpServer;
 
-import echoServer.outputManagement.ClientWriteableFactory;
-import echoServer.outputManagement.ClientWriteable;
+import httpServer.outputManagement.ClientWriteableFactory;
+import httpServer.outputManagement.ClientWriteable;
 
 import java.io.IOException;
 import java.net.Socket;

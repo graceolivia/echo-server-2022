@@ -1,7 +1,7 @@
-package echoServer;
-import echoServer.outputManagement.ClientWriteableFactory;
-import echoServer.outputManagement.ClientWriterFactory;
-import echoServer.outputManagement.ClientWriteable;
+package httpServer;
+import httpServer.outputManagement.ClientWriteableFactory;
+import httpServer.outputManagement.ClientWriterFactory;
+import httpServer.outputManagement.ClientWriteable;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

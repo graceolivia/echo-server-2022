@@ -1,4 +1,4 @@
-package echoServer.outputManagement;
+package httpServer.outputManagement;
 import java.io.IOException;
 import java.net.Socket;
 

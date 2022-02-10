@@ -49,3 +49,6 @@ build/*
 /.idea/
 /gradle/
 .gradle/
+http_server_spec/
+.idea/vcs.xml
+.idea/vcs.xml
