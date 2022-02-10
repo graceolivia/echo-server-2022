@@ -18,9 +18,8 @@ public class RouterTest {
         String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.CRLF + "Allow: GET" + Constants.CRLF + "Content-Length: 0" + Constants.CRLF;
         ResponseBuilder responseBuilder = new ResponseBuilder();
         Router router = new Router(HttpServer.getRoutes(), responseBuilder);
-        String returnedCode = router.getResponse(request);
-        System.out.print(returnedCode);
-        assertEquals(expectedResponse, returnedCode);
+        String returnedResponse = router.getResponse(request);
+        assertEquals(expectedResponse, returnedResponse);
     }
 
     @Test
@@ -29,20 +28,30 @@ public class RouterTest {
         String expectedResponse = "HTTP/1.1 " + StatusCodes.PAGE_NOT_FOUND.httpResponse + Constants.CRLF + "Content-Length: 0" + Constants.CRLF;
         ResponseBuilder responseBuilder = new ResponseBuilder();
         Router router = new Router(HttpServer.getRoutes(), responseBuilder);
-        String returnedCode = router.getResponse(request);
-        System.out.print(returnedCode);
-        assertEquals(expectedResponse.toString(), returnedCode);
+        String returnedResponse = router.getResponse(request);
+        assertEquals(expectedResponse.toString(), returnedResponse);
     }
 
     @Test
-    void testRouterReturns405ForInvalidMethod() throws IOException {
-        HTTPRequest request = new HTTPRequest("GET", "/head_request", "HTTP/1.1");
-        String expectedResponse = "HTTP/1.1 " + StatusCodes.NOT_ACCEPTABLE.httpResponse + Constants.CRLF + "Allow: HEAD, OPTIONS" + Constants.CRLF +  "Content-Length: 0" + Constants.CRLF;;
+    void testRouterReturns200ForValidOptionsRequest() throws IOException {
+        HTTPRequest request = new HTTPRequest("OPTIONS", "/head_request", "HTTP/1.1");
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.CRLF + "Allow: HEAD, OPTIONS" + Constants.CRLF +  "Content-Length: 0" + Constants.CRLF;;
         ResponseBuilder responseBuilder = new ResponseBuilder();
         Router router = new Router(HttpServer.getRoutes(), responseBuilder);
-        String returnedCode = router.getResponse(request);
-        System.out.print(returnedCode);
-        assertEquals(expectedResponse, returnedCode);
+        String returnedResponse = router.getResponse(request);
+        assertEquals(expectedResponse, returnedResponse);
     }
+
+    @Test
+    void testRouterReturns200ForValidHeadRequest() throws IOException {
+        HTTPRequest request = new HTTPRequest("Head", "/head_request", "HTTP/1.1");
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.CRLF + "Allow: HEAD, OPTIONS" + Constants.CRLF +  "Content-Length: 0" + Constants.CRLF;;
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        Router router = new Router(HttpServer.getRoutes(), responseBuilder);
+        String returnedResponse = router.getResponse(request);
+        assertEquals(expectedResponse, returnedResponse);
+    }
+
+
 
 }
