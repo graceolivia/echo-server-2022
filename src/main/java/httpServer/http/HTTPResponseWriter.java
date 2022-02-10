@@ -4,7 +4,7 @@ import java.util.List;
 
 import static httpServer.http.Constants.CRLF;
 
-public class ResponseBuilder {
+public class HTTPResponseWriter {
 
     public String buildResponse(StatusCodes statusCode, List methods, HTTPRequest request){
         StringBuilder responseStringBuilder = new StringBuilder();
