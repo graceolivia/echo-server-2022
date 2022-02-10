@@ -7,6 +7,7 @@ import static httpServer.http.Constants.CRLF;
 public class HTTPResponseWriter {
 
     public String buildResponse(StatusCodes statusCode, List methods, HTTPRequest request){
+
         StringBuilder responseStringBuilder = new StringBuilder();
         responseStringBuilder.append(makeStatusLine(statusCode, request));
         if (!statusCode.equals(StatusCodes.PAGE_NOT_FOUND)) {
