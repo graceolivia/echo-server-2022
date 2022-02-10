@@ -6,6 +6,7 @@ import httpServer.http.RequestParser;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -18,11 +19,13 @@ public class RequestParserTest {
         HTTPRequest httpRequestExpected = new HTTPRequest("GET", "/", "HTTP/1.1");
         String request = "GET / HTTP/1.1" + Constants.CRLF +
                 "Host: localhost:5000" + Constants.CRLF +
-                "User-Agent: cur/7.64.1" + Constants.CRLF +
+                "User-Agent: JUnit" + Constants.CRLF +
                 "Accept: */*" + Constants.CRLF;
 
         HTTPRequest httpParsed = RequestParser.parse(request);
-        assertTrue(httpParsed.equals(httpParsed));
+        assertEquals(httpRequestExpected.method, httpParsed.method);
+        assertEquals(httpRequestExpected.resource, httpParsed.resource);
+        assertEquals(httpRequestExpected.httpVersionNumber, httpParsed.httpVersionNumber);
 
     }
 }

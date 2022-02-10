@@ -4,7 +4,6 @@ import java.util.List;
 
 public class ResponseBuilder {
 
-
     public String buildResponse(StatusCodes statusCode, List methods){
         StringBuilder responseStringBuilder = new StringBuilder();
         responseStringBuilder.append(statusCode.httpResponse);
