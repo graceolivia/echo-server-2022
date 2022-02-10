@@ -22,9 +22,12 @@ public class Router {
             List asList = Arrays.asList(allowedRoutes);
 
             for (int i = 0; i < asList.size(); i++) {
-                String firstMethodAllowed = String.valueOf(asList.get(0));
-                if (request.method.equals(firstMethodAllowed)) {
+                String methodAllowed = String.valueOf(asList.get(0));
+                if (request.method.equals(methodAllowed)) {
                     return StatusCodes.OK;
+                }
+                else {
+                    return StatusCodes.NOT_ACCEPTABLE;
                 }
             }
 
