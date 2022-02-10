@@ -1,5 +1,5 @@
 package httpServer;
-import httpServer.http.StatusCode;
+import httpServer.http.StatusCodes;
 import httpServer.outputManagement.ClientWriteableFactory;
 import httpServer.routes.Router;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +26,7 @@ public class EchoerTest {
                 "Host: localhost:5000" + CRLF.CRLF +
                 "GET / HTTP/1.1" + CRLF.CRLF + CRLF.CRLF;
         socket = new Socket();
-        Router router = new Router(EchoServer.getRoutes());
+        Router router = new Router(HttpServer.getRoutes());
         mockServerSocket = new MockServerSocketWrapper(socket);
         mockPrintWriter =  new MockPrintWriterWrapper();
         mockBufferedReader = new MockBufferedReaderWrapper(input);
@@ -47,7 +47,7 @@ public class EchoerTest {
 
     @Test
     void testReadClientInputCallsPrintWriterPrintLn() throws IOException {
-        String expectedResult = StatusCode.PAGE_NOT_FOUND.httpResponse;
+        String expectedResult = StatusCodes.PAGE_NOT_FOUND.httpResponse;
 
         echoer.readClientInput(socket);
 

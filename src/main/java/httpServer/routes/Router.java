@@ -2,7 +2,7 @@ package httpServer.routes;
 
 import httpServer.http.HTTPMethods;
 import httpServer.http.HTTPRequest;
-import httpServer.http.StatusCode;
+import httpServer.http.StatusCodes;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,14 +16,14 @@ public class Router {
         this.routes = routes;
     }
 
-    public StatusCode getResponse(HTTPRequest request) {
+    public StatusCodes getResponse(HTTPRequest request) {
         if (routes.containsKey(request.resource)) {
             HTTPMethods[] allowedRoutes = routes.get(request.resource);
             List asList = Arrays.asList(allowedRoutes);
             String firstMethodAllowed = String.valueOf(asList.get(0));
             if (request.method.equals(firstMethodAllowed)) {
-                return StatusCode.OK;
+                return StatusCodes.OK;
             }
-        } return StatusCode.PAGE_NOT_FOUND;
+        } return StatusCodes.PAGE_NOT_FOUND;
     }
 }

@@ -3,7 +3,7 @@ package httpServer;
 import httpServer.http.HTTPRequest;
 import httpServer.http.RequestParser;
 import httpServer.routes.Router;
-import httpServer.http.StatusCode;
+import httpServer.http.StatusCodes;
 import httpServer.outputManagement.ClientWriteableFactory;
 import httpServer.outputManagement.ClientWriteable;
 import httpServer.socketManagement.ServerSocketInterface;
@@ -45,15 +45,15 @@ public class Echoer implements Echoable {
         String httpRequest;
         httpRequest = readAllLines(bufferedReader);
         if (httpRequest == null) {
-            StatusCode statusCode = StatusCode.BAD_REQUEST;
-            String responseText = statusCode.httpResponse;
+            StatusCodes statusCodes = StatusCodes.BAD_REQUEST;
+            String responseText = statusCodes.httpResponse;
             printServerResponse(responseText, printer);
         }
         if (!httpRequest.equals("")) {
             HTTPRequest request = RequestParser.parse(httpRequest);
             System.out.println(httpRequest);
-            StatusCode statusCode = router.getResponse(request);
-            String responseText = statusCode.httpResponse;
+            StatusCodes statusCodes = router.getResponse(request);
+            String responseText = statusCodes.httpResponse;
             printServerResponse(responseText, printer);
         }
 
