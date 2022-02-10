@@ -26,5 +26,4 @@ public class HTTPRequest {
         return (httpRequest.method == this.method && httpRequest.resource == this.resource && httpRequest.httpVersionNumber == this.httpVersionNumber);
     }
 
-
-    }
+}

@@ -11,6 +11,5 @@ public class RequestParser {
 
         HTTPRequest httpRequest = new HTTPRequest(requestLine[0], requestLine[1], requestLine[2]);
         return httpRequest;
-
     }
 }
