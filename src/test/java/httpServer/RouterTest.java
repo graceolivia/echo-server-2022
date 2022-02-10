@@ -44,7 +44,7 @@ public class RouterTest {
 
     @Test
     void testRouterReturns200ForValidHeadRequest() throws IOException {
-        HTTPRequest request = new HTTPRequest("Head", "/head_request", "HTTP/1.1");
+        HTTPRequest request = new HTTPRequest("HEAD", "/head_request", "HTTP/1.1");
         String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.CRLF + "Allow: HEAD, OPTIONS" + Constants.CRLF +  "Content-Length: 0" + Constants.CRLF;;
         ResponseBuilder responseBuilder = new ResponseBuilder();
         Router router = new Router(HttpServer.getRoutes(), responseBuilder);
