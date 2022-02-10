@@ -2,6 +2,7 @@ package httpServer;
 
 import httpServer.http.HTTPRequest;
 import httpServer.http.RequestParser;
+import httpServer.http.ResponseBuilder;
 import httpServer.routes.Router;
 import httpServer.http.StatusCodes;
 import httpServer.outputManagement.ClientWriteableFactory;
@@ -51,9 +52,8 @@ public class ListenerAndResponder implements ListenAndRespondable {
         if (!httpRequest.equals("")) {
             HTTPRequest request = RequestParser.parse(httpRequest);
             System.out.println(httpRequest);
-            StatusCodes statusCodes = router.getResponse(request);
-            String responseText = statusCodes.httpResponse;
-            printServerResponse(responseText, printer);
+            String httpResponse = router.getResponse(request);
+            printServerResponse(httpResponse, printer);
         }
 
     }
