@@ -20,22 +20,22 @@ public class Router {
     }
 
     public String getResponse(HTTPRequest request) {
-        List asList = null;
+        List allowedRoutesAsList = null;
         if (routes.containsKey(request.resource)) {
             HTTPMethods[] allowedRoutes = routes.get(request.resource);
-            asList = Arrays.asList(allowedRoutes);
+            allowedRoutesAsList = Arrays.asList(allowedRoutes);
 
-            for (int i = 0; i < asList.size(); i++) {
-                String methodAllowed = String.valueOf(asList.get(0));
+            for (int i = 0; i < allowedRoutesAsList.size(); i++) {
+                String methodAllowed = String.valueOf(allowedRoutesAsList.get(0));
                 if (request.method.equals(methodAllowed)) {
-                    return responseBuilder.buildResponse(StatusCodes.OK, asList);
+                    return responseBuilder.buildResponse(StatusCodes.OK, allowedRoutesAsList);
                 }
                 else {
-                    return responseBuilder.buildResponse(StatusCodes.NOT_ACCEPTABLE, asList);
+                    return responseBuilder.buildResponse(StatusCodes.NOT_ACCEPTABLE, allowedRoutesAsList);
                 }
             }
 
         }
-        return responseBuilder.buildResponse(StatusCodes.PAGE_NOT_FOUND, asList);
+        return responseBuilder.buildResponse(StatusCodes.PAGE_NOT_FOUND, allowedRoutesAsList);
     }
 }

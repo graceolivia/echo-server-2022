@@ -15,34 +15,34 @@ public class RouterTest {
     @Test
     void testRouterReturns200ForGetRequestToSimpleGetRoute() throws IOException {
         HTTPRequest request = new HTTPRequest("GET", "/simple_get", "HTTP/1.1");
-        String expectedStatusCode = StatusCodes.OK.httpResponse + Constants.CRLF + "Allow: GET" + Constants.CRLF + "Content-Length: 0" + Constants.CRLF;
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.CRLF + "Allow: GET" + Constants.CRLF + "Content-Length: 0" + Constants.CRLF;
         ResponseBuilder responseBuilder = new ResponseBuilder();
         Router router = new Router(HttpServer.getRoutes(), responseBuilder);
         String returnedCode = router.getResponse(request);
         System.out.print(returnedCode);
-        assertEquals(expectedStatusCode, returnedCode);
+        assertEquals(expectedResponse, returnedCode);
     }
 
     @Test
     void testRouterReturns404ForInvalidRoute() throws IOException {
         HTTPRequest request = new HTTPRequest("GET", "/anything_invalid", "HTTP/1.1");
-        String expectedStatusCodes = StatusCodes.PAGE_NOT_FOUND.httpResponse + Constants.CRLF + "Content-Length: 0" + Constants.CRLF;
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.PAGE_NOT_FOUND.httpResponse + Constants.CRLF + "Content-Length: 0" + Constants.CRLF;
         ResponseBuilder responseBuilder = new ResponseBuilder();
         Router router = new Router(HttpServer.getRoutes(), responseBuilder);
         String returnedCode = router.getResponse(request);
         System.out.print(returnedCode);
-        assertEquals(expectedStatusCodes.toString(), returnedCode);
+        assertEquals(expectedResponse.toString(), returnedCode);
     }
 
     @Test
     void testRouterReturns405ForInvalidMethod() throws IOException {
         HTTPRequest request = new HTTPRequest("GET", "/head_request", "HTTP/1.1");
-        String expectedStatusCodes = StatusCodes.NOT_ACCEPTABLE.httpResponse + Constants.CRLF + "Allow: HEAD, OPTIONS" + Constants.CRLF +  "Content-Length: 0" + Constants.CRLF;;
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.NOT_ACCEPTABLE.httpResponse + Constants.CRLF + "Allow: HEAD, OPTIONS" + Constants.CRLF +  "Content-Length: 0" + Constants.CRLF;;
         ResponseBuilder responseBuilder = new ResponseBuilder();
         Router router = new Router(HttpServer.getRoutes(), responseBuilder);
         String returnedCode = router.getResponse(request);
         System.out.print(returnedCode);
-        assertEquals(expectedStatusCodes, returnedCode);
+        assertEquals(expectedResponse, returnedCode);
     }
 
 }
