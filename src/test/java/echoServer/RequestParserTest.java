@@ -21,9 +21,7 @@ public class RequestParserTest {
                 "Accept: */*" + CRLF.CRLF;
 
         HTTPRequest httpParsed = RequestParser.parse(request);
+        assertTrue(httpParsed.equals(httpParsed));
 
-        assertEquals(httpRequestExpected.method, httpParsed.method);
-        assertEquals(httpRequestExpected.resource, httpParsed.resource);
-        assertEquals(httpRequestExpected.httpVersionNumber, httpParsed.httpVersionNumber);
     }
 }
