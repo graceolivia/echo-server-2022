@@ -1,6 +1,5 @@
 package echoServer.http;
 
-
 import echoServer.CRLF;
 
 public class RequestParser {
