@@ -30,4 +30,14 @@ public class RouterTest {
         assertEquals(expectedStatusCodes, returnedCode);
     }
 
+    @Test
+    void testRouterReturns405ForInvalidMethod() throws IOException {
+        HTTPRequest request = new HTTPRequest("GET", "/head_request", "HTTP/1.1");
+        StatusCodes expectedStatusCodes = StatusCodes.PAGE_NOT_FOUND;
+        Router router = new Router(HttpServer.getRoutes());
+        StatusCodes returnedCode = router.getResponse(request);
+        System.out.print(returnedCode);
+        assertEquals(expectedStatusCodes, returnedCode);
+    }
+
 }
