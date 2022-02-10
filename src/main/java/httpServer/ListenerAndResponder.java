@@ -11,13 +11,13 @@ import httpServer.socketManagement.ServerSocketInterface;
 import java.io.IOException;
 import java.net.Socket;
 
-public class Echoer implements Echoable {
+public class ListenerAndResponder implements ListenAndRespondable {
     ServerSocketInterface serverSocket;
     ClientReadableFactory clientReaderFactory;
     ClientWriteableFactory clientWriterFactory;
     Router router;
 
-    public Echoer(ServerSocketInterface serverSocket, ClientReadableFactory clientReaderFactory, ClientWriteableFactory clientWriterFactory, Router router) throws IOException {
+    public ListenerAndResponder(ServerSocketInterface serverSocket, ClientReadableFactory clientReaderFactory, ClientWriteableFactory clientWriterFactory, Router router) throws IOException {
         this.serverSocket = serverSocket;
         this.clientWriterFactory = clientWriterFactory;
         this.clientReaderFactory = clientReaderFactory;
@@ -29,7 +29,6 @@ public class Echoer implements Echoable {
         serverSocket.bind(port);
         System.err.println("Started server on port " + port);
         return keepListening();
-
     }
 
     public Socket keepListening() throws IOException {
