@@ -1,22 +1,27 @@
-package echoServer;
+package httpServer;
 
-import echoServer.http.StatusCode;
-import echoServer.outputManagement.ClientWriteableFactory;
-import echoServer.outputManagement.ClientWriteable;
-import echoServer.socketManagement.ServerSocketInterface;
+import httpServer.http.HTTPRequest;
+import httpServer.http.RequestParser;
+import httpServer.routes.Router;
+import httpServer.http.StatusCodes;
+import httpServer.outputManagement.ClientWriteableFactory;
+import httpServer.outputManagement.ClientWriteable;
+import httpServer.socketManagement.ServerSocketInterface;
 
 import java.io.IOException;
 import java.net.Socket;
 
-public class Echoer implements Echoable {
+public class ListenerAndResponder implements ListenAndRespondable {
     ServerSocketInterface serverSocket;
     ClientReadableFactory clientReaderFactory;
     ClientWriteableFactory clientWriterFactory;
+    Router router;
 
-    public Echoer(ServerSocketInterface serverSocket, ClientReadableFactory clientReaderFactory, ClientWriteableFactory clientWriterFactory) throws IOException {
+    public ListenerAndResponder(ServerSocketInterface serverSocket, ClientReadableFactory clientReaderFactory, ClientWriteableFactory clientWriterFactory, Router router) throws IOException {
         this.serverSocket = serverSocket;
         this.clientWriterFactory = clientWriterFactory;
         this.clientReaderFactory = clientReaderFactory;
+        this.router = router;
     }
 
     public Socket startServer() throws IOException {
@@ -24,7 +29,6 @@ public class Echoer implements Echoable {
         serverSocket.bind(port);
         System.err.println("Started server on port " + port);
         return keepListening();
-
     }
 
     public Socket keepListening() throws IOException {
@@ -40,14 +44,15 @@ public class Echoer implements Echoable {
         String httpRequest;
         httpRequest = readAllLines(bufferedReader);
         if (httpRequest == null) {
-            StatusCode statusCode = StatusCode.BAD_REQUEST;
-            String responseText = statusCode.httpResponse;
+            StatusCodes statusCodes = StatusCodes.BAD_REQUEST;
+            String responseText = statusCodes.httpResponse;
             printServerResponse(responseText, printer);
         }
         if (!httpRequest.equals("")) {
-                System.out.println(httpRequest);
-            StatusCode statusCode = StatusCode.PAGE_NOT_FOUND;
-            String responseText = statusCode.httpResponse;
+            HTTPRequest request = RequestParser.parse(httpRequest);
+            System.out.println(httpRequest);
+            StatusCodes statusCodes = router.getResponse(request);
+            String responseText = statusCodes.httpResponse;
             printServerResponse(responseText, printer);
         }
 

@@ -1,4 +1,4 @@
-package echoServer.socketManagement;
+package httpServer.socketManagement;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

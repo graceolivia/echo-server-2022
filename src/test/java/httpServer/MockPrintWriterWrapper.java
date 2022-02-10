@@ -1,6 +1,6 @@
-package echoServer;
+package httpServer;
 
-import echoServer.outputManagement.ClientWriteable;
+import httpServer.outputManagement.ClientWriteable;
 
 import java.io.IOException;
 import java.io.PrintWriter;

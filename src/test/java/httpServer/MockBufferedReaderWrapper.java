@@ -1,6 +1,5 @@
-package echoServer;
+package httpServer;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.Stack;
@@ -26,9 +25,10 @@ public class MockBufferedReaderWrapper implements ClientReadable {
         return null;
     }
 
-    private Stack<String> toStack(String[] inputArray){
+    private Stack<String> toStack(String[] inputArray) {
         Stack<String> inputStack = new Stack<String>();
         inputStack.addAll(List.of(inputArray));
         return inputStack;
     }
+
 }
