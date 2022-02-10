@@ -6,6 +6,7 @@ public class ResponseBuilder {
 
     public String buildResponse(StatusCodes statusCode, List methods){
         StringBuilder responseStringBuilder = new StringBuilder();
+        responseStringBuilder.append("HTTP/1.1 ");
         responseStringBuilder.append(statusCode.httpResponse);
         responseStringBuilder.append(Constants.CRLF);
         if (!statusCode.equals(StatusCodes.PAGE_NOT_FOUND)) {
