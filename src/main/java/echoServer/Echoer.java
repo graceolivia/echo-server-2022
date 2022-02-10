@@ -51,7 +51,7 @@ public class Echoer implements Echoable {
         }
         if (!httpRequest.equals("")) {
             HTTPRequest request = RequestParser.parse(httpRequest);
-                System.out.println(httpRequest);
+            System.out.println(httpRequest);
             StatusCode statusCode = router.getResponse(request);
             String responseText = statusCode.httpResponse;
             printServerResponse(responseText, printer);
