@@ -12,4 +12,19 @@ public class HTTPRequest {
         this.httpVersionNumber = httpVersionNumber;
     }
 
-}
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(this == obj)
+            return true;
+
+        if(obj == null || obj.getClass()!= this.getClass())
+            return false;
+
+        HTTPRequest httpRequest = (HTTPRequest) obj;
+
+        return (httpRequest.method == this.method && httpRequest.resource == this.resource && httpRequest.httpVersionNumber == this.httpVersionNumber);
+    }
+
+
+    }
