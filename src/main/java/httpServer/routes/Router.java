@@ -20,10 +20,14 @@ public class Router {
         if (routes.containsKey(request.resource)) {
             HTTPMethods[] allowedRoutes = routes.get(request.resource);
             List asList = Arrays.asList(allowedRoutes);
-            String firstMethodAllowed = String.valueOf(asList.get(0));
-            if (request.method.equals(firstMethodAllowed)) {
-                return StatusCodes.OK;
+
+            for (int i = 0; i < asList.size(); i++) {
+                String firstMethodAllowed = String.valueOf(asList.get(0));
+                if (request.method.equals(firstMethodAllowed)) {
+                    return StatusCodes.OK;
+                }
             }
+
         } return StatusCodes.PAGE_NOT_FOUND;
     }
 }
