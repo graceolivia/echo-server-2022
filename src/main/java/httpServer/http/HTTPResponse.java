@@ -13,4 +13,9 @@ public class HTTPResponse {
         this.contentLengthLine = contentLengthLine;
     }
 
+    public String getFullResponse() {
+
+        return(statusLine + allowLine + contentLengthLine);
+    }
+
 }
