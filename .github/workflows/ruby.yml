@@ -2,7 +2,7 @@ name: Ruby
 
 on:
   push:
-    branches: [ master ]
+    branches: [ cdSetupBranch ]
   pull_request:
     branches: [ master ]
 
