@@ -20,10 +20,9 @@ public class Router {
     }
 
     public String getResponse(HTTPRequest request) {
-        List allowedRoutesAsList = null;
         if (routes.containsKey(request.resource)) {
             HTTPMethods[] allowedRoutes = routes.get(request.resource);
-            allowedRoutesAsList = Arrays.asList(allowedRoutes);
+            List allowedRoutesAsList = Arrays.asList(allowedRoutes);
 
             for (int i = 0; i < allowedRoutesAsList.size(); i++) {
                 String methodAllowed = String.valueOf(allowedRoutesAsList.get(i));
@@ -36,6 +35,6 @@ public class Router {
             }
             return responseBuilder.buildResponse(StatusCodes.NOT_ACCEPTABLE, allowedRoutesAsList, request);
         }
-        return responseBuilder.buildResponse(StatusCodes.PAGE_NOT_FOUND, allowedRoutesAsList, request);
+        return responseBuilder.buildResponse(StatusCodes.PAGE_NOT_FOUND, null, request);
     }
 }

@@ -26,7 +26,7 @@ public class RouterTest {
         router = new Router(HttpServer.getRoutes(), responseBuilder);
     }
     @Test
-    void testRouterReturns200ForGetRequestToSimpleGetRoute() throws IOException {
+    void testRouterReturns200ForGetRequestToResourceWithGetAllowed() throws IOException {
         HTTPRequest request = new HTTPRequest("GET", "/simple_get", "HTTP/1.1");
         String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.CRLF + "Allow: GET" + Constants.CRLF + "Content-Length: 0" + Constants.CRLF;
         String returnedResponse = router.getResponse(request);
@@ -34,7 +34,7 @@ public class RouterTest {
     }
 
     @Test
-    void testRouterReturns404ForInvalidRoute() throws IOException {
+    void testRouterReturns404ForNonExistentResource() throws IOException {
         HTTPRequest request = new HTTPRequest("GET", "/anything_invalid", "HTTP/1.1");
         String expectedResponse = "HTTP/1.1 " + StatusCodes.PAGE_NOT_FOUND.httpResponse + Constants.CRLF + "Content-Length: 0" + Constants.CRLF;
         String returnedResponse = router.getResponse(request);
@@ -42,7 +42,7 @@ public class RouterTest {
     }
 
     @Test
-    void testRouterReturns405ForInvalidMethodToExistingResource() throws IOException {
+    void testRouterReturns405ForInvalidMethodRequestToExistingResource() throws IOException {
         HTTPRequest request = new HTTPRequest("GET", "/head_request", "HTTP/1.1");
         String expectedResponse = "HTTP/1.1 " + StatusCodes.NOT_ACCEPTABLE.httpResponse + Constants.CRLF + "Allow: HEAD, OPTIONS" + Constants.CRLF +  "Content-Length: 0" + Constants.CRLF;;
         String returnedResponse = router.getResponse(request);
@@ -50,7 +50,7 @@ public class RouterTest {
     }
 
     @Test
-    void testRouterReturns200ForValidOptionsRequest() throws IOException {
+    void testRouterReturns200ForFirstAllowedRequestTypeToExistingResourceWithMultipleMethods() throws IOException {
         HTTPRequest request = new HTTPRequest("OPTIONS", "/head_request", "HTTP/1.1");
         String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.CRLF + "Allow: HEAD, OPTIONS" + Constants.CRLF +  "Content-Length: 0" + Constants.CRLF;;
         String returnedResponse = router.getResponse(request);
@@ -58,7 +58,7 @@ public class RouterTest {
     }
 
     @Test
-    void testRouterReturns200ForValidHeadRequest() throws IOException {
+    void testRouterReturns200ForSecondAllowedRequestTypeToExistingResourceWithMultipleMethods() throws IOException {
         HTTPRequest request = new HTTPRequest("HEAD", "/head_request", "HTTP/1.1");
         String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.CRLF + "Allow: HEAD, OPTIONS" + Constants.CRLF +  "Content-Length: 0" + Constants.CRLF;;
         String returnedResponse = router.getResponse(request);

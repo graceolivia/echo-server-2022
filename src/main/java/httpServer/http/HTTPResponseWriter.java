@@ -39,7 +39,7 @@ public class HTTPResponseWriter {
     }
 
     private String makeContentLengthHeader(int length) {
-    return("Content-Length: " + String.valueOf(length) + CRLF);
+        return("Content-Length: " + String.valueOf(length) + CRLF);
     }
 
 }
