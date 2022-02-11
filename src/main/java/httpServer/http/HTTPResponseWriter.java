@@ -8,15 +8,16 @@ public class HTTPResponseWriter {
 
 
     public String buildResponse(StatusCodes statusCode, List methods, HTTPRequest request){
-
-        //  HTTPResponse response = new HTTPResponse();
-        StringBuilder responseStringBuilder = new StringBuilder();
-        responseStringBuilder.append(makeStatusLine(statusCode, request));
+        String statusLine;
+        String allowHeader = null;
+        String contentLengthHeader;
+        statusLine = makeStatusLine(statusCode, request);
         if (!statusCode.equals(StatusCodes.PAGE_NOT_FOUND)) {
-            responseStringBuilder.append(makeAllowHeader(methods));
+            allowHeader = makeAllowHeader(methods);
         }
-        responseStringBuilder.append(makeContentLengthHeader(0));
-        return responseStringBuilder.toString();
+        contentLengthHeader = makeContentLengthHeader(0);
+        HTTPResponse response = new HTTPResponse(statusLine, allowHeader, contentLengthHeader);
+        return(response.getFullResponse());
     }
 
     private String makeStatusLine(StatusCodes statusCode, HTTPRequest request) {
