@@ -27,4 +27,4 @@ jobs:
       - name: Go into testing directory
         run: cd http_server_spec
       - name: Run tests
-        run: bundle exec rake
+        run: rake test
