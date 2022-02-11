@@ -11,6 +11,8 @@ import httpServer.socketManagement.ServerSocketInterface;
 import java.io.IOException;
 import java.net.Socket;
 
+import static httpServer.http.Constants.CRLF;
+
 public class ListenerAndResponder implements ListenAndRespondable {
     ServerSocketInterface serverSocket;
     ClientReadableFactory clientReaderFactory;
@@ -40,33 +42,31 @@ public class ListenerAndResponder implements ListenAndRespondable {
     public void readClientInput(Socket clientSocket) throws IOException {
 
         ClientReadable bufferedReader = clientReaderFactory.makeReader(clientSocket);
-        ClientWriteable printer = clientWriterFactory.makePrinter(clientSocket);
+
         String httpRequest;
         httpRequest = readAllLines(bufferedReader);
         if (httpRequest == null) {
             StatusCodes statusCodes = StatusCodes.BAD_REQUEST;
             String responseText = statusCodes.httpResponse;
-            printServerResponse(responseText, printer);
+            printServerResponse(responseText, clientSocket);
         }
         if (!httpRequest.equals("")) {
             HTTPRequest request = RequestParser.parse(httpRequest);
             System.out.println(httpRequest);
-            StatusCodes statusCodes = router.getResponse(request);
-            String responseText = statusCodes.httpResponse;
-            printServerResponse(responseText, printer);
+            String httpResponse = router.getResponse(request);
+            printServerResponse(httpResponse, clientSocket);
         }
 
     }
 
-    private void printServerResponse(String message, ClientWriteable printer) throws IOException {
-
+    private void printServerResponse(String message, Socket clientSocket) throws IOException {
+            ClientWriteable printer = clientWriterFactory.makePrinter(clientSocket);
             System.out.println(message);
             printer.println(message);
 
     }
 
     private String readAllLines(ClientReadable bufferedReader)  {
-        String CRLF = "\r\n";
         String line;
         StringBuilder stringBuilder = new StringBuilder();
         try {

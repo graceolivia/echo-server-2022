@@ -1,9 +1,10 @@
 package httpServer.http;
 
 public enum StatusCodes {
-    PAGE_NOT_FOUND("HTTP/1.1 404 Not Found" + constants.CRLF + "Content-Length: 0" + constants.CRLF ),
-    BAD_REQUEST("HTTP/1.1 400 Bad Request" + constants.CRLF + "Content-Length: 0" + constants.CRLF),
-    OK("HTTP/1.1 200 OK" + constants.CRLF+ "Content-Length: 0" + constants.CRLF);
+    PAGE_NOT_FOUND("404 Not Found"),
+    BAD_REQUEST("400 Bad Request"),
+    OK("200 OK"),
+    NOT_ACCEPTABLE("405 Not Acceptable");
 
     public final String httpResponse;
 

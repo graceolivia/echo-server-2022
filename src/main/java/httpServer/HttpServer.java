@@ -2,6 +2,7 @@ package httpServer;
 import httpServer.http.HTTPMethods;
 import httpServer.outputManagement.ClientWriteableFactory;
 import httpServer.outputManagement.ClientWriterFactory;
+import httpServer.http.HTTPResponseWriter;
 
 import httpServer.routes.Router;
 import httpServer.socketManagement.ServerSocketInterface;
@@ -15,7 +16,7 @@ import java.util.Map;
 public class HttpServer {
 
     public static void main(String[] args) throws IOException {
-        Router router = new Router(getRoutes());
+        Router router = new Router(getRoutes(), new HTTPResponseWriter());
         ServerSocketInterface serverSocket = new ServerSocketWrapper();
         ClientWriteableFactory clientWriterFactory = new ClientWriterFactory();
         ClientReadableFactory clientReaderFactory = new ClientReaderFactory();
