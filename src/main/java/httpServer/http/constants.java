@@ -1,6 +1,6 @@
 package httpServer.http;
 
-public class constants {
+public class Constants {
 
     public static String CRLF = "\r\n";
 

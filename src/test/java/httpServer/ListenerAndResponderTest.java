@@ -1,5 +1,6 @@
 package httpServer;
-import httpServer.http.constants;
+import httpServer.http.Constants;
+import httpServer.http.HTTPResponseWriter;
 import httpServer.http.StatusCodes;
 import httpServer.outputManagement.ClientWriteableFactory;
 import httpServer.routes.Router;
@@ -9,7 +10,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Map;
 
+import static httpServer.HttpServer.getRoutes;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ListenerAndResponderTest {
@@ -19,15 +22,19 @@ public class ListenerAndResponderTest {
     MockServerSocketWrapper mockServerSocket;
     MockBufferedReaderWrapper mockBufferedReader;
     MockPrintWriterWrapper mockPrintWriter;
+    HTTPResponseWriter responseBuilder;
+    Map routes;
 
     @BeforeEach
     void setUp() throws IOException {
-        String input = "Accept: */*" + constants.CRLF +
-                "User-Agent: jUnit" + constants.CRLF +
-                "Host: localhost:5000" + constants.CRLF +
-                "GET / HTTP/1.1" + constants.CRLF + constants.CRLF;
+        String input = "Accept: */*" + Constants.CRLF +
+                "User-Agent: jUnit" + Constants.CRLF +
+                "Host: localhost:5000" + Constants.CRLF +
+                "GET / HTTP/1.1" + Constants.CRLF + Constants.CRLF;
         socket = new Socket();
-        Router router = new Router(HttpServer.getRoutes());
+        routes = getRoutes();
+        responseBuilder = new HTTPResponseWriter();
+        Router router = new Router(routes, responseBuilder);
         mockServerSocket = new MockServerSocketWrapper(socket);
         mockPrintWriter =  new MockPrintWriterWrapper();
         mockBufferedReader = new MockBufferedReaderWrapper(input);
@@ -48,7 +55,7 @@ public class ListenerAndResponderTest {
 
     @Test
     void testReadClientInputCallsPrintWriterPrintLn() throws IOException {
-        String expectedResult = StatusCodes.PAGE_NOT_FOUND.httpResponse;
+        String expectedResult = "HTTP/1.1 " + StatusCodes.PAGE_NOT_FOUND.httpResponse + Constants.CRLF + "Content-Length: 0" + Constants.CRLF;
 
         echoer.readClientInput(socket);
 
