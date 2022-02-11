@@ -42,6 +42,14 @@ public class RouterTest {
     }
 
     @Test
+    void testRouterReturns405ForInvalidMethodToExistingResource() throws IOException {
+        HTTPRequest request = new HTTPRequest("GET", "/head_request", "HTTP/1.1");
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.NOT_ACCEPTABLE.httpResponse + Constants.CRLF + "Allow: HEAD, OPTIONS" + Constants.CRLF +  "Content-Length: 0" + Constants.CRLF;;
+        String returnedResponse = router.getResponse(request);
+        assertEquals(expectedResponse, returnedResponse);
+    }
+
+    @Test
     void testRouterReturns200ForValidOptionsRequest() throws IOException {
         HTTPRequest request = new HTTPRequest("OPTIONS", "/head_request", "HTTP/1.1");
         String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.CRLF + "Allow: HEAD, OPTIONS" + Constants.CRLF +  "Content-Length: 0" + Constants.CRLF;;

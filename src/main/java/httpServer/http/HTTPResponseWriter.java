@@ -21,11 +21,7 @@ public class HTTPResponseWriter {
     }
 
     private String makeStatusLine(StatusCodes statusCode, HTTPRequest request) {
-        StringBuilder statusLine = new StringBuilder();
-        statusLine.append(request.httpVersionNumber + " ");
-        statusLine.append(statusCode.httpResponse);
-        statusLine.append(CRLF);
-        return statusLine.toString();
+        return (request.httpVersionNumber + " " + statusCode.httpResponse + CRLF);
     }
 
     private String makeAllowHeader(List methods) {
