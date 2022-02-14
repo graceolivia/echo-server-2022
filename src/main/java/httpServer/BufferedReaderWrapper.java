@@ -10,8 +10,8 @@ public class BufferedReaderWrapper implements ClientReadable {
         this.bufferedReader = bufferedReader;
     }
 
-    public String readLine() throws IOException {
-        return bufferedReader.readLine();
+    public String read() throws IOException {
+        return String.valueOf((char)bufferedReader.read());
     }
 
 }

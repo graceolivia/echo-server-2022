@@ -66,20 +66,29 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
     }
 
-    private String readAllLines(ClientReadable bufferedReader)  {
-        String line;
+    private HTTPRequest readAllLines(ClientReadable bufferedReader)  {
+        HTTPRequest httpRequest = new HTTPRequest(null, null, null, null);
+        String character;
         StringBuilder stringBuilder = new StringBuilder();
         try {
-            while ((line = bufferedReader.readLine()) != null)
+            while ((character = bufferedReader.read()) != null)
             {
-                stringBuilder.append(line);
-                stringBuilder.append(CRLF);
-                if (line.equals("")) { break; }
+                stringBuilder.append(character);
+                System.out.println(stringBuilder.toString());
+                System.out.println(detectBodyLength(stringBuilder));
+               if (character.equals("")) {
+                   break; }
             }
             return stringBuilder.toString();
         } catch (IOException e) {
             e.printStackTrace();
             return stringBuilder.toString();
         }
+    }
+
+    private boolean detectBodyLength(StringBuilder stringBuilder){
+        String string = stringBuilder.toString();
+        boolean containsContentLength = string.contains("Content-Length: ");
+        return containsContentLength;
     }
 }

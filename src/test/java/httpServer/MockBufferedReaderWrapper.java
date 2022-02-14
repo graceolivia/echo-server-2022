@@ -17,7 +17,7 @@ public class MockBufferedReaderWrapper implements ClientReadable {
         inputStack = toStack(inputArray);
     }
 
-    public String readLine() throws IOException {
+    public String read() throws IOException {
         readLineWasCalled = true;
         if ( inputStack.size() > 0) {
             return inputStack.pop();
