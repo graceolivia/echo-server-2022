@@ -3,6 +3,6 @@ import java.io.IOException;
 
 public interface ClientReadable {
 
-    public String readLine() throws IOException;
+    public String read() throws IOException;
 
 }

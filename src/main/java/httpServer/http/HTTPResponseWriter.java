@@ -11,12 +11,13 @@ public class HTTPResponseWriter {
         String statusLine;
         String allowHeader = null;
         String contentLengthHeader;
+        String responseContent = null;
         statusLine = makeStatusLine(statusCode, request);
         if (!statusCode.equals(StatusCodes.PAGE_NOT_FOUND)) {
             allowHeader = makeAllowHeader(methods);
         }
         contentLengthHeader = makeContentLengthHeader(0);
-        HTTPResponse response = new HTTPResponse(statusLine, allowHeader, contentLengthHeader);
+        HTTPResponse response = new HTTPResponse(statusLine, allowHeader, contentLengthHeader, responseContent);
         return(response.getFullResponse());
     }
 
