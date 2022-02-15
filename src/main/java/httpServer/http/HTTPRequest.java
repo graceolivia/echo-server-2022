@@ -9,12 +9,19 @@ public class HTTPRequest {
     public String resource;
     public String httpVersionNumber;
     public Map<String, String> headers = new HashMap<>();
+    public String body;
 
-    public HTTPRequest(String method, String resource, String httpVersionNumber, String[] headers;) {
+    public HTTPRequest(String method, String resource, String httpVersionNumber, Map<String, String> headers, String body) {
         this.method = method;
         this.resource = resource;
         this.httpVersionNumber = httpVersionNumber;
         this.headers = headers;
+        this.body = body;
+    }
+
+    public int getContentLength() {
+        String contentLengthString = headers.get("Content-Length");
+        return Integer.valueOf(contentLengthString);
     }
 
     @Override
