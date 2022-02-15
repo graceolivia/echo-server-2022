@@ -78,7 +78,8 @@ public class ListenerAndResponder implements ListenAndRespondable {
         try {
             while ((character = bufferedReader.read()) != null)
             {
-
+                System.out.println(stringBuilder.toString());
+                System.out.println(detectBodyLength(stringBuilder));
                 //getting headers
                 stringBuilder.append(character);
                 // Get a current line going
@@ -95,7 +96,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
                 // and also make sure it isn't the double CLDR that indicates the beginning of the body
                 else if (reachedEndOfLine(currentLine) && !reachedEndOfHeaders(stringBuilder)) {
                     String stringCurrentLine = currentLine.toString();
-                    httpRequest = addHeaderToObject(stringCurrentLine, httpRequest);
+                    httpRequest = discernHeader(stringCurrentLine, httpRequest);
                 }
                 // if end of headers has been reached
                 else if (reachedEndOfHeaders(currentLine)) {
@@ -106,8 +107,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
                 }
             }
-                System.out.println(stringBuilder.toString());
-                System.out.println(detectBodyLength(stringBuilder));
+
 
             return httpRequest;
         } catch (IOException e) {
