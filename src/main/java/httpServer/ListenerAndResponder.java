@@ -1,7 +1,9 @@
 package httpServer;
 
 import httpServer.http.HTTPRequest;
+
 //import httpServer.http.RequestParser;
+
 import httpServer.routes.Router;
 import httpServer.http.StatusCodes;
 import httpServer.outputManagement.ClientWriteableFactory;
@@ -10,7 +12,9 @@ import httpServer.socketManagement.ServerSocketInterface;
 
 import java.io.IOException;
 import java.net.Socket;
+
 import java.util.AbstractMap;
+
 
 import static httpServer.http.Constants.CRLF;
 
@@ -44,6 +48,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
         ClientReadable bufferedReader = clientReaderFactory.makeReader(clientSocket);
 
+
         HTTPRequest httpRequest;
         httpRequest = readAllLines(bufferedReader);
         if (httpRequest == null) {
@@ -52,9 +57,11 @@ public class ListenerAndResponder implements ListenAndRespondable {
             printServerResponse(responseText, clientSocket);
         }
         if (!httpRequest.equals("")) {
-            // HTTPRequest request = RequestParser.parse(httpRequest);
-            // System.out.println(httpRequest);
+
+            //HTTPRequest request = RequestParser.parse(httpRequest);
+            System.out.println(httpRequest);
             String httpResponse = router.getResponse(httpRequest);
+
             printServerResponse(httpResponse, clientSocket);
         }
 
@@ -68,6 +75,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
     }
 
     private HTTPRequest readAllLines(ClientReadable bufferedReader)  {
+
         HTTPRequest httpRequest = new HTTPRequest(null, null, null, null, null);
         String character;
         StringBuilder stringBuilder = new StringBuilder();
@@ -99,7 +107,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
                     //System.out.println("4");
                     System.out.println("reached end of headers");
                     // get the content length
-                    contentLength = httpRequest.getContentLength();
+                    contentLength = httpRequest.detectBodyLength();
                     // switch to readingInBody
                     readingInBody = true;
 
@@ -151,6 +159,8 @@ public class ListenerAndResponder implements ListenAndRespondable {
         }
         return httpRequest;
     }
+
+
 
     private boolean detectBodyLength(StringBuilder stringBuilder){
         String string = stringBuilder.toString();

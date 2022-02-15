@@ -14,6 +14,7 @@ public class HTTPRequest {
     public String body;
 
     public HTTPRequest(String method, String resource, String httpVersionNumber, Map<String, String> headers, String body) {
+
         this.method = method;
         this.resource = resource;
         this.httpVersionNumber = httpVersionNumber;
@@ -38,6 +39,7 @@ public class HTTPRequest {
             System.out.println(String.join(",", set));
             String contentLengthString = headers.get("Content-Length");
             return Integer.valueOf(contentLengthString);
+
 
     }
 
