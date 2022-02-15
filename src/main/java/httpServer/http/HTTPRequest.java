@@ -21,6 +21,14 @@ public class HTTPRequest {
         this.body = body;
     }
 
+    public HTTPRequest() {
+        method = null;
+        resource = null;
+        httpVersionNumber = null;
+        headers = null;
+        body = null;
+    }
+
     public int getContentLength() {
         System.out.println("Here come the headers:");
             int size = headers.size();
