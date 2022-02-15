@@ -1,11 +1,14 @@
 package httpServer.http;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class HTTPRequest {
 
     public String method;
     public String resource;
     public String httpVersionNumber;
-    public String[] headers;
+    public Map<String, String> headers = new HashMap<>();
 
     public HTTPRequest(String method, String resource, String httpVersionNumber, String[] headers;) {
         this.method = method;

@@ -10,6 +10,7 @@ import httpServer.socketManagement.ServerSocketInterface;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.AbstractMap;
 
 import static httpServer.http.Constants.CRLF;
 
@@ -70,9 +71,11 @@ public class ListenerAndResponder implements ListenAndRespondable {
         HTTPRequest httpRequest = new HTTPRequest(null, null, null, null);
         String character;
         StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder currentLine = new StringBuilder();
         try {
             while ((character = bufferedReader.read()) != null)
             {
+
                 stringBuilder.append(character);
                 System.out.println(stringBuilder.toString());
                 System.out.println(detectBodyLength(stringBuilder));
@@ -91,4 +94,9 @@ public class ListenerAndResponder implements ListenAndRespondable {
         boolean containsContentLength = string.contains("Content-Length: ");
         return containsContentLength;
     }
-}
+
+    private String[] addHeaderToObject(String header) {
+        String[] headerComponents = header.split(":");
+        return headerComponents;
+    }
+ }
