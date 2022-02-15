@@ -1,6 +1,6 @@
 package httpServer.http;
 
-public class RequestParser {
+public class RequestBuilder {
 
     public static HTTPRequest parse(String rawRequest) {
 

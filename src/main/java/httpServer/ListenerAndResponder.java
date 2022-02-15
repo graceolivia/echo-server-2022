@@ -52,8 +52,8 @@ public class ListenerAndResponder implements ListenAndRespondable {
             printServerResponse(responseText, clientSocket);
         }
         if (!httpRequest.equals("")) {
-            //HTTPRequest request = RequestParser.parse(httpRequest);
-            System.out.println(httpRequest);
+            // HTTPRequest request = RequestParser.parse(httpRequest);
+            // System.out.println(httpRequest);
             String httpResponse = router.getResponse(httpRequest);
             printServerResponse(httpResponse, clientSocket);
         }
@@ -78,34 +78,54 @@ public class ListenerAndResponder implements ListenAndRespondable {
         try {
             while ((character = bufferedReader.read()) != null)
             {
-                System.out.println(stringBuilder.toString());
-                System.out.println(detectBodyLength(stringBuilder));
+
                 //getting headers
                 stringBuilder.append(character);
                 // Get a current line going
                 currentLine.append(character);
-                // check if body has been read in and if the content length of the body has been reached
-                if (readingInBody = true && contentLength == currentLine.length()) {
-                    break;
+                if (!readingInBody) {
+                  boolean haveWeReachedTheEndOfTheLine = reachedEndOfLine(currentLine);
+                  if (haveWeReachedTheEndOfTheLine) {
+                      String stringCurrentLine = currentLine.toString();
+                      httpRequest = discernHeader(stringCurrentLine, httpRequest);
+                      currentLine.setLength(0);
+                  }
+                  else {
+                      continue;
+                  }
+
                 }
-                // if body is ready to be added to HTTP request
-                else if (readingInBody = true && reachedEndOfLine(currentLine)) {
-                    httpRequest = requestBodyAssembler(currentLine, httpRequest);
-                }
-                // Check if line contains the CLDR (thus reaching end of line)
-                // and also make sure it isn't the double CLDR that indicates the beginning of the body
-                else if (reachedEndOfLine(currentLine) && !reachedEndOfHeaders(stringBuilder)) {
-                    String stringCurrentLine = currentLine.toString();
-                    httpRequest = discernHeader(stringCurrentLine, httpRequest);
-                }
-                // if end of headers has been reached
-                else if (reachedEndOfHeaders(currentLine)) {
+                if (reachedEndOfHeaders(stringBuilder)) {
+                    //System.out.println("4");
+                    System.out.println("reached end of headers");
                     // get the content length
                     contentLength = httpRequest.getContentLength();
                     // switch to readingInBody
                     readingInBody = true;
 
+
+            }
+                // check if body has been read in and if the content length of the body has been reached
+                if (readingInBody = true && contentLength == currentLine.length()) {
+                   // System.out.println("1");
+                    break;
                 }
+                // if body is ready to be added to HTTP request
+                else if (readingInBody = true && reachedEndOfLine(currentLine)) {
+                   // System.out.println("2");
+                    httpRequest = requestBodyAssembler(currentLine, httpRequest);
+                }
+                // Check if line contains the CLDR (thus reaching end of line)
+                // and also make sure it isn't the double CLDR that indicates the beginning of the body
+//                else if (reachedEndOfLine(currentLine) && !reachedEndOfHeaders(stringBuilder)) {
+//                    //System.out.println("3");
+//                    String stringCurrentLine = currentLine.toString();
+//                    httpRequest = discernHeader(stringCurrentLine, httpRequest);
+//                }
+                // if end of headers has been reached
+
+               // System.out.println(stringBuilder.toString());
+               // System.out.println(detectBodyLength(stringBuilder));
             }
 
 
@@ -120,8 +140,10 @@ public class ListenerAndResponder implements ListenAndRespondable {
     private HTTPRequest discernHeader(String line, HTTPRequest httpRequest) {
     // this should only take in headers, not blank strings or body
         if (line.contains(": ")) {
+            System.out.println("FIRSTLINE");
             addHeaderToObject(line, httpRequest);
         } else {
+            System.out.println("SECONDLINE");
             String[] requestLine = line.split(" ");
             httpRequest.method = requestLine[0];
             httpRequest.resource = requestLine[1];
@@ -139,6 +161,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
     private HTTPRequest addHeaderToObject(String header, HTTPRequest httpRequest) {
         String[] headerComponents = header.split(":");
         httpRequest.headers.put(headerComponents[0], headerComponents[1]);
+        System.out.println(headerComponents[0] + headerComponents[1]);
         return httpRequest;
     }
 

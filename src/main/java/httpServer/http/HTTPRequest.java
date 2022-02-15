@@ -2,6 +2,8 @@ package httpServer.http;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashMap;
 
 public class HTTPRequest {
 
@@ -20,8 +22,15 @@ public class HTTPRequest {
     }
 
     public int getContentLength() {
-        String contentLengthString = headers.get("Content-Length");
-        return Integer.valueOf(contentLengthString);
+        System.out.println("Here come the headers:");
+            int size = headers.size();
+        System.out.println("boop");
+            System.out.println(String.valueOf(size));
+            Set<String> set = headers.keySet();
+            System.out.println(String.join(",", set));
+            String contentLengthString = headers.get("Content-Length");
+            return Integer.valueOf(contentLengthString);
+
     }
 
     @Override

@@ -2,16 +2,15 @@ package httpServer;
 
 import httpServer.http.Constants;
 import httpServer.http.HTTPRequest;
-import httpServer.http.RequestParser;
+import httpServer.http.RequestBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class RequestParserTest {
+public class RequestBuilderTest {
 
     @Test
     void testRequestParserReturnsCorrectHTTPResponseObject() throws IOException {
@@ -22,7 +21,7 @@ public class RequestParserTest {
                 "User-Agent: JUnit" + Constants.CRLF +
                 "Accept: */*" + Constants.CRLF;
 
-        HTTPRequest httpParsed = RequestParser.parse(request);
+        HTTPRequest httpParsed = RequestBuilder.parse(request);
         assertEquals(httpRequestExpected.method, httpParsed.method);
         assertEquals(httpRequestExpected.resource, httpParsed.resource);
         assertEquals(httpRequestExpected.httpVersionNumber, httpParsed.httpVersionNumber);
