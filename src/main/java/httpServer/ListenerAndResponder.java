@@ -4,6 +4,7 @@ import httpServer.http.HTTPRequest;
 
 //import httpServer.http.RequestParser;
 
+import httpServer.http.RequestBuilder;
 import httpServer.routes.Router;
 import httpServer.http.StatusCodes;
 import httpServer.outputManagement.ClientWriteableFactory;
@@ -12,8 +13,6 @@ import httpServer.socketManagement.ServerSocketInterface;
 
 import java.io.IOException;
 import java.net.Socket;
-
-import java.util.AbstractMap;
 
 
 import static httpServer.http.Constants.CRLF;
@@ -50,7 +49,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
 
         HTTPRequest httpRequest;
-        httpRequest = readAllLines(bufferedReader);
+        httpRequest = readAllLinesAndReturnHttpRequest(bufferedReader);
         if (httpRequest == null) {
             StatusCodes statusCodes = StatusCodes.BAD_REQUEST;
             String responseText = statusCodes.httpResponse;
@@ -74,106 +73,56 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
     }
 
-    private HTTPRequest readAllLines(ClientReadable bufferedReader)  {
+    private HTTPRequest readAllLinesAndReturnHttpRequest(ClientReadable bufferedReader)  {
 
-        HTTPRequest httpRequest = new HTTPRequest(null, null, null, null, null);
         String character;
+        RequestBuilder requestBuilder = new RequestBuilder();
         StringBuilder stringBuilder = new StringBuilder();
         StringBuilder currentLine = new StringBuilder();
         boolean readingInBody = false;
         int contentLength = 0;
 
         try {
-            while ((character = bufferedReader.read()) != null)
-            {
-
-                //getting headers
+            while ((character = bufferedReader.read()) != null) {
                 stringBuilder.append(character);
-                // Get a current line going
                 currentLine.append(character);
-                if (!readingInBody) {
-                  boolean haveWeReachedTheEndOfTheLine = reachedEndOfLine(currentLine);
-                  if (haveWeReachedTheEndOfTheLine) {
-                      String stringCurrentLine = currentLine.toString();
-                      httpRequest = discernHeader(stringCurrentLine, httpRequest);
-                      currentLine.setLength(0);
-                  }
-                  else {
-                      continue;
-                  }
 
-                }
-                if (reachedEndOfHeaders(stringBuilder)) {
-                    //System.out.println("4");
-                    System.out.println("reached end of headers");
-                    // get the content length
-                    contentLength = httpRequest.detectBodyLength();
-                    // switch to readingInBody
-                    readingInBody = true;
-
-
-            }
-                // check if body has been read in and if the content length of the body has been reached
-                if (readingInBody = true && contentLength == currentLine.length()) {
-                   // System.out.println("1");
-                    break;
-                }
-                // if body is ready to be added to HTTP request
-                else if (readingInBody = true && reachedEndOfLine(currentLine)) {
-                   // System.out.println("2");
-                    httpRequest = requestBodyAssembler(currentLine, httpRequest);
-                }
-                // Check if line contains the CLDR (thus reaching end of line)
-                // and also make sure it isn't the double CLDR that indicates the beginning of the body
-//                else if (reachedEndOfLine(currentLine) && !reachedEndOfHeaders(stringBuilder)) {
-//                    //System.out.println("3");
-//                    String stringCurrentLine = currentLine.toString();
-//                    httpRequest = discernHeader(stringCurrentLine, httpRequest);
-//                }
-                // if end of headers has been reached
-
-               // System.out.println(stringBuilder.toString());
-               // System.out.println(detectBodyLength(stringBuilder));
+              if (reachedEndOfLine(currentLine)) {
+                  String stringCurrentLine = currentLine.toString();
+                  requestBuilder = discernLine(stringCurrentLine, requestBuilder, readingInBody);
+                  currentLine.setLength(0);
+              }
+            if (reachedEndOfHeaders(stringBuilder)) {
+                System.out.println("reached end of headers");
+                readingInBody = true;
             }
 
-
-            return httpRequest;
+                System.out.println(stringBuilder.toString());
+            }
+            return requestBuilder.build();
         } catch (IOException e) {
             e.printStackTrace();
-            return httpRequest;
+            return requestBuilder.build();
         }
     }
 
 
-    private HTTPRequest discernHeader(String line, HTTPRequest httpRequest) {
+    private RequestBuilder discernLine(String line, RequestBuilder requestBuilder, boolean readingInBody) {
     // this should only take in headers, not blank strings or body
-        if (line.contains(": ")) {
+        if (!line.contains(": ") && readingInBody == false) {
             System.out.println("FIRSTLINE");
-            addHeaderToObject(line, httpRequest);
-        } else {
+            requestBuilder.buildRequestLine(line);
+        } else if (readingInBody == false) {
             System.out.println("SECONDLINE");
-            String[] requestLine = line.split(" ");
-            httpRequest.method = requestLine[0];
-            httpRequest.resource = requestLine[1];
-            httpRequest.httpVersionNumber = requestLine[2];
+            requestBuilder.buildHeaderLine(line);
+        } else if (readingInBody == true) {
+            System.out.println("BODY");
+            requestBuilder.setBody(line);
         }
-        return httpRequest;
+        return requestBuilder;
     }
 
 
-
-    private boolean detectBodyLength(StringBuilder stringBuilder){
-        String string = stringBuilder.toString();
-        boolean containsContentLength = string.contains("Content-Length: ");
-        return containsContentLength;
-    }
-
-    private HTTPRequest addHeaderToObject(String header, HTTPRequest httpRequest) {
-        String[] headerComponents = header.split(":");
-        httpRequest.headers.put(headerComponents[0], headerComponents[1]);
-        System.out.println(headerComponents[0] + headerComponents[1]);
-        return httpRequest;
-    }
 
     private boolean reachedEndOfLine(StringBuilder currentLine) {
         return currentLine.toString().contains(CRLF);
@@ -183,10 +132,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
         return requestScannedInSoFar.toString().contains(CRLF + CRLF);
     }
 
-    private HTTPRequest requestBodyAssembler(StringBuilder contentStringBuilder, HTTPRequest httpRequest) {
-        httpRequest.body = contentStringBuilder.toString();
-        return httpRequest;
-    }
+
 
 
 }
