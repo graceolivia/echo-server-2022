@@ -1,12 +1,11 @@
 package httpServer;
 
 import httpServer.http.Constants;
-import httpServer.http.HTTPRequest;
+import httpServer.http.request.HTTPRequest;
 import httpServer.http.RequestParser;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

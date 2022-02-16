@@ -1,28 +1,25 @@
 package httpServer;
 
 import httpServer.http.Constants;
-import httpServer.http.HTTPRequest;
-import httpServer.http.HTTPResponseWriter;
-import httpServer.outputManagement.ClientWriteableFactory;
+import httpServer.http.request.HTTPRequest;
+import httpServer.http.response.HTTPResponseBuilder;
 import httpServer.routes.Router;
 import httpServer.http.StatusCodes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.net.Socket;
 
-import static httpServer.HttpServer.getRoutes;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RouterTest {
 
-    HTTPResponseWriter responseBuilder;
+    HTTPResponseBuilder responseBuilder;
     Router router;
 
     @BeforeEach
     void setUp() throws IOException {
-        responseBuilder = new HTTPResponseWriter();
+        responseBuilder = new HTTPResponseBuilder();
         router = new Router(HttpServer.getRoutes(), responseBuilder);
     }
     @Test

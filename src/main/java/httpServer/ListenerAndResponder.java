@@ -1,10 +1,10 @@
 package httpServer;
 
-import httpServer.http.HTTPRequest;
+import httpServer.http.request.HTTPRequest;
 
 //import httpServer.http.RequestParser;
 
-import httpServer.http.RequestBuilder;
+import httpServer.http.request.RequestBuilder;
 import httpServer.routes.Router;
 import httpServer.http.StatusCodes;
 import httpServer.outputManagement.ClientWriteableFactory;
@@ -127,6 +127,5 @@ public class ListenerAndResponder implements ListenAndRespondable {
     private boolean reachedEndOfHeaders(StringBuilder requestScannedInSoFar) {
         return requestScannedInSoFar.toString().contains(CRLF + CRLF);
     }
-
 
 }

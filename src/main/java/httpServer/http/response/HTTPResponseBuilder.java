@@ -1,11 +1,36 @@
-package httpServer.http;
+package httpServer.http.response;
 
+import httpServer.http.StatusCodes;
+import httpServer.http.request.HTTPRequest;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static httpServer.http.Constants.CRLF;
 
-public class HTTPResponseWriter {
+public class HTTPResponseBuilder {
 
+    public String statusLine;
+    public Map<String, String> headers = new HashMap<>();
+    public String body;
+
+    public HTTPResponseBuilder buildStatusLine() {
+
+    }
+
+
+    public HTTPResponseBuilder setHeaderLine(String header, String value) {
+
+    }
+
+    public HTTPResponseBuilder setBody(String body) {
+        this.body = body;
+    }
+
+    public HTTPResponse build() {
+        return new HTTPResponse();
+    }
 
     public String buildResponse(StatusCodes statusCode, List methods, HTTPRequest request){
         String statusLine;

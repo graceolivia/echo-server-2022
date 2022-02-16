@@ -1,8 +1,8 @@
 package httpServer.routes;
 
 import httpServer.http.HTTPMethods;
-import httpServer.http.HTTPRequest;
-import httpServer.http.HTTPResponseWriter;
+import httpServer.http.request.HTTPRequest;
+import httpServer.http.response.HTTPResponseBuilder;
 import httpServer.http.StatusCodes;
 
 import java.util.Arrays;
@@ -12,9 +12,9 @@ import java.util.Map;
 public class Router {
 
     Map<String, HTTPMethods[]> routes;
-    HTTPResponseWriter responseBuilder;
+    HTTPResponseBuilder responseBuilder;
 
-    public Router(Map routes, HTTPResponseWriter responseBuilder) {
+    public Router(Map routes, HTTPResponseBuilder responseBuilder) {
         this.routes = routes;
         this.responseBuilder = responseBuilder;
     }

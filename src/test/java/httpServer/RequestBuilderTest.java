@@ -1,8 +1,8 @@
 package httpServer;
 
 import httpServer.http.Constants;
-import httpServer.http.HTTPRequest;
-import httpServer.http.RequestBuilder;
+import httpServer.http.request.HTTPRequest;
+import httpServer.http.request.RequestBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

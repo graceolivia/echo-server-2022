@@ -1,11 +1,18 @@
-package httpServer.http;
+package httpServer.http.response;
 
+
+import httpServer.http.Constants;
+import httpServer.http.request.HTTPRequest;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class HTTPResponse {
 
     String statusLine;
     String allowHeader;
     String contentLengthHeader;
+    public Map<String, String> headers = new HashMap<>();
     String responseBody;
 
     public HTTPResponse(String statusLine, String allowHeader, String contentLengthHeader, String responseBody) {
@@ -13,6 +20,11 @@ public class HTTPResponse {
         this.allowHeader = allowHeader;
         this.contentLengthHeader = contentLengthHeader;
         this.responseBody = responseBody;
+    }
+
+    public HTTPResponse() {
+        statusLine = allowHeader = contentLengthHeader = responseBody = null;
+
     }
 
     public String getFullResponse() {

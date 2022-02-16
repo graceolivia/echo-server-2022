@@ -1,6 +1,6 @@
 package httpServer;
 import httpServer.http.Constants;
-import httpServer.http.HTTPResponseWriter;
+import httpServer.http.response.HTTPResponseBuilder;
 import httpServer.http.StatusCodes;
 import httpServer.outputManagement.ClientWriteableFactory;
 import httpServer.routes.Router;
@@ -22,7 +22,7 @@ public class ListenerAndResponderTest {
     MockServerSocketWrapper mockServerSocket;
     MockBufferedReaderWrapper mockBufferedReader;
     MockPrintWriterWrapper mockPrintWriter;
-    HTTPResponseWriter responseBuilder;
+    HTTPResponseBuilder responseBuilder;
     Map routes;
 
     @BeforeEach
@@ -33,7 +33,7 @@ public class ListenerAndResponderTest {
                 "GET / HTTP/1.1" + Constants.CRLF + Constants.CRLF;
         socket = new Socket();
         routes = getRoutes();
-        responseBuilder = new HTTPResponseWriter();
+        responseBuilder = new HTTPResponseBuilder();
         Router router = new Router(routes, responseBuilder);
         mockServerSocket = new MockServerSocketWrapper(socket);
         mockPrintWriter =  new MockPrintWriterWrapper();
