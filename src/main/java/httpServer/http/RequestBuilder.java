@@ -18,7 +18,7 @@ public class RequestBuilder {
         String[] requestLine = line.split(" ");
         this.method = requestLine[0];
         this.resource = requestLine[1];
-        this.httpVersionNumber = requestLine[2];
+        this.httpVersionNumber = requestLine[2].replace(CRLF, "");;
         return this;
     }
 

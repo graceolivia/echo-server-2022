@@ -56,20 +56,16 @@ public class ListenerAndResponder implements ListenAndRespondable {
             printServerResponse(responseText, clientSocket);
         }
         if (!httpRequest.equals("")) {
-
-            //HTTPRequest request = RequestParser.parse(httpRequest);
-            System.out.println(httpRequest);
             String httpResponse = router.getResponse(httpRequest);
             printServerResponse(httpResponse, clientSocket);
         }
 
     }
 
-    private void printServerResponse(String message, Socket clientSocket) throws IOException {
+    private void printServerResponse(String httpResponse, Socket clientSocket) throws IOException {
             ClientWriteable printer = clientWriterFactory.makePrinter(clientSocket);
-            System.out.println("sending this out");
-            System.out.println(message);
-            printer.println(message);
+            System.out.println(httpResponse);
+            printer.println(httpResponse);
 
     }
 
@@ -80,8 +76,6 @@ public class ListenerAndResponder implements ListenAndRespondable {
         StringBuilder stringBuilder = new StringBuilder();
         StringBuilder currentLine = new StringBuilder();
         boolean readingInBody = false;
-        boolean readEntireMessage = false;
-        int contentLength = 0;
 
         try {
             while ((character = bufferedReader.read()) != null) {
@@ -94,11 +88,9 @@ public class ListenerAndResponder implements ListenAndRespondable {
                     }
                     if (currentLine.length() == requestBuilder.getContentLengthInt()) {
                         requestBuilder.setBody(currentLine.toString());
-                        System.out.println(requestBuilder.toString());
                         break;
                     }
                 }
-
               if (reachedEndOfLine(currentLine)) {
                   if (currentLine.toString() != CRLF + CRLF) {
                       String stringCurrentLine = currentLine.toString();
@@ -106,7 +98,6 @@ public class ListenerAndResponder implements ListenAndRespondable {
                   }
                   currentLine.setLength(0);
               }
-
             }
             return requestBuilder.build();
         } catch (IOException e) {
@@ -136,8 +127,6 @@ public class ListenerAndResponder implements ListenAndRespondable {
     private boolean reachedEndOfHeaders(StringBuilder requestScannedInSoFar) {
         return requestScannedInSoFar.toString().contains(CRLF + CRLF);
     }
-
-
 
 
 }
