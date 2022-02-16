@@ -3,11 +3,13 @@ package httpServer.http;
 import java.util.HashMap;
 import java.util.Map;
 
+import static httpServer.http.Constants.CRLF;
+
 public class RequestBuilder {
 
-    public static String method;
-    public static String resource;
-    public static String httpVersionNumber;
+    public String method;
+    public String resource;
+    public String httpVersionNumber;
     public Map<String, String> headers = new HashMap<>();
     public String body;
 
@@ -22,7 +24,8 @@ public class RequestBuilder {
 
     public RequestBuilder buildHeaderLine(String line) {
         String[] requestLine = line.split(": ");
-        this.headers.put(requestLine[0], requestLine[1]);
+        String removedCLDR = requestLine[1].replace(CRLF, "");
+        this.headers.put(requestLine[0], removedCLDR);
         return this;
     }
 
@@ -31,8 +34,44 @@ public class RequestBuilder {
         return this;
     }
 
+    public String toString() {
+       String requestLine = method + resource + httpVersionNumber + CRLF;
+       System.out.println(requestLine);
+       headers.forEach((k,v)-> System.out.println("key: "+k+", value: "+v));
+       if (body != null) {
+           System.out.println("body: " + body);
+       }
+
+        return requestLine;
+    }
+
     public HTTPRequest build() {
         return new HTTPRequest(method, resource, httpVersionNumber, headers, body);
+    }
+
+    public int length() {
+        return headers.size();
+    }
+
+    public boolean doesRequestContainBody() {
+        return headers.containsKey("Content-Length");
+    }
+
+
+    public int getContentLengthInt() {
+        String contentLengthString = headers.get("Content-Length");
+        Integer length = Integer.valueOf(contentLengthString);
+        return length;
+    }
+
+    public boolean hasEntireBodyBeenReadIn() {
+        if (body == null) { return false; }
+        int expectedBodyLength = getContentLengthInt();
+        int currentBodyLength = body.length();
+        System.out.println(expectedBodyLength);
+        System.out.println(currentBodyLength);
+        System.out.println(body);
+        return(expectedBodyLength == currentBodyLength);
     }
 
 }

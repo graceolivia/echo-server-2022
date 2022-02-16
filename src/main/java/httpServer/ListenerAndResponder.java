@@ -60,7 +60,6 @@ public class ListenerAndResponder implements ListenAndRespondable {
             //HTTPRequest request = RequestParser.parse(httpRequest);
             System.out.println(httpRequest);
             String httpResponse = router.getResponse(httpRequest);
-
             printServerResponse(httpResponse, clientSocket);
         }
 
@@ -68,6 +67,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
     private void printServerResponse(String message, Socket clientSocket) throws IOException {
             ClientWriteable printer = clientWriterFactory.makePrinter(clientSocket);
+            System.out.println("sending this out");
             System.out.println(message);
             printer.println(message);
 
@@ -80,24 +80,33 @@ public class ListenerAndResponder implements ListenAndRespondable {
         StringBuilder stringBuilder = new StringBuilder();
         StringBuilder currentLine = new StringBuilder();
         boolean readingInBody = false;
+        boolean readEntireMessage = false;
         int contentLength = 0;
 
         try {
             while ((character = bufferedReader.read()) != null) {
                 stringBuilder.append(character);
                 currentLine.append(character);
+                if (reachedEndOfHeaders(stringBuilder)) {
+                    readingInBody = true;
+                    if (!requestBuilder.doesRequestContainBody()) {
+                        break;
+                    }
+                    if (currentLine.length() == requestBuilder.getContentLengthInt()) {
+                        requestBuilder.setBody(currentLine.toString());
+                        System.out.println(requestBuilder.toString());
+                        break;
+                    }
+                }
 
               if (reachedEndOfLine(currentLine)) {
-                  String stringCurrentLine = currentLine.toString();
-                  requestBuilder = discernLine(stringCurrentLine, requestBuilder, readingInBody);
+                  if (currentLine.toString() != CRLF + CRLF) {
+                      String stringCurrentLine = currentLine.toString();
+                      requestBuilder = discernLine(stringCurrentLine, requestBuilder, readingInBody);
+                  }
                   currentLine.setLength(0);
               }
-            if (reachedEndOfHeaders(stringBuilder)) {
-                System.out.println("reached end of headers");
-                readingInBody = true;
-            }
 
-                System.out.println(stringBuilder.toString());
             }
             return requestBuilder.build();
         } catch (IOException e) {
@@ -108,15 +117,11 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
 
     private RequestBuilder discernLine(String line, RequestBuilder requestBuilder, boolean readingInBody) {
-    // this should only take in headers, not blank strings or body
         if (!line.contains(": ") && readingInBody == false) {
-            System.out.println("FIRSTLINE");
             requestBuilder.buildRequestLine(line);
         } else if (readingInBody == false) {
-            System.out.println("SECONDLINE");
             requestBuilder.buildHeaderLine(line);
         } else if (readingInBody == true) {
-            System.out.println("BODY");
             requestBuilder.setBody(line);
         }
         return requestBuilder;
