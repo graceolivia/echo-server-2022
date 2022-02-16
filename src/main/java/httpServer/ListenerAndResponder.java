@@ -1,10 +1,13 @@
 package httpServer;
 
+import httpServer.http.HTTPMethods;
 import httpServer.http.request.HTTPRequest;
 
 //import httpServer.http.RequestParser;
 
 import httpServer.http.request.RequestBuilder;
+import httpServer.http.response.HTTPResponse;
+import httpServer.http.response.HTTPResponseBuilder;
 import httpServer.routes.Router;
 import httpServer.http.StatusCodes;
 import httpServer.outputManagement.ClientWriteableFactory;
@@ -54,17 +57,20 @@ public class ListenerAndResponder implements ListenAndRespondable {
             printServerResponse(responseText, clientSocket);
         }
         if (!httpRequest.equals("")) {
-            String httpResponse = router.getResponse(httpRequest);
-            printServerResponse(httpResponse, clientSocket);
+            HTTPResponse httpResponse = router.getResponse(httpRequest);
+            System.out.println("hi");
+            System.out.println(httpResponse.responseString());
+            System.out.println("hi");
+            printServerResponse(httpResponse.responseString(), clientSocket);
         }
 
     }
 
     private void printServerResponse(String httpResponse, Socket clientSocket) throws IOException {
+
             ClientWriteable printer = clientWriterFactory.makePrinter(clientSocket);
             System.out.println(httpResponse);
             printer.println(httpResponse);
-
     }
 
     private HTTPRequest readAllLinesAndReturnHttpRequest(ClientReadable bufferedReader)  {

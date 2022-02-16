@@ -2,6 +2,7 @@ package httpServer.routes;
 
 import httpServer.http.HTTPMethods;
 import httpServer.http.request.HTTPRequest;
+import httpServer.http.response.HTTPResponse;
 import httpServer.http.response.HTTPResponseBuilder;
 import httpServer.http.StatusCodes;
 
@@ -21,34 +22,26 @@ public class Router {
 
 
 
-    public String getResponse(HTTPRequest httpRequest) {
+    public HTTPResponse getResponse(HTTPRequest httpRequest) {
+        responseBuilder = setHeader(httpRequest, responseBuilder);
+        responseBuilder = responseBuilder.setBody(httpRequest.body);
 
+        return responseBuilder.build();
+
+    }
+
+    private HTTPResponseBuilder setHeader(HTTPRequest httpRequest, HTTPResponseBuilder responseBuilder) {
         if (!isResourceValid(httpRequest)) {
             responseBuilder = responseBuilder.setStatusLine(StatusCodes.PAGE_NOT_FOUND, httpRequest);
         }
         else if (isResourceValid(httpRequest) && !isRouteInExistingResource(httpRequest)) {
-
+            responseBuilder = responseBuilder.setStatusLine(StatusCodes.NOT_ACCEPTABLE, httpRequest);
+        }
+        else if (isResourceValid(httpRequest) && isRouteInExistingResource(httpRequest)) {
+            responseBuilder= responseBuilder.setStatusLine(StatusCodes.OK, httpRequest);
         }
 
-
-
-//
-//        if (routes.containsKey(request.resource)) {
-//            HTTPMethods[] allowedRoutes = routes.get(request.resource);
-//            List allowedRoutesAsList = Arrays.asList(allowedRoutes);
-//
-//            for (int i = 0; i < allowedRoutesAsList.size(); i++) {
-//                String methodAllowed = String.valueOf(allowedRoutesAsList.get(i));
-//                if (request.method.equals(methodAllowed)) {
-//                    return responseBuilder.buildResponse(StatusCodes.OK, allowedRoutesAsList, request);
-//                }
-//                else {
-//                    continue;
-//                }
-//            }
-//            return responseBuilder.buildResponse(StatusCodes.NOT_ACCEPTABLE, allowedRoutesAsList, request);
-//        }
-//        return responseBuilder.buildResponse(StatusCodes.PAGE_NOT_FOUND, null, request);
+        return responseBuilder;
     }
 
     private boolean isResourceValid(HTTPRequest httpRequest) {
@@ -63,13 +56,13 @@ public class Router {
         for (int i = 0; i < allowedRoutesAsList.size(); i++) {
             String methodAllowed = String.valueOf(allowedRoutesAsList.get(i));
             if (httpRequest.method.equals(methodAllowed)) {
-                return responseBuilder.buildResponse(StatusCodes.OK, allowedRoutesAsList, httpRequest);
+                return true;
             }
             else {
                 continue;
             }
         }
-        return responseBuilder.buildResponse(StatusCodes.NOT_ACCEPTABLE, allowedRoutesAsList, httpRequest);
+        return false;
     }
 
 

@@ -31,22 +31,22 @@ public class HTTPResponseBuilder {
     }
 
     public HTTPResponse build() {
-        return new HTTPResponse();
+        return new HTTPResponse(statusLine, "null", "null", body);
     }
-
-    public String buildResponse(StatusCodes statusCode, List methods, HTTPRequest request){
-        String statusLine;
-        String allowHeader = null;
-        String contentLengthHeader;
-        String responseContent = null;
-        statusLine = setStatusLine(statusCode, request);
-        if (!statusCode.equals(StatusCodes.PAGE_NOT_FOUND)) {
-            allowHeader = makeAllowHeader(methods);
-        }
-        contentLengthHeader = makeContentLengthHeader(0);
-        HTTPResponse response = new HTTPResponse(statusLine, allowHeader, contentLengthHeader, responseContent);
-        return(response.responseString());
-    }
+//
+//    public String buildResponse(StatusCodes statusCode, List methods, HTTPRequest request){
+//        String statusLine;
+//        String allowHeader = null;
+//        String contentLengthHeader;
+//        String responseContent = null;
+//        statusLine = setStatusLine(statusCode, request);
+//        if (!statusCode.equals(StatusCodes.PAGE_NOT_FOUND)) {
+//            allowHeader = makeAllowHeader(methods);
+//        }
+//        contentLengthHeader = makeContentLengthHeader(0);
+//        HTTPResponse response = new HTTPResponse(statusLine, allowHeader, contentLengthHeader, responseContent);
+//        return(response.responseString());
+//    }
 
 
     private String makeAllowHeader(List methods) {
