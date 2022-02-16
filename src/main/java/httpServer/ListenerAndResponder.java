@@ -46,8 +46,6 @@ public class ListenerAndResponder implements ListenAndRespondable {
     public void readClientInput(Socket clientSocket) throws IOException {
 
         ClientReadable bufferedReader = clientReaderFactory.makeReader(clientSocket);
-
-
         HTTPRequest httpRequest;
         httpRequest = readAllLinesAndReturnHttpRequest(bufferedReader);
         if (httpRequest == null) {

@@ -15,17 +15,19 @@ public class HTTPResponseBuilder {
     public Map<String, String> headers = new HashMap<>();
     public String body;
 
-    public HTTPResponseBuilder buildStatusLine() {
 
+    public HTTPResponseBuilder setStatusLine(StatusCodes statusCode, HTTPRequest request) {
+       this.statusLine = request.httpVersionNumber + " " + statusCode.httpResponse + CRLF;
+       return this;
     }
 
-
     public HTTPResponseBuilder setHeaderLine(String header, String value) {
-
+    return this;
     }
 
     public HTTPResponseBuilder setBody(String body) {
         this.body = body;
+        return this;
     }
 
     public HTTPResponse build() {
@@ -37,18 +39,15 @@ public class HTTPResponseBuilder {
         String allowHeader = null;
         String contentLengthHeader;
         String responseContent = null;
-        statusLine = makeStatusLine(statusCode, request);
+        statusLine = setStatusLine(statusCode, request);
         if (!statusCode.equals(StatusCodes.PAGE_NOT_FOUND)) {
             allowHeader = makeAllowHeader(methods);
         }
         contentLengthHeader = makeContentLengthHeader(0);
         HTTPResponse response = new HTTPResponse(statusLine, allowHeader, contentLengthHeader, responseContent);
-        return(response.getFullResponse());
+        return(response.responseString());
     }
 
-    private String makeStatusLine(StatusCodes statusCode, HTTPRequest request) {
-        return (request.httpVersionNumber + " " + statusCode.httpResponse + CRLF);
-    }
 
     private String makeAllowHeader(List methods) {
         StringBuilder allowLine = new StringBuilder();

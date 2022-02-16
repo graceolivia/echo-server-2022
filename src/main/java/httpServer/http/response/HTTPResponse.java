@@ -2,7 +2,6 @@ package httpServer.http.response;
 
 
 import httpServer.http.Constants;
-import httpServer.http.request.HTTPRequest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +26,7 @@ public class HTTPResponse {
 
     }
 
-    public String getFullResponse() {
+    public String responseString() {
         StringBuilder fullResponse = new StringBuilder();
         appendIfNotNull(fullResponse, statusLine);
         appendIfNotNull(fullResponse, allowHeader);

@@ -19,22 +19,58 @@ public class Router {
         this.responseBuilder = responseBuilder;
     }
 
-    public String getResponse(HTTPRequest request) {
-        if (routes.containsKey(request.resource)) {
-            HTTPMethods[] allowedRoutes = routes.get(request.resource);
-            List allowedRoutesAsList = Arrays.asList(allowedRoutes);
 
-            for (int i = 0; i < allowedRoutesAsList.size(); i++) {
-                String methodAllowed = String.valueOf(allowedRoutesAsList.get(i));
-                if (request.method.equals(methodAllowed)) {
-                    return responseBuilder.buildResponse(StatusCodes.OK, allowedRoutesAsList, request);
-                }
-                else {
-                    continue;
-                }
-            }
-            return responseBuilder.buildResponse(StatusCodes.NOT_ACCEPTABLE, allowedRoutesAsList, request);
+
+    public String getResponse(HTTPRequest httpRequest) {
+
+        if (!isResourceValid(httpRequest)) {
+            responseBuilder = responseBuilder.setStatusLine(StatusCodes.PAGE_NOT_FOUND, httpRequest);
         }
-        return responseBuilder.buildResponse(StatusCodes.PAGE_NOT_FOUND, null, request);
+        else if (isResourceValid(httpRequest) && !isRouteInExistingResource(httpRequest)) {
+
+        }
+
+
+
+//
+//        if (routes.containsKey(request.resource)) {
+//            HTTPMethods[] allowedRoutes = routes.get(request.resource);
+//            List allowedRoutesAsList = Arrays.asList(allowedRoutes);
+//
+//            for (int i = 0; i < allowedRoutesAsList.size(); i++) {
+//                String methodAllowed = String.valueOf(allowedRoutesAsList.get(i));
+//                if (request.method.equals(methodAllowed)) {
+//                    return responseBuilder.buildResponse(StatusCodes.OK, allowedRoutesAsList, request);
+//                }
+//                else {
+//                    continue;
+//                }
+//            }
+//            return responseBuilder.buildResponse(StatusCodes.NOT_ACCEPTABLE, allowedRoutesAsList, request);
+//        }
+//        return responseBuilder.buildResponse(StatusCodes.PAGE_NOT_FOUND, null, request);
     }
+
+    private boolean isResourceValid(HTTPRequest httpRequest) {
+        return routes.containsKey(httpRequest.resource);
+    }
+
+    private boolean isRouteInExistingResource(HTTPRequest httpRequest) {
+
+        HTTPMethods[] allowedRoutes = routes.get(httpRequest.resource);
+        List allowedRoutesAsList = Arrays.asList(allowedRoutes);
+
+        for (int i = 0; i < allowedRoutesAsList.size(); i++) {
+            String methodAllowed = String.valueOf(allowedRoutesAsList.get(i));
+            if (httpRequest.method.equals(methodAllowed)) {
+                return responseBuilder.buildResponse(StatusCodes.OK, allowedRoutesAsList, httpRequest);
+            }
+            else {
+                continue;
+            }
+        }
+        return responseBuilder.buildResponse(StatusCodes.NOT_ACCEPTABLE, allowedRoutesAsList, httpRequest);
+    }
+
+
 }
