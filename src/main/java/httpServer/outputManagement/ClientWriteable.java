@@ -1,4 +1,5 @@
 package httpServer.outputManagement;
+
 import java.io.IOException;
 
 public interface ClientWriteable {

@@ -16,10 +16,10 @@ public class RequestBuilderTest {
     void testRequestParserReturnsCorrectHTTPResponseObject() throws IOException {
 
         HTTPRequest httpRequestExpected = new HTTPRequest("GET", "/", "HTTP/1.1");
-        String request = "GET / HTTP/1.1" + Constants.CRLF +
-                "Host: localhost:5000" + Constants.CRLF +
-                "User-Agent: JUnit" + Constants.CRLF +
-                "Accept: */*" + Constants.CRLF;
+        String request = "GET / HTTP/1.1" + Constants.crlf +
+                "Host: localhost:5000" + Constants.crlf +
+                "User-Agent: JUnit" + Constants.crlf +
+                "Accept: */*" + Constants.crlf;
 
         HTTPRequest httpParsed = RequestBuilder.parse(request);
         assertEquals(httpRequestExpected.method, httpParsed.method);

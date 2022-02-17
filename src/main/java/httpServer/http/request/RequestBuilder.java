@@ -3,7 +3,7 @@ package httpServer.http.request;
 import java.util.HashMap;
 import java.util.Map;
 
-import static httpServer.http.Constants.CRLF;
+import static httpServer.http.Constants.crlf;
 
 public class RequestBuilder {
 
@@ -13,18 +13,17 @@ public class RequestBuilder {
     public Map<String, String> headers = new HashMap<>();
     public String body;
 
-
     public RequestBuilder buildRequestLine(String line) {
         String[] requestLine = line.split(" ");
         this.method = requestLine[0];
         this.resource = requestLine[1];
-        this.httpVersionNumber = requestLine[2].replace(CRLF, "");;
+        this.httpVersionNumber = requestLine[2].replace(crlf, "");;
         return this;
     }
 
     public RequestBuilder buildHeaderLine(String line) {
         String[] requestLine = line.split(": ");
-        String removedCLDR = requestLine[1].replace(CRLF, "");
+        String removedCLDR = requestLine[1].replace(crlf, "");
         this.headers.put(requestLine[0], removedCLDR);
         return this;
     }
@@ -35,12 +34,12 @@ public class RequestBuilder {
     }
 
     public String toString() {
-       String requestLine = method + resource + httpVersionNumber + CRLF;
-       System.out.println(requestLine);
-       headers.forEach((k,v)-> System.out.println("key: "+k+", value: "+v));
-       if (body != null) {
-           System.out.println("body: " + body);
-       }
+        String requestLine = method + resource + httpVersionNumber + crlf;
+        System.out.println(requestLine);
+        headers.forEach((k, v) -> System.out.println("key: " + k + ", value: " + v));
+        if (body != null) {
+            System.out.println("body: " + body);
+        }
 
         return requestLine;
     }
@@ -57,7 +56,6 @@ public class RequestBuilder {
         return headers.containsKey("Content-Length");
     }
 
-
     public int getContentLengthInt() {
         String contentLengthString = headers.get("Content-Length");
         Integer length = Integer.valueOf(contentLengthString);
@@ -65,13 +63,16 @@ public class RequestBuilder {
     }
 
     public boolean hasEntireBodyBeenReadIn() {
-        if (body == null) { return false; }
+        if (body == null) {
+            return false;
+        }
         int expectedBodyLength = getContentLengthInt();
         int currentBodyLength = body.length();
         System.out.println(expectedBodyLength);
         System.out.println(currentBodyLength);
         System.out.println(body);
-        return(expectedBodyLength == currentBodyLength);
+        return (expectedBodyLength == currentBodyLength);
+
     }
 
 }

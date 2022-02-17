@@ -20,35 +20,30 @@ public class Router {
         this.responseBuilder = responseBuilder;
     }
 
-
-
     public HTTPResponse getResponse(HTTPRequest httpRequest) {
         responseBuilder = setStatusCodeLine(httpRequest, responseBuilder);
         responseBuilder = responseBuilder.setBody(httpRequest.body);
 
         return responseBuilder.build(httpRequest);
-
     }
 
     private HTTPResponseBuilder setStatusCodeLine(HTTPRequest httpRequest, HTTPResponseBuilder responseBuilder) {
         if (!isResourceValid(httpRequest)) {
             responseBuilder = responseBuilder.setStatusLine(StatusCodes.PAGE_NOT_FOUND, httpRequest);
-        }
-        else if (isResourceValid(httpRequest) && !isRouteInExistingResource(httpRequest)) {
+        } else if (isResourceValid(httpRequest) && !isRouteInExistingResource(httpRequest)) {
             responseBuilder = responseBuilder.setStatusLine(StatusCodes.NOT_ACCEPTABLE, httpRequest);
-        }
-        else if (isResourceValid(httpRequest) && isRouteInExistingResource(httpRequest)) {
-            responseBuilder= responseBuilder.setStatusLine(StatusCodes.OK, httpRequest);
+        } else if (isResourceValid(httpRequest) && isRouteInExistingResource(httpRequest)) {
+            responseBuilder = responseBuilder.setStatusLine(StatusCodes.OK, httpRequest);
         }
 
         return responseBuilder;
     }
 
-    private HTTPResponseBuilder setHeaders(HTTPRequest httpRequest, HTTPResponseBuilder responseBuilder) {
-        if (responseBuilder.statusLine.contains("405")) {
-
-        }
-    }
+//    private HTTPResponseBuilder setHeaders(HTTPRequest httpRequest, HTTPResponseBuilder responseBuilder) {
+//        if (responseBuilder.statusLine.contains("405")) {
+//
+//        }
+//    }
 
     private boolean isResourceValid(HTTPRequest httpRequest) {
         return routes.containsKey(httpRequest.resource);
@@ -63,13 +58,11 @@ public class Router {
             String methodAllowed = String.valueOf(allowedRoutesAsList.get(i));
             if (httpRequest.method.equals(methodAllowed)) {
                 return true;
-            }
-            else {
+            } else {
                 continue;
             }
         }
         return false;
     }
-
 
 }

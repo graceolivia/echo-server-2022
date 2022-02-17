@@ -1,13 +1,12 @@
 package httpServer;
+
 import httpServer.http.HTTPMethods;
 import httpServer.outputManagement.ClientWriteableFactory;
 import httpServer.outputManagement.ClientWriterFactory;
 import httpServer.http.response.HTTPResponseBuilder;
-
 import httpServer.routes.Router;
 import httpServer.socketManagement.ServerSocketInterface;
 import httpServer.socketManagement.ServerSocketWrapper;
-
 import java.io.IOException;
 import java.net.Socket;
 import java.util.HashMap;
@@ -24,9 +23,9 @@ public class HttpServer {
         Socket clientSocket = echoer.startServer();
 
         try {
-           while (true) {
-               echoer.readClientInput(clientSocket);
-               clientSocket = echoer.keepListening();
+            while (true) {
+                echoer.readClientInput(clientSocket);
+                clientSocket = echoer.keepListening();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -37,7 +36,7 @@ public class HttpServer {
         System.err.println("Closing connection.");
         clientSocket.close();
         serverSocket.close();
-    };
+    }
 
     public static Map<String, HTTPMethods[]> getRoutes() {
         Map<String, HTTPMethods[]> routes = new HashMap<>();

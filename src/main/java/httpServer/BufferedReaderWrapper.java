@@ -1,4 +1,5 @@
 package httpServer;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 
@@ -11,7 +12,7 @@ public class BufferedReaderWrapper implements ClientReadable {
     }
 
     public String read() throws IOException {
-        return String.valueOf((char)bufferedReader.read());
+        return String.valueOf((char) bufferedReader.read());
     }
 
 }

@@ -27,10 +27,10 @@ public class ListenerAndResponderTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        String input = "Accept: */*" + Constants.CRLF +
-                "User-Agent: jUnit" + Constants.CRLF +
-                "Host: localhost:5000" + Constants.CRLF +
-                "GET / HTTP/1.1" + Constants.CRLF + Constants.CRLF;
+        String input = "Accept: */*" + Constants.crlf +
+                "User-Agent: jUnit" + Constants.crlf +
+                "Host: localhost:5000" + Constants.crlf +
+                "GET / HTTP/1.1" + Constants.crlf + Constants.crlf;
         socket = new Socket();
         routes = getRoutes();
         responseBuilder = new HTTPResponseBuilder();
@@ -55,7 +55,7 @@ public class ListenerAndResponderTest {
 
     @Test
     void testReadClientInputCallsPrintWriterPrintLn() throws IOException {
-        String expectedResult = "HTTP/1.1 " + StatusCodes.PAGE_NOT_FOUND.httpResponse + Constants.CRLF + "Content-Length: 0" + Constants.CRLF;
+        String expectedResult = "HTTP/1.1 " + StatusCodes.PAGE_NOT_FOUND.httpResponse + Constants.crlf + "Content-Length: 0" + Constants.crlf;
 
         echoer.readClientInput(socket);
 

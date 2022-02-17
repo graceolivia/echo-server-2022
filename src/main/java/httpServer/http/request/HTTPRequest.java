@@ -39,13 +39,14 @@ public class HTTPRequest {
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
-        if(this == obj)
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
+        }
 
-        if(obj == null || obj.getClass()!= this.getClass())
+        if (obj == null || obj.getClass() != this.getClass()) {
             return false;
+        }
 
         HTTPRequest httpRequest = (HTTPRequest) obj;
 

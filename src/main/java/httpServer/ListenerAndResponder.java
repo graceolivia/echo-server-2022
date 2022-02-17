@@ -1,24 +1,20 @@
 package httpServer;
 
-import httpServer.http.HTTPMethods;
 import httpServer.http.request.HTTPRequest;
 
 //import httpServer.http.RequestParser;
 
 import httpServer.http.request.RequestBuilder;
 import httpServer.http.response.HTTPResponse;
-import httpServer.http.response.HTTPResponseBuilder;
 import httpServer.routes.Router;
 import httpServer.http.StatusCodes;
 import httpServer.outputManagement.ClientWriteableFactory;
 import httpServer.outputManagement.ClientWriteable;
 import httpServer.socketManagement.ServerSocketInterface;
-
 import java.io.IOException;
 import java.net.Socket;
 
-
-import static httpServer.http.Constants.CRLF;
+import static httpServer.http.Constants.crlf;
 
 public class ListenerAndResponder implements ListenAndRespondable {
     ServerSocketInterface serverSocket;
@@ -65,10 +61,9 @@ public class ListenerAndResponder implements ListenAndRespondable {
     }
 
     private void printServerResponse(String httpResponse, Socket clientSocket) throws IOException {
-
-            ClientWriteable printer = clientWriterFactory.makePrinter(clientSocket);
-            System.out.println(httpResponse);
-            printer.println(httpResponse);
+        ClientWriteable printer = clientWriterFactory.makePrinter(clientSocket);
+        System.out.println(httpResponse);
+        printer.println(httpResponse);
     }
 
     private HTTPRequest readAllLinesAndReturnHttpRequest(ClientReadable bufferedReader)  {
@@ -93,13 +88,13 @@ public class ListenerAndResponder implements ListenAndRespondable {
                         break;
                     }
                 }
-              if (reachedEndOfLine(currentLine)) {
-                  if (currentLine.toString() != CRLF + CRLF) {
-                      String stringCurrentLine = currentLine.toString();
-                      requestBuilder = discernLine(stringCurrentLine, requestBuilder, readingInBody);
-                  }
-                  currentLine.setLength(0);
-              }
+                if (reachedEndOfLine(currentLine)) {
+                    if (currentLine.toString() != crlf + crlf) {
+                        String stringCurrentLine = currentLine.toString();
+                        requestBuilder = discernLine(stringCurrentLine, requestBuilder, readingInBody);
+                    }
+                    currentLine.setLength(0);
+                }
             }
             return requestBuilder.build();
         } catch (IOException e) {
@@ -107,7 +102,6 @@ public class ListenerAndResponder implements ListenAndRespondable {
             return requestBuilder.build();
         }
     }
-
 
     private RequestBuilder discernLine(String line, RequestBuilder requestBuilder, boolean readingInBody) {
         if (!line.contains(": ") && readingInBody == false) {
@@ -120,14 +114,12 @@ public class ListenerAndResponder implements ListenAndRespondable {
         return requestBuilder;
     }
 
-
-
     private boolean reachedEndOfLine(StringBuilder currentLine) {
-        return currentLine.toString().contains(CRLF);
+        return currentLine.toString().contains(crlf);
     }
 
     private boolean reachedEndOfHeaders(StringBuilder requestScannedInSoFar) {
-        return requestScannedInSoFar.toString().contains(CRLF + CRLF);
+        return requestScannedInSoFar.toString().contains(crlf + crlf);
     }
 
 }

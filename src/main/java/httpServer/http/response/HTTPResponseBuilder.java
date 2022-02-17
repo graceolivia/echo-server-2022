@@ -7,22 +7,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static httpServer.http.Constants.CRLF;
-
 public class HTTPResponseBuilder {
 
     public String statusLine;
     public Map<String, String> headers = new HashMap<>();
     public String body;
 
-
     public HTTPResponseBuilder setStatusLine(StatusCodes statusCode, HTTPRequest request) {
-       this.statusLine = request.httpVersionNumber + " " + statusCode.httpResponse;
-       return this;
+        this.statusLine = request.httpVersionNumber + " " + statusCode.httpResponse;
+        return this;
     }
 
     public HTTPResponseBuilder setHeaderLine(String header, String value) {
-    return this;
+        return this;
     }
 
     public HTTPResponseBuilder setBody(String body) {
@@ -61,11 +58,9 @@ public class HTTPResponseBuilder {
 //        return(response.responseString());
 //    }
 
-
-
-
     private String makeContentLengthHeader(int length) {
-        return("Content-Length: " + String.valueOf(length));
+        return ("Content-Length: " + String.valueOf(length));
+
     }
 
 }

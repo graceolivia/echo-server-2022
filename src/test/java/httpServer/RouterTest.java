@@ -25,7 +25,7 @@ public class RouterTest {
     @Test
     void testRouterReturns200ForGetRequestToResourceWithGetAllowed() throws IOException {
         HTTPRequest request = new HTTPRequest("GET", "/simple_get", "HTTP/1.1");
-        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.CRLF + "Allow: GET" + Constants.CRLF + "Content-Length: 0" + Constants.CRLF;
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.crlf + "Allow: GET" + Constants.crlf + "Content-Length: 0" + Constants.crlf;
         String returnedResponse = router.getResponse(request);
         assertEquals(expectedResponse, returnedResponse);
     }
@@ -33,7 +33,7 @@ public class RouterTest {
     @Test
     void testRouterReturns404ForNonExistentResource() throws IOException {
         HTTPRequest request = new HTTPRequest("GET", "/anything_invalid", "HTTP/1.1");
-        String expectedResponse = "HTTP/1.1 " + StatusCodes.PAGE_NOT_FOUND.httpResponse + Constants.CRLF + "Content-Length: 0" + Constants.CRLF;
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.PAGE_NOT_FOUND.httpResponse + Constants.crlf + "Content-Length: 0" + Constants.crlf;
         String returnedResponse = router.getResponse(request);
         assertEquals(expectedResponse.toString(), returnedResponse);
     }
@@ -41,7 +41,7 @@ public class RouterTest {
     @Test
     void testRouterReturns405ForInvalidMethodRequestToExistingResource() throws IOException {
         HTTPRequest request = new HTTPRequest("GET", "/head_request", "HTTP/1.1");
-        String expectedResponse = "HTTP/1.1 " + StatusCodes.NOT_ACCEPTABLE.httpResponse + Constants.CRLF + "Allow: HEAD, OPTIONS" + Constants.CRLF +  "Content-Length: 0" + Constants.CRLF;;
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.NOT_ACCEPTABLE.httpResponse + Constants.crlf + "Allow: HEAD, OPTIONS" + Constants.crlf +  "Content-Length: 0" + Constants.crlf;;
         String returnedResponse = router.getResponse(request);
         assertEquals(expectedResponse, returnedResponse);
     }
@@ -49,7 +49,7 @@ public class RouterTest {
     @Test
     void testRouterReturns200ForFirstAllowedRequestTypeToExistingResourceWithMultipleMethods() throws IOException {
         HTTPRequest request = new HTTPRequest("OPTIONS", "/head_request", "HTTP/1.1");
-        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.CRLF + "Allow: HEAD, OPTIONS" + Constants.CRLF +  "Content-Length: 0" + Constants.CRLF;;
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.crlf + "Allow: HEAD, OPTIONS" + Constants.crlf +  "Content-Length: 0" + Constants.crlf;;
         String returnedResponse = router.getResponse(request);
         assertEquals(expectedResponse, returnedResponse);
     }
@@ -57,7 +57,7 @@ public class RouterTest {
     @Test
     void testRouterReturns200ForSecondAllowedRequestTypeToExistingResourceWithMultipleMethods() throws IOException {
         HTTPRequest request = new HTTPRequest("HEAD", "/head_request", "HTTP/1.1");
-        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.CRLF + "Allow: HEAD, OPTIONS" + Constants.CRLF +  "Content-Length: 0" + Constants.CRLF;;
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.crlf + "Allow: HEAD, OPTIONS" + Constants.crlf +  "Content-Length: 0" + Constants.crlf;;
         String returnedResponse = router.getResponse(request);
         assertEquals(expectedResponse, returnedResponse);
     }

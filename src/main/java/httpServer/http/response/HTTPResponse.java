@@ -1,10 +1,11 @@
 package httpServer.http.response;
 
-
 import httpServer.http.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static httpServer.http.Constants.crlf;
 
 public class HTTPResponse {
 
@@ -29,6 +30,7 @@ public class HTTPResponse {
     public String responseString() {
         StringBuilder fullResponse = new StringBuilder();
         appendIfNotNull(fullResponse, statusLine);
+        appendHeaders(fullResponse, headers);
         appendIfNotNull(fullResponse, allowHeader);
         appendIfNotNull(fullResponse, contentLengthHeader);
         appendBodyIfNotNull(fullResponse, responseBody);
@@ -38,18 +40,26 @@ public class HTTPResponse {
     private StringBuilder appendIfNotNull(StringBuilder stringBuilder, String lineOrHeader) {
         if (!(lineOrHeader == null)) {
             stringBuilder.append(lineOrHeader);
-            stringBuilder.append(Constants.CRLF);
+            stringBuilder.append(crlf);
         }
         return stringBuilder;
     }
 
     private StringBuilder appendBodyIfNotNull(StringBuilder stringBuilder, String body) {
         if (!(body == null)) {
-            stringBuilder.append(Constants.CRLF);
+            stringBuilder.append(crlf);
             stringBuilder.append(body);
         }
         return stringBuilder;
+
     }
+
+    private StringBuilder appendHeaders(StringBuilder stringBuilder, Map<String, String> headerMap) {
+        headerMap.forEach((k, v) -> stringBuilder.append(
+                k + ": " + v + crlf));
+        return stringBuilder;
+    }
+
 
 
 }
