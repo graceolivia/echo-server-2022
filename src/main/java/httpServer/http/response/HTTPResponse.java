@@ -31,13 +31,14 @@ public class HTTPResponse {
         appendIfNotNull(fullResponse, statusLine);
         appendIfNotNull(fullResponse, allowHeader);
         appendIfNotNull(fullResponse, contentLengthHeader);
-
+        appendBodyIfNotNull(fullResponse, responseBody);
         return fullResponse.toString();
     }
 
     private StringBuilder appendIfNotNull(StringBuilder stringBuilder, String lineOrHeader) {
         if (!(lineOrHeader == null)) {
             stringBuilder.append(lineOrHeader);
+            stringBuilder.append(Constants.CRLF);
         }
         return stringBuilder;
     }

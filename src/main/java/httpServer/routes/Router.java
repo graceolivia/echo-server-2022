@@ -23,14 +23,14 @@ public class Router {
 
 
     public HTTPResponse getResponse(HTTPRequest httpRequest) {
-        responseBuilder = setHeader(httpRequest, responseBuilder);
+        responseBuilder = setStatusCodeLine(httpRequest, responseBuilder);
         responseBuilder = responseBuilder.setBody(httpRequest.body);
 
-        return responseBuilder.build();
+        return responseBuilder.build(httpRequest);
 
     }
 
-    private HTTPResponseBuilder setHeader(HTTPRequest httpRequest, HTTPResponseBuilder responseBuilder) {
+    private HTTPResponseBuilder setStatusCodeLine(HTTPRequest httpRequest, HTTPResponseBuilder responseBuilder) {
         if (!isResourceValid(httpRequest)) {
             responseBuilder = responseBuilder.setStatusLine(StatusCodes.PAGE_NOT_FOUND, httpRequest);
         }
@@ -42,6 +42,12 @@ public class Router {
         }
 
         return responseBuilder;
+    }
+
+    private HTTPResponseBuilder setHeaders(HTTPRequest httpRequest, HTTPResponseBuilder responseBuilder) {
+        if (responseBuilder.statusLine.contains("405")) {
+
+        }
     }
 
     private boolean isResourceValid(HTTPRequest httpRequest) {

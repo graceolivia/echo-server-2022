@@ -58,9 +58,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
         }
         if (!httpRequest.equals("")) {
             HTTPResponse httpResponse = router.getResponse(httpRequest);
-            System.out.println("hi");
             System.out.println(httpResponse.responseString());
-            System.out.println("hi");
             printServerResponse(httpResponse.responseString(), clientSocket);
         }
 

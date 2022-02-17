@@ -17,7 +17,7 @@ public class HTTPResponseBuilder {
 
 
     public HTTPResponseBuilder setStatusLine(StatusCodes statusCode, HTTPRequest request) {
-       this.statusLine = request.httpVersionNumber + " " + statusCode.httpResponse + CRLF;
+       this.statusLine = request.httpVersionNumber + " " + statusCode.httpResponse;
        return this;
     }
 
@@ -30,8 +30,21 @@ public class HTTPResponseBuilder {
         return this;
     }
 
-    public HTTPResponse build() {
-        return new HTTPResponse(statusLine, "null", "null", body);
+    private HTTPResponseBuilder makeAllowHeader(List methods) {
+        StringBuilder allowedMethods = new StringBuilder();
+        for (int i = 0; i < methods.size(); i++) {
+            allowedMethods.append(methods.get(i));
+            if (i < (methods.size() - 1)) {
+                allowedMethods.append(", ");
+            }
+        }
+        this.headers.put("Allow: ", allowedMethods.toString());
+        return this;
+    }
+
+    public HTTPResponse build(HTTPRequest request) {
+
+        return new HTTPResponse(statusLine, "", makeContentLengthHeader(0), body);
     }
 //
 //    public String buildResponse(StatusCodes statusCode, List methods, HTTPRequest request){
@@ -49,22 +62,10 @@ public class HTTPResponseBuilder {
 //    }
 
 
-    private String makeAllowHeader(List methods) {
-        StringBuilder allowLine = new StringBuilder();
-        allowLine.append("Allow: ");
-        for (int i = 0; i < methods.size(); i++) {
-            allowLine.append(methods.get(i));
-            if (i < (methods.size() - 1)) {
-                allowLine.append(", ");
-            }
-        }
-        allowLine.append(CRLF);
 
-        return allowLine.toString();
-    }
 
     private String makeContentLengthHeader(int length) {
-        return("Content-Length: " + String.valueOf(length) + CRLF);
+        return("Content-Length: " + String.valueOf(length));
     }
 
 }
