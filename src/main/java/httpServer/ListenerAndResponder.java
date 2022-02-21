@@ -72,42 +72,42 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
         String character;
         RequestBuilder requestBuilder = new RequestBuilder();
-        StringBuilder stringBuilder = new StringBuilder();
-        StringBuilder currentLine = new StringBuilder();
-        boolean readingInBody = false;
+        StringBuilder headers = new StringBuilder();
+        StringBuilder body = new StringBuilder();
 
         try {
-            //System.err.println("Getting characters from buffered reader");
             while ((character = bufferedReader.read()) != null) {
-                stringBuilder.append(character);
-                //System.err.println(stringBuilder.toString());
-                currentLine.append(character);
-                if (reachedEndOfHeaders(stringBuilder)) {
-                    //System.err.println("Reached end of header");
-                    readingInBody = true;
-                    if (requestBuilder.getContentLengthInt() == 0) {
-                        //System.err.println("Did we detect zero body");
-                        break;
-                    }
-                    if (currentLine.length() == requestBuilder.getContentLengthInt()) {
-                        requestBuilder.setBody(currentLine.toString());
-                        break;
-                    }
-                }
-                if (reachedEndOfLine(currentLine)) {
-                    if (currentLine.toString() != crlf + crlf) {
-                        String stringCurrentLine = currentLine.toString();
-                        requestBuilder = discernLine(stringCurrentLine, requestBuilder, readingInBody);
-                    }
-                    currentLine.setLength(0);
+                headers.append(character);
+                if (checkIfReachedEndOfHeaders(headers)) {
+                    break;
                 }
             }
-            System.err.println("We got out of hte while loop of doom");
-            return requestBuilder.build();
+
         } catch (IOException e) {
             e.printStackTrace();
             return requestBuilder.build();
         }
+        if (checkIfHeadersIndicateARequestBody(headers)) {
+            int bodyLength = getBodyLength(headers);
+            try {
+                while ((character = bufferedReader.read()) != null) {
+                    body.append(character);
+                    if (body.length() == bodyLength) {
+                        break;
+                    }
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return requestBuilder.build();
+            }
+        }
+    return turnStringBuilderIntoHttpRequest(headers, body, requestBuilder);
+    }
+
+    private HTTPRequest turnStringBuilderIntoHttpRequest(StringBuilder headers, StringBuilder body, RequestBuilder requestBuilder) {
+        // To Do : parse the lines into RequestBuilder
+        return requestBuilder.build();
     }
 
     private RequestBuilder discernLine(String line, RequestBuilder requestBuilder, boolean readingInBody) {
@@ -125,8 +125,21 @@ public class ListenerAndResponder implements ListenAndRespondable {
         return currentLine.toString().contains(crlf);
     }
 
-    private boolean reachedEndOfHeaders(StringBuilder requestScannedInSoFar) {
+    private boolean checkIfReachedEndOfHeaders(StringBuilder requestScannedInSoFar) {
         return requestScannedInSoFar.toString().contains(crlf + crlf);
+    }
+
+    private boolean checkIfHeadersIndicateARequestBody(StringBuilder headers) {
+        String headersAsString = headers.toString();
+        return headersAsString.contains("Content-Length:");
+    }
+
+    private int getBodyLength(StringBuilder headers) {
+        int indexOfContentLengthHeader = headers.indexOf("Content-Length: ");
+        int indexOfContentLength = indexOfContentLengthHeader + 16;
+        String trimmedHeaders = headers.substring(indexOfContentLength);
+        String lengthOfHeaders = trimmedHeaders.split(crlf)[0];
+        return Integer.parseInt(lengthOfHeaders);
     }
 
 }
