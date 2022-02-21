@@ -11,6 +11,8 @@ import httpServer.socketManagement.ServerSocketInterface;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 
 import static httpServer.http.Constants.crlf;
 
@@ -75,6 +77,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
         try {
             while ((character = bufferedReader.read()) != null) {
+
                 headers.append(character);
                 if (checkIfReachedEndOfHeaders(headers)) {
                     break;
@@ -85,16 +88,19 @@ public class ListenerAndResponder implements ListenAndRespondable {
             e.printStackTrace();
             return requestBuilder.build();
         }
+
         if (checkIfHeadersIndicateARequestBody(headers)) {
             int bodyLength = getBodyLength(headers);
             try {
                 while ((character = bufferedReader.read()) != null) {
+                    if (java.util.Objects.equals(bodyLength, 0)) {
+                        break;
+                    }
                     body.append(character);
                     if (body.length() == bodyLength) {
                         break;
                     }
                 }
-
             } catch (IOException e) {
                 e.printStackTrace();
                 return requestBuilder.build();
@@ -105,7 +111,9 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
     private HTTPRequest turnStringBuilderIntoHttpRequest(StringBuilder headers, StringBuilder body, RequestBuilder requestBuilder) {
         String[] headersArray = headers.toString().split(crlf);
-        for (String header: headersArray) { requestBuilder = discernHeaderTypeAndAddToRequestBuilder(header, requestBuilder); }
+        for (String header: headersArray) {
+            requestBuilder = discernHeaderTypeAndAddToRequestBuilder(header, requestBuilder);
+        }
         if (body.length() != 0) {
             requestBuilder.setBody(body.toString());
         }
@@ -128,7 +136,13 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
     private boolean checkIfHeadersIndicateARequestBody(StringBuilder headers) {
         String headersAsString = headers.toString();
-        return headersAsString.contains("Content-Length:");
+        if (headersAsString.contains("Content-Length:")) {
+            if (getBodyLength(headers) == 0) {
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     private int getBodyLength(StringBuilder headers) {

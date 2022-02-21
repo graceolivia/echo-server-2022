@@ -49,13 +49,6 @@ public class Router {
                 .setContentTypeHeader();
     }
 
-//    private HTTPResponseBuilder setContentLength(HTTPRequest httpRequest, HTTPResponseBuilder responseBuilder) {
-//        if (httpRequest.body.isEmpty()) {
-//            responseBuilder = responseBuilder.makeContentLengthHeader();
-//        }
-//        return responseBuilder;
-//    }
-
     private boolean isResourceValid(HTTPRequest httpRequest) {
         return routes.containsKey(httpRequest.resource);
     }
