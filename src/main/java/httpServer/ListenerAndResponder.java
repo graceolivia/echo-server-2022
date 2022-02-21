@@ -1,9 +1,6 @@
 package httpServer;
 
 import httpServer.http.request.HTTPRequest;
-
-//import httpServer.http.RequestParser;
-
 import httpServer.http.request.RequestBuilder;
 import httpServer.http.response.HTTPResponse;
 import httpServer.routes.Router;
@@ -11,6 +8,7 @@ import httpServer.http.StatusCodes;
 import httpServer.outputManagement.ClientWriteableFactory;
 import httpServer.outputManagement.ClientWriteable;
 import httpServer.socketManagement.ServerSocketInterface;
+
 import java.io.IOException;
 import java.net.Socket;
 
@@ -102,27 +100,26 @@ public class ListenerAndResponder implements ListenAndRespondable {
                 return requestBuilder.build();
             }
         }
-    return turnStringBuilderIntoHttpRequest(headers, body, requestBuilder);
+        return turnStringBuilderIntoHttpRequest(headers, body, requestBuilder);
     }
 
     private HTTPRequest turnStringBuilderIntoHttpRequest(StringBuilder headers, StringBuilder body, RequestBuilder requestBuilder) {
-        // To Do : parse the lines into RequestBuilder
+        String[] headersArray = headers.toString().split(crlf);
+        for (String header: headersArray) { requestBuilder = discernHeaderTypeAndAddToRequestBuilder(header, requestBuilder); }
+        if (body.length() != 0) {
+            requestBuilder.setBody(body.toString());
+        }
         return requestBuilder.build();
     }
 
-    private RequestBuilder discernLine(String line, RequestBuilder requestBuilder, boolean readingInBody) {
-        if (!line.contains(": ") && readingInBody == false) {
+    private RequestBuilder discernHeaderTypeAndAddToRequestBuilder(String line, RequestBuilder requestBuilder) {
+        if (!line.contains(": ")) {
             requestBuilder.buildRequestLine(line);
-        } else if (readingInBody == false) {
+        } else {
             requestBuilder.buildHeaderLine(line);
-        } else if (readingInBody == true) {
-            requestBuilder.setBody(line);
+
         }
         return requestBuilder;
-    }
-
-    private boolean reachedEndOfLine(StringBuilder currentLine) {
-        return currentLine.toString().contains(crlf);
     }
 
     private boolean checkIfReachedEndOfHeaders(StringBuilder requestScannedInSoFar) {
