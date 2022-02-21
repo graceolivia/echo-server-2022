@@ -4,37 +4,31 @@ import httpServer.http.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static httpServer.http.Constants.crlf;
 
 public class HTTPResponse {
 
     String statusLine;
-    String allowHeader;
-    String contentLengthHeader;
     public Map<String, String> headers = new HashMap<>();
-    String responseBody;
+    public String responseBody;
 
-    public HTTPResponse(String statusLine, String allowHeader, String contentLengthHeader, String responseBody) {
+    public HTTPResponse(String statusLine, String responseBody, Map<String, String> headers) {
         this.statusLine = statusLine;
-        this.allowHeader = allowHeader;
-        this.contentLengthHeader = contentLengthHeader;
         this.responseBody = responseBody;
+        this.headers = headers;
     }
 
-    public HTTPResponse() {
-        statusLine = allowHeader = contentLengthHeader = responseBody = null;
-
+    public String toString() {
+        return statusLine + crlf + convertHeadersToString() + crlf + crlf + bodyIfNotNull(responseBody);
     }
 
-    public String responseString() {
-        StringBuilder fullResponse = new StringBuilder();
-        appendIfNotNull(fullResponse, statusLine);
-        appendHeaders(fullResponse, headers);
-        appendIfNotNull(fullResponse, allowHeader);
-        appendIfNotNull(fullResponse, contentLengthHeader);
-        appendBodyIfNotNull(fullResponse, responseBody);
-        return fullResponse.toString();
+    private String convertHeadersToString() {
+        return headers.entrySet()
+                        .stream()
+                        .<String>map(entry -> entry.getKey() + ": " + entry.getValue())
+                        .collect(Collectors.joining(crlf));
     }
 
     private StringBuilder appendIfNotNull(StringBuilder stringBuilder, String lineOrHeader) {
@@ -45,12 +39,11 @@ public class HTTPResponse {
         return stringBuilder;
     }
 
-    private StringBuilder appendBodyIfNotNull(StringBuilder stringBuilder, String body) {
-        if (!(body == null)) {
-            stringBuilder.append(crlf);
-            stringBuilder.append(body);
+    private String bodyIfNotNull(String body) {
+        if (body == null) {
+            return ("");
         }
-        return stringBuilder;
+        return body;
 
     }
 
@@ -59,7 +52,5 @@ public class HTTPResponse {
                 k + ": " + v + crlf));
         return stringBuilder;
     }
-
-
 
 }

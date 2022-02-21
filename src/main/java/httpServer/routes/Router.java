@@ -23,8 +23,9 @@ public class Router {
     public HTTPResponse getResponse(HTTPRequest httpRequest) {
         responseBuilder = setStatusCodeLine(httpRequest, responseBuilder);
         responseBuilder = responseBuilder.setBody(httpRequest.body);
-
-        return responseBuilder.build(httpRequest);
+        responseBuilder = setHeaders(httpRequest, responseBuilder);
+        HTTPResponse httpResponse =  responseBuilder.build(httpRequest);
+        return httpResponse;
     }
 
     private HTTPResponseBuilder setStatusCodeLine(HTTPRequest httpRequest, HTTPResponseBuilder responseBuilder) {
@@ -39,10 +40,20 @@ public class Router {
         return responseBuilder;
     }
 
-//    private HTTPResponseBuilder setHeaders(HTTPRequest httpRequest, HTTPResponseBuilder responseBuilder) {
-//        if (responseBuilder.statusLine.contains("405")) {
-//
+    private HTTPResponseBuilder setHeaders(HTTPRequest httpRequest, HTTPResponseBuilder responseBuilder) {
+        if (responseBuilder.statusLine.contains("405")) {
+            responseBuilder = responseBuilder.makeAllowHeader(List.of(routes.get(httpRequest.resource)));
+        }
+        return responseBuilder
+                .setContentLengthHeader()
+                .setContentTypeHeader();
+    }
+
+//    private HTTPResponseBuilder setContentLength(HTTPRequest httpRequest, HTTPResponseBuilder responseBuilder) {
+//        if (httpRequest.body.isEmpty()) {
+//            responseBuilder = responseBuilder.makeContentLengthHeader();
 //        }
+//        return responseBuilder;
 //    }
 
     private boolean isResourceValid(HTTPRequest httpRequest) {

@@ -58,6 +58,9 @@ public class RequestBuilder {
 
     public int getContentLengthInt() {
         String contentLengthString = headers.get("Content-Length");
+        if (contentLengthString == null) {
+            return 0;
+        }
         Integer length = Integer.valueOf(contentLengthString);
         return length;
     }

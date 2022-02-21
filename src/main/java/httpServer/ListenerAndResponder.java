@@ -43,7 +43,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
     }
 
     public void readClientInput(Socket clientSocket) throws IOException {
-
+        System.err.println("Starting to read");
         ClientReadable bufferedReader = clientReaderFactory.makeReader(clientSocket);
         HTTPRequest httpRequest;
         httpRequest = readAllLinesAndReturnHttpRequest(bufferedReader);
@@ -54,8 +54,9 @@ public class ListenerAndResponder implements ListenAndRespondable {
         }
         if (!httpRequest.equals("")) {
             HTTPResponse httpResponse = router.getResponse(httpRequest);
-            System.out.println(httpResponse.responseString());
-            printServerResponse(httpResponse.responseString(), clientSocket);
+            String responseString = httpResponse.toString();
+            System.err.println(responseString.length());
+            printServerResponse(responseString, clientSocket);
         }
 
     }
@@ -63,7 +64,8 @@ public class ListenerAndResponder implements ListenAndRespondable {
     private void printServerResponse(String httpResponse, Socket clientSocket) throws IOException {
         ClientWriteable printer = clientWriterFactory.makePrinter(clientSocket);
         System.out.println(httpResponse);
-        printer.println(httpResponse);
+        printer.print(httpResponse);
+        printer.close();
     }
 
     private HTTPRequest readAllLinesAndReturnHttpRequest(ClientReadable bufferedReader)  {
@@ -75,12 +77,16 @@ public class ListenerAndResponder implements ListenAndRespondable {
         boolean readingInBody = false;
 
         try {
+            //System.err.println("Getting characters from buffered reader");
             while ((character = bufferedReader.read()) != null) {
                 stringBuilder.append(character);
+                //System.err.println(stringBuilder.toString());
                 currentLine.append(character);
                 if (reachedEndOfHeaders(stringBuilder)) {
+                    //System.err.println("Reached end of header");
                     readingInBody = true;
-                    if (!requestBuilder.doesRequestContainBody()) {
+                    if (requestBuilder.getContentLengthInt() == 0) {
+                        //System.err.println("Did we detect zero body");
                         break;
                     }
                     if (currentLine.length() == requestBuilder.getContentLengthInt()) {
@@ -96,6 +102,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
                     currentLine.setLength(0);
                 }
             }
+            System.err.println("We got out of hte while loop of doom");
             return requestBuilder.build();
         } catch (IOException e) {
             e.printStackTrace();

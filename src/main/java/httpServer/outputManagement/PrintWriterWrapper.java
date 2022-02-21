@@ -14,7 +14,12 @@ public class PrintWriterWrapper implements ClientWriteable {
         this.printer = new PrintWriter(clientSocket.getOutputStream(), true);
     }
 
-    public void println(String message) throws IOException {
-        printer.println(message);
+    public void print(String message) throws IOException {
+        printer.print(message);
+        printer.flush();
+    }
+
+    public void close() throws IOException {
+        printer.close();
     }
 }

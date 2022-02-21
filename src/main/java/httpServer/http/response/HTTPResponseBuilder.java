@@ -27,7 +27,7 @@ public class HTTPResponseBuilder {
         return this;
     }
 
-    private HTTPResponseBuilder makeAllowHeader(List methods) {
+    public HTTPResponseBuilder makeAllowHeader(List methods) {
         StringBuilder allowedMethods = new StringBuilder();
         for (int i = 0; i < methods.size(); i++) {
             allowedMethods.append(methods.get(i));
@@ -35,13 +35,28 @@ public class HTTPResponseBuilder {
                 allowedMethods.append(", ");
             }
         }
-        this.headers.put("Allow: ", allowedMethods.toString());
+        this.headers.put("Allow", allowedMethods.toString());
+        return this;
+    }
+
+    public HTTPResponseBuilder setContentLengthHeader() {
+        if (body == null) {
+            this.headers.put("Content-Length", "0");
+        } else {
+            int bodyLength = body.length();
+            this.headers.put("Content-Length", String.valueOf(bodyLength));
+        }
+
+        return this;
+    }
+
+    public HTTPResponseBuilder setContentTypeHeader() {
+        this.headers.put("Content-Type", "text/plain");
         return this;
     }
 
     public HTTPResponse build(HTTPRequest request) {
-
-        return new HTTPResponse(statusLine, "", makeContentLengthHeader(0), body);
+        return new HTTPResponse(statusLine, body, headers);
     }
 //
 //    public String buildResponse(StatusCodes statusCode, List methods, HTTPRequest request){
@@ -58,7 +73,7 @@ public class HTTPResponseBuilder {
 //        return(response.responseString());
 //    }
 
-    private String makeContentLengthHeader(int length) {
+    private String setContentLengthHeader(int length) {
         return ("Content-Length: " + String.valueOf(length));
 
     }
