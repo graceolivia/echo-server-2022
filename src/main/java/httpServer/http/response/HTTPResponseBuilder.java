@@ -58,20 +58,6 @@ public class HTTPResponseBuilder {
     public HTTPResponse build(HTTPRequest request) {
         return new HTTPResponse(statusLine, body, headers);
     }
-//
-//    public String buildResponse(StatusCodes statusCode, List methods, HTTPRequest request){
-//        String statusLine;
-//        String allowHeader = null;
-//        String contentLengthHeader;
-//        String responseContent = null;
-//        statusLine = setStatusLine(statusCode, request);
-//        if (!statusCode.equals(StatusCodes.PAGE_NOT_FOUND)) {
-//            allowHeader = makeAllowHeader(methods);
-//        }
-//        contentLengthHeader = makeContentLengthHeader(0);
-//        HTTPResponse response = new HTTPResponse(statusLine, allowHeader, contentLengthHeader, responseContent);
-//        return(response.responseString());
-//    }
 
     private String setContentLengthHeader(int length) {
         return ("Content-Length: " + String.valueOf(length));

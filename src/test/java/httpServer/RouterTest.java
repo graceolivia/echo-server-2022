@@ -2,7 +2,6 @@ package httpServer;
 
 import httpServer.http.Constants;
 import httpServer.http.request.HTTPRequest;
-import httpServer.http.response.HTTPResponse;
 import httpServer.http.response.HTTPResponseBuilder;
 import httpServer.routes.Router;
 import httpServer.http.StatusCodes;
@@ -47,7 +46,7 @@ public class RouterTest {
     void testRouterReturns405ForInvalidMethodRequestToExistingResource() throws IOException {
         Map<String, String> headers = new HashMap();
         HTTPRequest request = new HTTPRequest("GET", "/head_request", "HTTP/1.1", headers, null);
-        String expectedResponse = "HTTP/1.1 " + StatusCodes.NOT_ACCEPTABLE.httpResponse + Constants.crlf + "Allow: HEAD, OPTIONS" + Constants.crlf +  "Content-Length: 0" + Constants.crlf;;
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.NOT_ACCEPTABLE.httpResponse +  Constants.crlf +  "Content-Length: 0" + Constants.crlf + "Allow: HEAD, OPTIONS" + Constants.crlf + "Content-Type: text/plain" + Constants.crlf + Constants.crlf;;
         String returnedResponse = router.getResponse(request).toString();
         assertEquals(expectedResponse, returnedResponse);
     }
