@@ -69,4 +69,13 @@ public class RouterTest {
         assertEquals(expectedResponse, returnedResponse);
     }
 
+    @Test
+    void testRouterReturns200AndBodyUponPostToEchoBody() throws IOException {
+        Map<String, String> headers = new HashMap();
+        HTTPRequest request = new HTTPRequest("POST", "/echo_body", "HTTP/1.1", headers, "test");
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.crlf +  "Content-Length: 4" + Constants.crlf + "Content-Type: text/plain" + Constants.crlf + Constants.crlf + "test";
+        String returnedResponse = router.getResponse(request).toString();
+        assertEquals(expectedResponse, returnedResponse);
+    }
+
 }
