@@ -12,7 +12,7 @@ import httpServer.socketManagement.ServerSocketInterface;
 import java.io.IOException;
 import java.net.Socket;
 
-import static httpServer.http.Constants.crlf;
+import static httpServer.http.Constants.CRLF;
 
 public class ListenerAndResponder implements ListenAndRespondable {
     ServerSocketInterface serverSocket;
@@ -116,7 +116,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
     }
 
     private HTTPRequest returnHttpRequest(StringBuilder headers, StringBuilder body, RequestBuilder requestBuilder) {
-        String[] headersArray = headers.toString().split(crlf);
+        String[] headersArray = headers.toString().split(CRLF);
         for (String header: headersArray) {
             requestBuilder = discernHeaderTypeAndAddToRequestBuilder(header, requestBuilder);
         }
@@ -137,7 +137,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
     }
 
     private boolean checkIfReachedEndOfHeaders(StringBuilder requestScannedInSoFar) {
-        return requestScannedInSoFar.toString().contains(crlf + crlf);
+        return requestScannedInSoFar.toString().contains(CRLF + CRLF);
     }
 
     private int getBodyLength(StringBuilder headers) {
@@ -147,7 +147,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
         }
         int indexOfContentLength = indexOfContentLengthHeader + 16;
         String trimmedHeaders = headers.substring(indexOfContentLength);
-        String lengthOfHeaders = trimmedHeaders.split(crlf)[0];
+        String lengthOfHeaders = trimmedHeaders.split(CRLF)[0];
         return Integer.parseInt(lengthOfHeaders);
     }
 

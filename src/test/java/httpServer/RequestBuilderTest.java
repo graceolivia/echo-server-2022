@@ -3,8 +3,6 @@ package httpServer;
 import httpServer.http.Constants;
 import httpServer.http.request.HTTPRequest;
 import httpServer.http.request.RequestBuilder;
-import httpServer.http.response.HTTPResponseBuilder;
-import httpServer.routes.Router;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,10 +25,10 @@ public class RequestBuilderTest {
         headers = new HashMap();
         headers.put("Host", "localhost:5000");
         httpRequestExpected = new HTTPRequest("GET", "/", "HTTP/1.1", headers, null);
-        request = "GET / HTTP/1.1" + Constants.crlf +
-                "Host: localhost:5000" + Constants.crlf +
-                "User-Agent: JUnit" + Constants.crlf +
-                "Accept: */*" + Constants.crlf;
+        request = "GET / HTTP/1.1" + Constants.CRLF +
+                "Host: localhost:5000" + Constants.CRLF +
+                "User-Agent: JUnit" + Constants.CRLF +
+                "Accept: */*" + Constants.CRLF;
     }
 
     @Test

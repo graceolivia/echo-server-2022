@@ -1,12 +1,10 @@
 package httpServer.http.response;
 
-import httpServer.http.Constants;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static httpServer.http.Constants.crlf;
+import static httpServer.http.Constants.CRLF;
 
 public class HTTPResponse {
 
@@ -21,20 +19,20 @@ public class HTTPResponse {
     }
 
     public String toString() {
-        return statusLine + crlf + convertHeadersToString() + crlf + crlf + bodyIfNotNull(responseBody);
+        return statusLine + CRLF + convertHeadersToString() + CRLF + CRLF + bodyIfNotNull(responseBody);
     }
 
     private String convertHeadersToString() {
         return headers.entrySet()
                         .stream()
                         .<String>map(entry -> entry.getKey() + ": " + entry.getValue())
-                        .collect(Collectors.joining(crlf));
+                        .collect(Collectors.joining(CRLF));
     }
 
     private StringBuilder appendIfNotNull(StringBuilder stringBuilder, String lineOrHeader) {
         if (!(lineOrHeader == null)) {
             stringBuilder.append(lineOrHeader);
-            stringBuilder.append(crlf);
+            stringBuilder.append(CRLF);
         }
         return stringBuilder;
     }
@@ -49,7 +47,7 @@ public class HTTPResponse {
 
     private StringBuilder appendHeaders(StringBuilder stringBuilder, Map<String, String> headerMap) {
         headerMap.forEach((k, v) -> stringBuilder.append(
-                k + ": " + v + crlf));
+                k + ": " + v + CRLF));
         return stringBuilder;
     }
 

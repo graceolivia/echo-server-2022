@@ -3,7 +3,7 @@ package httpServer.http.request;
 import java.util.HashMap;
 import java.util.Map;
 
-import static httpServer.http.Constants.crlf;
+import static httpServer.http.Constants.CRLF;
 
 public class RequestBuilder {
 
@@ -17,13 +17,13 @@ public class RequestBuilder {
         String[] requestLine = line.split(" ");
         this.method = requestLine[0];
         this.resource = requestLine[1];
-        this.httpVersionNumber = requestLine[2].replace(crlf, "");;
+        this.httpVersionNumber = requestLine[2].replace(CRLF, "");;
         return this;
     }
 
     public RequestBuilder buildHeaderLine(String line) {
         String[] requestLine = line.split(": ");
-        String removedCLDR = requestLine[1].replace(crlf, "");
+        String removedCLDR = requestLine[1].replace(CRLF, "");
         this.headers.put(requestLine[0], removedCLDR);
         return this;
     }
@@ -34,7 +34,7 @@ public class RequestBuilder {
     }
 
     public String toString() {
-        String requestLine = method + resource + httpVersionNumber + crlf;
+        String requestLine = method + resource + httpVersionNumber + CRLF;
         System.out.println(requestLine);
         headers.forEach((k, v) -> System.out.println("key: " + k + ", value: " + v));
         if (body != null) {

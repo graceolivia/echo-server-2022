@@ -6,7 +6,7 @@ import httpServer.outputManagement.ClientWriteableFactory;
 import httpServer.routes.Router;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static httpServer.http.Constants.crlf;
+import static httpServer.http.Constants.CRLF;
 
 
 import java.io.IOException;
@@ -28,10 +28,10 @@ public class ListenerAndResponderTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        String input = "Accept: */*" + crlf +
-                "User-Agent: jUnit" + crlf +
-                "Host: localhost:5000" + crlf +
-                "GET / HTTP/1.1" + crlf + crlf;
+        String input = "Accept: */*" + CRLF +
+                "User-Agent: jUnit" + CRLF +
+                "Host: localhost:5000" + CRLF +
+                "GET / HTTP/1.1" + CRLF + CRLF;
         socket = new Socket();
         routes = getRoutes();
         responseBuilder = new HTTPResponseBuilder();
@@ -56,7 +56,7 @@ public class ListenerAndResponderTest {
 
     @Test
     void testReadClientInputCallsPrintWriterPrint() throws IOException {
-        String expectedResult = "HTTP/1.1 " + StatusCodes.PAGE_NOT_FOUND.httpResponse + Constants.crlf + "Content-Length: 0" + Constants.crlf;
+        String expectedResult = "HTTP/1.1 " + StatusCodes.PAGE_NOT_FOUND.httpResponse + Constants.CRLF + "Content-Length: 0" + Constants.CRLF;
 
         echoer.readClientInput(socket);
 
