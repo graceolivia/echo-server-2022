@@ -11,8 +11,6 @@ import httpServer.socketManagement.ServerSocketInterface;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-import java.util.Locale;
 
 import static httpServer.http.Constants.crlf;
 
@@ -55,7 +53,6 @@ public class ListenerAndResponder implements ListenAndRespondable {
         if (!httpRequest.equals("")) {
             HTTPResponse httpResponse = router.getResponse(httpRequest);
             String responseString = httpResponse.toString();
-            System.err.println(responseString.length());
             printServerResponse(responseString, clientSocket);
         }
 
@@ -93,7 +90,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
             int bodyLength = getBodyLength(headers);
             try {
                 while ((character = bufferedReader.read()) != null) {
-                    if (java.util.Objects.equals(bodyLength, 0)) {
+                    if (bodyLength == 0) {
                         break;
                     }
                     body.append(character);
@@ -106,10 +103,10 @@ public class ListenerAndResponder implements ListenAndRespondable {
                 return requestBuilder.build();
             }
         }
-        return turnStringBuilderIntoHttpRequest(headers, body, requestBuilder);
+        return returnHttpRequest(headers, body, requestBuilder);
     }
 
-    private HTTPRequest turnStringBuilderIntoHttpRequest(StringBuilder headers, StringBuilder body, RequestBuilder requestBuilder) {
+    private HTTPRequest returnHttpRequest(StringBuilder headers, StringBuilder body, RequestBuilder requestBuilder) {
         String[] headersArray = headers.toString().split(crlf);
         for (String header: headersArray) {
             requestBuilder = discernHeaderTypeAndAddToRequestBuilder(header, requestBuilder);
