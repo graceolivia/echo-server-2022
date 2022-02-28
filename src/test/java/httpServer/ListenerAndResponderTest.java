@@ -6,6 +6,7 @@ import httpServer.outputManagement.ClientWriteableFactory;
 import httpServer.routes.Router;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static httpServer.http.Constants.crlf;
 
 
 import java.io.IOException;
@@ -27,10 +28,10 @@ public class ListenerAndResponderTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        String input = "Accept: */*" + Constants.crlf +
-                "User-Agent: jUnit" + Constants.crlf +
-                "Host: localhost:5000" + Constants.crlf +
-                "GET / HTTP/1.1" + Constants.crlf + Constants.crlf;
+        String input = "Accept: */*" + crlf +
+                "User-Agent: jUnit" + crlf +
+                "Host: localhost:5000" + crlf +
+                "GET / HTTP/1.1" + crlf + crlf;
         socket = new Socket();
         routes = getRoutes();
         responseBuilder = new HTTPResponseBuilder();
@@ -54,12 +55,12 @@ public class ListenerAndResponderTest {
     }
 
     @Test
-    void testReadClientInputCallsPrintWriterPrintLn() throws IOException {
+    void testReadClientInputCallsPrintWriterPrint() throws IOException {
         String expectedResult = "HTTP/1.1 " + StatusCodes.PAGE_NOT_FOUND.httpResponse + Constants.crlf + "Content-Length: 0" + Constants.crlf;
 
         echoer.readClientInput(socket);
 
         assertTrue(mockBufferedReader.readLineWasCalled);
-        assertEquals(expectedResult, mockPrintWriter.printlnWasCalledWith);
+        assertEquals(expectedResult, mockPrintWriter.printWasCalledWith);
     }
 }

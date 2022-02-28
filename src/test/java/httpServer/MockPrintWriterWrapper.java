@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class MockPrintWriterWrapper implements ClientWriteable {
-    String printlnWasCalledWith = new String();
+    String printWasCalledWith = new String();
     boolean closeWasCalled = false;
     public PrintWriter printer;
 
@@ -16,7 +16,7 @@ public class MockPrintWriterWrapper implements ClientWriteable {
 
     @Override
     public void print(String message) throws IOException {
-        printlnWasCalledWith = message;
+        printWasCalledWith = message;
     }
 
     public void close() throws IOException {
