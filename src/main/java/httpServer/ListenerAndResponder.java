@@ -140,7 +140,6 @@ public class ListenerAndResponder implements ListenAndRespondable {
         return requestScannedInSoFar.toString().contains(crlf + crlf);
     }
 
-
     private int getBodyLength(StringBuilder headers) {
         int indexOfContentLengthHeader = headers.indexOf("Content-Length: ");
         if (indexOfContentLengthHeader == -1) {
