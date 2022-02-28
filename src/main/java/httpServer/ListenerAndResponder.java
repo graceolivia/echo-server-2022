@@ -127,11 +127,10 @@ public class ListenerAndResponder implements ListenAndRespondable {
     }
 
     private RequestBuilder discernHeaderTypeAndAddToRequestBuilder(String line, RequestBuilder requestBuilder) {
-        if (!line.contains(": ")) {
-            requestBuilder.buildRequestLine(line);
-        } else {
+        if (line.contains(": ")) {
             requestBuilder.buildHeaderLine(line);
-
+        } else {
+            requestBuilder.buildRequestLine(line);
         }
         return requestBuilder;
     }
@@ -142,14 +141,15 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
     private int getBodyLength(StringBuilder headers) {
         String[] headersArray = headers.toString().split(CRLF);
+
         for (String header : headersArray) {
             if (header.indexOf("Content-Length: ") != -1) {
                 String[] split = header.split(": ");
                 return Integer.parseInt(split[1]);
-
             }
         }
+
+
         return 0;
     }
-
 }

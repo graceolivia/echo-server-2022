@@ -36,7 +36,7 @@ public class RequestBuilder {
     public String toString() {
         String requestLine = method + resource + httpVersionNumber + CRLF;
         System.out.println(requestLine);
-        headers.forEach((k, v) -> System.out.println("key: " + k + ", value: " + v));
+        headers.forEach((k, v) -> System.out.println(k + ": " + v));
         if (body != null) {
             System.out.println("body: " + body);
         }
@@ -46,14 +46,6 @@ public class RequestBuilder {
 
     public HTTPRequest build() {
         return new HTTPRequest(method, resource, httpVersionNumber, headers, body);
-    }
-
-    public int length() {
-        return headers.size();
-    }
-
-    public boolean doesRequestContainBody() {
-        return headers.containsKey("Content-Length");
     }
 
     public int getContentLengthInt() {

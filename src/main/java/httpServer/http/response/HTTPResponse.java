@@ -29,26 +29,12 @@ public class HTTPResponse {
                         .collect(Collectors.joining(CRLF));
     }
 
-    private StringBuilder appendIfNotNull(StringBuilder stringBuilder, String lineOrHeader) {
-        if (!(lineOrHeader == null)) {
-            stringBuilder.append(lineOrHeader);
-            stringBuilder.append(CRLF);
-        }
-        return stringBuilder;
-    }
-
     private String bodyIfNotNull(String body) {
         if (body == null) {
             return ("");
         }
         return body;
-
     }
 
-    private StringBuilder appendHeaders(StringBuilder stringBuilder, Map<String, String> headerMap) {
-        headerMap.forEach((k, v) -> stringBuilder.append(
-                k + ": " + v + CRLF));
-        return stringBuilder;
-    }
 
 }
