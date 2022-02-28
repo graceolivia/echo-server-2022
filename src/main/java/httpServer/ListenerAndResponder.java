@@ -141,14 +141,15 @@ public class ListenerAndResponder implements ListenAndRespondable {
     }
 
     private int getBodyLength(StringBuilder headers) {
-        int indexOfContentLengthHeader = headers.indexOf("Content-Length: ");
-        if (indexOfContentLengthHeader == -1) {
-            return 0;
+        String[] headersArray = headers.toString().split(CRLF);
+        for (String header : headersArray) {
+            if (header.indexOf("Content-Length: ") != -1) {
+                String[] split = header.split(": ");
+                return Integer.parseInt(split[1]);
+
+            }
         }
-        int indexOfContentLength = indexOfContentLengthHeader + 16;
-        String trimmedHeaders = headers.substring(indexOfContentLength);
-        String lengthOfHeaders = trimmedHeaders.split(CRLF)[0];
-        return Integer.parseInt(lengthOfHeaders);
+        return 0;
     }
 
 }

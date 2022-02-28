@@ -2,6 +2,6 @@ package httpServer.http;
 
 public class Constants {
 
-    public static String CRLF = "\r\n";
+    public static final String CRLF = "\r\n";
 
 }
