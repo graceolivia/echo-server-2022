@@ -44,7 +44,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
         System.err.println("Starting to read");
         ClientReadable bufferedReader = clientReaderFactory.makeReader(clientSocket);
         HTTPRequest httpRequest;
-        httpRequest = readAllLinesAndReturnHttpRequest(bufferedReader);
+        httpRequest = readHeaderAndBodyAndReturnHttpRequest(bufferedReader);
         if (httpRequest == null) {
             StatusCodes statusCodes = StatusCodes.BAD_REQUEST;
             String responseText = statusCodes.httpResponse;
@@ -65,12 +65,19 @@ public class ListenerAndResponder implements ListenAndRespondable {
         printer.close();
     }
 
-    private HTTPRequest readAllLinesAndReturnHttpRequest(ClientReadable bufferedReader)  {
+    private HTTPRequest readHeaderAndBodyAndReturnHttpRequest(ClientReadable bufferedReader)  {
+
+        RequestBuilder requestBuilder = new RequestBuilder();
+        StringBuilder headers = readHeaders(bufferedReader);
+        int bodyLength = getBodyLength(headers);
+        StringBuilder body = readBody(bufferedReader, bodyLength);
+        return returnHttpRequest(headers, body, requestBuilder);
+    }
+
+    private StringBuilder readHeaders(ClientReadable bufferedReader) {
 
         String character;
-        RequestBuilder requestBuilder = new RequestBuilder();
         StringBuilder headers = new StringBuilder();
-        StringBuilder body = new StringBuilder();
 
         try {
             while ((character = bufferedReader.read()) != null) {
@@ -83,27 +90,29 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
         } catch (IOException e) {
             e.printStackTrace();
-            return requestBuilder.build();
         }
 
-        if (checkIfHeadersIndicateARequestBody(headers)) {
-            int bodyLength = getBodyLength(headers);
-            try {
-                while ((character = bufferedReader.read()) != null) {
-                    if (bodyLength == 0) {
-                        break;
-                    }
-                    body.append(character);
-                    if (body.length() == bodyLength) {
-                        break;
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                return requestBuilder.build();
-            }
+        return headers;
+
+    }
+
+    private StringBuilder readBody(ClientReadable bufferedReader, int bodyLength) {
+        String character;
+        StringBuilder body = new StringBuilder();
+        if (bodyLength == 0) {
+            return body;
         }
-        return returnHttpRequest(headers, body, requestBuilder);
+        try {
+            while ((character = bufferedReader.read()) != null) {
+                body.append(character);
+                if (body.length() == bodyLength) {
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return body;
     }
 
     private HTTPRequest returnHttpRequest(StringBuilder headers, StringBuilder body, RequestBuilder requestBuilder) {
@@ -144,6 +153,9 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
     private int getBodyLength(StringBuilder headers) {
         int indexOfContentLengthHeader = headers.indexOf("Content-Length: ");
+        if (indexOfContentLengthHeader == -1) {
+            return 0;
+        }
         int indexOfContentLength = indexOfContentLengthHeader + 16;
         String trimmedHeaders = headers.substring(indexOfContentLength);
         String lengthOfHeaders = trimmedHeaders.split(crlf)[0];
