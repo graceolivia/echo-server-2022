@@ -57,8 +57,14 @@ public class Router {
 
         HTTPMethods[] allowedRoutes = routes.get(httpRequest.resource);
         List allowedRoutesAsList = Arrays.asList(allowedRoutes);
+//        boolean isItInThere = allowedRoutesAsList.contains(httpRequest.method);
+//
+//        return isItInThere;
+
 
         for (int i = 0; i < allowedRoutesAsList.size(); i++) {
+            System.out.println(allowedRoutesAsList.get(i));
+            System.out.println(allowedRoutesAsList.get(i));
             String methodAllowed = String.valueOf(allowedRoutesAsList.get(i));
             if (httpRequest.method.equals(methodAllowed)) {
                 return true;
@@ -67,6 +73,6 @@ public class Router {
             }
         }
         return false;
-    }
+   }
 
 }

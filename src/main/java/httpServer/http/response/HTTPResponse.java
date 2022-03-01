@@ -36,5 +36,4 @@ public class HTTPResponse {
         return body;
     }
 
-
 }

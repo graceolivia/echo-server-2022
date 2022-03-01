@@ -149,7 +149,6 @@ public class ListenerAndResponder implements ListenAndRespondable {
             }
         }
 
-
         return 0;
     }
 }

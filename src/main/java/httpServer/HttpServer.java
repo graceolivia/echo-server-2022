@@ -41,7 +41,7 @@ public class HttpServer {
     public static Map<String, HTTPMethods[]> getRoutes() {
         Map<String, HTTPMethods[]> routes = new HashMap<>();
 
-        routes.put("/simple_get", new HTTPMethods[] {HTTPMethods.GET, HTTPMethods.OPTIONS});
+        routes.put("/simple_get", new HTTPMethods[] {HTTPMethods.GET, HTTPMethods.OPTIONS, HTTPMethods.HEAD});
         routes.put("/head_request", new HTTPMethods[] {HTTPMethods.HEAD, HTTPMethods.OPTIONS});
         routes.put("/echo_body", new HTTPMethods[] {HTTPMethods.HEAD, HTTPMethods.OPTIONS, HTTPMethods.POST});
         return routes;
