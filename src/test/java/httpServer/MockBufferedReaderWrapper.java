@@ -14,10 +14,10 @@ public class MockBufferedReaderWrapper implements ClientReadable {
     public MockBufferedReaderWrapper(String input) {
         this.input = input;
         this.inputArray = input.split("\r\n");
-        inputStack = to465f Stack(inputArray);
+        inputStack = toStack(inputArray);
     }
 
-    public String read() throws IOException {
+    public String read() {
         readLineWasCalled = true;
         if ( inputStack.size() > 0) {
             return inputStack.pop();

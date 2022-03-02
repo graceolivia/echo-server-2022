@@ -56,6 +56,4 @@ public class RequestBuilder {
         Integer length = Integer.valueOf(contentLengthString);
         return length;
     }
-
-
 }
