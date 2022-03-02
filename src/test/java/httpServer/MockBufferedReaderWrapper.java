@@ -14,7 +14,7 @@ public class MockBufferedReaderWrapper implements ClientReadable {
     public MockBufferedReaderWrapper(String input) {
         this.input = input;
         this.inputArray = input.split("\r\n");
-        inputStack = toStack(inputArray);
+        inputStack = to465f Stack(inputArray);
     }
 
     public String read() throws IOException {

@@ -23,8 +23,8 @@ public class RequestBuilder {
 
     public RequestBuilder buildHeaderLine(String line) {
         String[] requestLine = line.split(": ");
-        String removedCLDR = requestLine[1].replace(CRLF, "");
-        this.headers.put(requestLine[0], removedCLDR);
+        String removedCRLF = requestLine[1].replace(CRLF, "");
+        this.headers.put(requestLine[0], removedCRLF);
         return this;
     }
 

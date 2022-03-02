@@ -61,7 +61,6 @@ public class Router {
 //
 //        return isItInThere;
 
-
         for (int i = 0; i < allowedRoutesAsList.size(); i++) {
             System.out.println(allowedRoutesAsList.get(i));
             System.out.println(allowedRoutesAsList.get(i));
@@ -73,6 +72,5 @@ public class Router {
             }
         }
         return false;
-   }
-
+    }
 }
