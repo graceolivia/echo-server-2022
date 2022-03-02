@@ -21,13 +21,7 @@ public class HTTPRequest {
         this.body = body;
     }
 
-    public HTTPRequest() {
-        method = null;
-        resource = null;
-        httpVersionNumber = null;
-        headers = null;
-        body = null;
-    }
+    public HTTPRequest() {}
 
     public int getContentLength() {
         int size = headers.size();
