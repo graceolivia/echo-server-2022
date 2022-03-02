@@ -57,7 +57,13 @@ public class Router {
 
         HTTPMethods[] allowedRoutes = routes.get(httpRequest.resource);
         List allowedRoutesAsList = Arrays.asList(allowedRoutes);
-//        boolean isItInThere = allowedRoutesAsList.contains(httpRequest.method);
+        System.out.println(allowedRoutesAsList.get(0).toString().getClass());
+        System.out.println(allowedRoutesAsList);
+        System.out.println(httpRequest.method);
+        boolean isItInThere = (boolean) allowedRoutesAsList.stream().
+                filter(method -> method.toString().equals(httpRequest.method)).
+                findAny().
+                orElse(false);
 //
 //        return isItInThere;
 
