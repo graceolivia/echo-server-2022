@@ -6,6 +6,7 @@ import httpServer.http.request.HTTPRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class HTTPResponseBuilder {
 
@@ -24,14 +25,8 @@ public class HTTPResponseBuilder {
     }
 
     public HTTPResponseBuilder makeAllowHeader(List methods) {
-        StringBuilder allowedMethods = new StringBuilder();
-        for (int i = 0; i < methods.size(); i++) {
-            allowedMethods.append(methods.get(i));
-            if (i < (methods.size() - 1)) {
-                allowedMethods.append(", ");
-            }
-        }
-        this.headers.put("Allow", allowedMethods.toString());
+        String stringOfMethods = (String) methods.stream().map(Object::toString).collect(Collectors.joining(", "));
+        this.headers.put("Allow", stringOfMethods);
         return this;
     }
 
