@@ -11,6 +11,8 @@ import httpServer.socketManagement.ServerSocketInterface;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.List;
 
 import static httpServer.http.Constants.CRLF;
 
@@ -141,6 +143,11 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
     private int getBodyLength(StringBuilder headers) {
         String[] headersArray = headers.toString().split(CRLF);
+        List<String> headersString = Arrays.asList(headersArray);
+//        String contentLengthHeader = headersString.stream().
+//                filter(h -> h.contains("Content-Length: ")).
+//                forEach();
+//
 
         for (String header : headersArray) {
             if (header.indexOf("Content-Length: ") != -1) {
