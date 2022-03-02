@@ -39,10 +39,8 @@ public class HTTPResponseBuilder {
         if (body == null) {
             this.headers.put("Content-Length", "0");
         } else {
-            int bodyLength = body.length();
-            this.headers.put("Content-Length", String.valueOf(bodyLength));
+            this.headers.put("Content-Length", String.valueOf(body.length()));
         }
-
         return this;
     }
 
