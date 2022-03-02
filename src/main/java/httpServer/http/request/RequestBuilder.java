@@ -22,7 +22,7 @@ public class RequestBuilder {
     }
 
     public RequestBuilder buildHeaderLine(String line) {
-        String[] requestLine = line.split(": ");
+        String[] requestLine = line.trim().split(": ");
         String removedCRLF = requestLine[1].replace(CRLF, "");
         this.headers.put(requestLine[0], removedCRLF);
         return this;
@@ -57,17 +57,5 @@ public class RequestBuilder {
         return length;
     }
 
-    public boolean hasEntireBodyBeenReadIn() {
-        if (body == null) {
-            return false;
-        }
-        int expectedBodyLength = getContentLengthInt();
-        int currentBodyLength = body.length();
-        System.out.println(expectedBodyLength);
-        System.out.println(currentBodyLength);
-        System.out.println(body);
-        return (expectedBodyLength == currentBodyLength);
-
-    }
 
 }
