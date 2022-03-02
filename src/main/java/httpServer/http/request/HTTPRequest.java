@@ -21,7 +21,9 @@ public class HTTPRequest {
         this.body = body;
     }
 
-    public HTTPRequest() {}
+    public HTTPRequest() {
+
+    }
 
     public int getContentLength() {
         int size = headers.size();

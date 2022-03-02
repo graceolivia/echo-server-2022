@@ -18,10 +18,6 @@ public class HTTPResponseBuilder {
         return this;
     }
 
-    public HTTPResponseBuilder setHeaderLine(String header, String value) {
-        return this;
-    }
-
     public HTTPResponseBuilder setBody(String body) {
         this.body = body;
         return this;
@@ -57,11 +53,6 @@ public class HTTPResponseBuilder {
 
     public HTTPResponse build(HTTPRequest request) {
         return new HTTPResponse(statusLine, body, headers);
-    }
-
-    private String setContentLengthHeader(int length) {
-        return ("Content-Length: " + String.valueOf(length));
-
     }
 
 }
