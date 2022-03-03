@@ -1,7 +1,7 @@
 package httpServer;
 
 import httpServer.http.request.HTTPRequest;
-import httpServer.http.request.RequestBuilder;
+import httpServer.http.request.HTTPRequestBuilder;
 import httpServer.http.response.HTTPResponse;
 import httpServer.routes.Router;
 import httpServer.http.StatusCodes;
@@ -66,7 +66,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
     private HTTPRequest readHeaderAndBodyAndReturnHttpRequest(ClientReadable bufferedReader)  {
 
-        RequestBuilder requestBuilder = new RequestBuilder();
+        HTTPRequestBuilder requestBuilder = new HTTPRequestBuilder();
         requestBuilder = readHeaders(bufferedReader, requestBuilder);
         int bodyLength = requestBuilder.getContentLengthInt();
         StringBuilder body = readBody(bufferedReader, bodyLength);
@@ -74,7 +74,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
     }
 
-    private RequestBuilder readHeaders(ClientReadable bufferedReader, RequestBuilder requestBuilder) {
+    private HTTPRequestBuilder readHeaders(ClientReadable bufferedReader, HTTPRequestBuilder requestBuilder) {
 
         String character;
         StringBuilder headers = new StringBuilder();
@@ -92,7 +92,6 @@ public class ListenerAndResponder implements ListenAndRespondable {
             e.printStackTrace();
         }
         String[] headersArray = headers.toString().split(CRLF);
-        System.out.println(headersArray);
         for (String header: headersArray) {
             requestBuilder = discernHeaderTypeAndAddToRequestBuilder(header, requestBuilder);
         }
@@ -119,20 +118,20 @@ public class ListenerAndResponder implements ListenAndRespondable {
         return body;
     }
 
-    private HTTPRequest returnHttpRequest(StringBuilder body, RequestBuilder requestBuilder) {
+    private HTTPRequest returnHttpRequest(StringBuilder body, HTTPRequestBuilder requestBuilder) {
         if (body.length() != 0) {
             requestBuilder.setBody(body.toString());
         }
         return requestBuilder.build();
     }
 
-    private RequestBuilder discernHeaderTypeAndAddToRequestBuilder(String line, RequestBuilder requestBuilder) {
+    private HTTPRequestBuilder discernHeaderTypeAndAddToRequestBuilder(String line, HTTPRequestBuilder HTTPRequestBuilder) {
         if (line.contains(": ")) {
-            requestBuilder.buildHeaderLine(line);
+            HTTPRequestBuilder.buildHeaderLine(line);
         } else {
-            requestBuilder.buildRequestLine(line);
+            HTTPRequestBuilder.buildRequestLine(line);
         }
-        return requestBuilder;
+        return HTTPRequestBuilder;
     }
 
     private boolean checkIfReachedEndOfHeaders(StringBuilder requestScannedInSoFar) {

@@ -1,7 +1,7 @@
 package httpServer;
 
 import httpServer.http.request.HTTPRequest;
-import httpServer.http.request.RequestBuilder;
+import httpServer.http.request.HTTPRequestBuilder;
 import httpServer.http.response.HTTPResponse;
 import httpServer.http.response.HTTPResponseBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +23,7 @@ public class HTTPResponseBuilderTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        request = new RequestBuilder()
+        request = new HTTPRequestBuilder()
                 .buildRequestLine("GET / HTTP/1.1")
                 .buildHeaderLine("Host: localhost:5000")
                 .buildHeaderLine("Accept: */*")

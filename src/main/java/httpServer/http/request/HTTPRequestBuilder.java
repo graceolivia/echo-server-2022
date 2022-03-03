@@ -5,7 +5,7 @@ import java.util.Map;
 
 import static httpServer.http.Constants.CRLF;
 
-public class RequestBuilder {
+public class HTTPRequestBuilder {
 
     public String method;
     public String resource;
@@ -13,25 +13,22 @@ public class RequestBuilder {
     public Map<String, String> headers = new HashMap<>();
     public String body;
 
-    public RequestBuilder buildRequestLine(String line) {
+    public HTTPRequestBuilder buildRequestLine(String line) {
         String[] requestLine = line.split(" ");
         this.method = requestLine[0];
         this.resource = requestLine[1];
         this.httpVersionNumber = requestLine[2].replace(CRLF, "");
-        System.out.println(method);
-        System.out.println(resource);
-        System.out.println(httpVersionNumber);
         return this;
     }
 
-    public RequestBuilder buildHeaderLine(String line) {
+    public HTTPRequestBuilder buildHeaderLine(String line) {
         String[] requestLine = line.trim().split(": ");
         String removedCRLF = requestLine[1].replace(CRLF, "");
         this.headers.put(requestLine[0], removedCRLF);
         return this;
     }
 
-    public RequestBuilder setBody(String line) {
+    public HTTPRequestBuilder setBody(String line) {
         this.body = line;
         return this;
     }

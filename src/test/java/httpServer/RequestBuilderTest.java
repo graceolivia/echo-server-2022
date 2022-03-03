@@ -1,8 +1,7 @@
 package httpServer;
 
-import httpServer.http.Constants;
 import httpServer.http.request.HTTPRequest;
-import httpServer.http.request.RequestBuilder;
+import httpServer.http.request.HTTPRequestBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,14 +14,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RequestBuilderTest {
-    RequestBuilder requestBuilder;
+    HTTPRequestBuilder requestBuilder;
     Map<String, String> headers;
     HTTPRequest httpRequestExpected;
     String request;
 
     @BeforeEach
     void setUp() throws IOException {
-        requestBuilder = new RequestBuilder();
+        requestBuilder = new HTTPRequestBuilder();
         headers = new HashMap();
         headers.put("Host", "localhost:5000");
         headers.put("Content-Length", "5");
