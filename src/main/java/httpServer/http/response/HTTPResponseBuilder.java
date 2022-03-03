@@ -44,7 +44,7 @@ public class HTTPResponseBuilder {
         return this;
     }
 
-    public HTTPResponse build(HTTPRequest request) {
+    public HTTPResponse build() {
         return new HTTPResponse(statusLine, body, headers);
     }
 

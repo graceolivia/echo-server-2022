@@ -9,7 +9,7 @@ public class HTTPRequest {
     public String method;
     public String resource;
     public String httpVersionNumber;
-    public Map<String, String> headers = new HashMap<>();
+    public Map<String, String> headers;
     public String body;
 
     public HTTPRequest(String method, String resource, String httpVersionNumber, Map<String, String> headers, String body) {
@@ -22,12 +22,10 @@ public class HTTPRequest {
     }
 
     public HTTPRequest() {
-
+        this.headers = new HashMap<>();
     }
 
     public int getContentLength() {
-        int size = headers.size();
-        System.out.println(String.valueOf(size));
         Set<String> set = headers.keySet();
         System.out.println(String.join(",", set));
         String contentLengthString = headers.get("Content-Length");

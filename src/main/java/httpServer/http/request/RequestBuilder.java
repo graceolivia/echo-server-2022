@@ -17,7 +17,10 @@ public class RequestBuilder {
         String[] requestLine = line.split(" ");
         this.method = requestLine[0];
         this.resource = requestLine[1];
-        this.httpVersionNumber = requestLine[2].replace(CRLF, "");;
+        this.httpVersionNumber = requestLine[2].replace(CRLF, "");
+        System.out.println(method);
+        System.out.println(resource);
+        System.out.println(httpVersionNumber);
         return this;
     }
 
@@ -31,17 +34,6 @@ public class RequestBuilder {
     public RequestBuilder setBody(String line) {
         this.body = line;
         return this;
-    }
-
-    public String toString() {
-        String requestLine = method + resource + httpVersionNumber + CRLF;
-        System.out.println(requestLine);
-        headers.forEach((k, v) -> System.out.println(k + ": " + v));
-        if (body != null) {
-            System.out.println("body: " + body);
-        }
-
-        return requestLine;
     }
 
     public HTTPRequest build() {

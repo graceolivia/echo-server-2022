@@ -8,18 +8,18 @@ import static httpServer.http.Constants.CRLF;
 
 public class HTTPResponse {
 
-    String statusLine;
+    public String statusLine;
     public Map<String, String> headers = new HashMap<>();
-    public String responseBody;
+    public String body;
 
-    public HTTPResponse(String statusLine, String responseBody, Map<String, String> headers) {
+    public HTTPResponse(String statusLine, String body, Map<String, String> headers) {
         this.statusLine = statusLine;
-        this.responseBody = responseBody;
+        this.body = body;
         this.headers = headers;
     }
 
     public String toString() {
-        return statusLine + CRLF + convertHeadersToString() + CRLF + CRLF + bodyIfNotNull(responseBody);
+        return statusLine + CRLF + convertHeadersToString() + CRLF + CRLF + bodyIfNotNull(body);
     }
 
     private String convertHeadersToString() {

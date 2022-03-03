@@ -9,6 +9,7 @@ import httpServer.http.StatusCodes;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Router {
 
@@ -24,7 +25,7 @@ public class Router {
         responseBuilder = setStatusCodeLine(httpRequest, responseBuilder);
         responseBuilder = responseBuilder.setBody(httpRequest.body);
         responseBuilder = setHeaders(httpRequest, responseBuilder);
-        HTTPResponse httpResponse =  responseBuilder.build(httpRequest);
+        HTTPResponse httpResponse =  responseBuilder.build();
         return httpResponse;
     }
 
@@ -57,24 +58,11 @@ public class Router {
 
         HTTPMethods[] allowedRoutes = routes.get(httpRequest.resource);
         List allowedRoutesAsList = Arrays.asList(allowedRoutes);
-        System.out.println(allowedRoutesAsList.get(0).toString().getClass());
-        System.out.println(allowedRoutesAsList);
-        System.out.println(httpRequest.method);
-        boolean isItInThere = (boolean) allowedRoutesAsList.stream().
-                filter(method -> method.toString().equals(httpRequest.method)).
-                findAny().
-                orElse(false);
-//
-//        return isItInThere;
 
-        for (int i = 0; i < allowedRoutesAsList.size(); i++) {
-            String methodAllowed = String.valueOf(allowedRoutesAsList.get(i));
-            if (httpRequest.method.equals(methodAllowed)) {
-                return true;
-            } else {
-                continue;
-            }
-        }
-        return false;
+        return allowedRoutesAsList
+                .stream()
+                .map(e -> e.toString()).
+                anyMatch(x -> x.equals(httpRequest.method));
+
     }
 }

@@ -11,9 +11,6 @@ import httpServer.socketManagement.ServerSocketInterface;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Arrays;
-import java.util.List;
-
 import static httpServer.http.Constants.CRLF;
 
 public class ListenerAndResponder implements ListenAndRespondable {
@@ -70,13 +67,14 @@ public class ListenerAndResponder implements ListenAndRespondable {
     private HTTPRequest readHeaderAndBodyAndReturnHttpRequest(ClientReadable bufferedReader)  {
 
         RequestBuilder requestBuilder = new RequestBuilder();
-        StringBuilder headers = readHeaders(bufferedReader);
-        int bodyLength = getBodyLength(headers);
+        requestBuilder = readHeaders(bufferedReader, requestBuilder);
+        int bodyLength = requestBuilder.getContentLengthInt();
         StringBuilder body = readBody(bufferedReader, bodyLength);
-        return returnHttpRequest(headers, body, requestBuilder);
+        return returnHttpRequest(body, requestBuilder);
+
     }
 
-    private StringBuilder readHeaders(ClientReadable bufferedReader) {
+    private RequestBuilder readHeaders(ClientReadable bufferedReader, RequestBuilder requestBuilder) {
 
         String character;
         StringBuilder headers = new StringBuilder();
@@ -93,8 +91,12 @@ public class ListenerAndResponder implements ListenAndRespondable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return headers;
+        String[] headersArray = headers.toString().split(CRLF);
+        System.out.println(headersArray);
+        for (String header: headersArray) {
+            requestBuilder = discernHeaderTypeAndAddToRequestBuilder(header, requestBuilder);
+        }
+        return requestBuilder;
 
     }
 
@@ -117,11 +119,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
         return body;
     }
 
-    private HTTPRequest returnHttpRequest(StringBuilder headers, StringBuilder body, RequestBuilder requestBuilder) {
-        String[] headersArray = headers.toString().split(CRLF);
-        for (String header: headersArray) {
-            requestBuilder = discernHeaderTypeAndAddToRequestBuilder(header, requestBuilder);
-        }
+    private HTTPRequest returnHttpRequest(StringBuilder body, RequestBuilder requestBuilder) {
         if (body.length() != 0) {
             requestBuilder.setBody(body.toString());
         }
@@ -141,21 +139,4 @@ public class ListenerAndResponder implements ListenAndRespondable {
         return requestScannedInSoFar.toString().contains(CRLF + CRLF);
     }
 
-    private int getBodyLength(StringBuilder headers) {
-        String[] headersArray = headers.toString().split(CRLF);
-        List<String> headersString = Arrays.asList(headersArray);
-//        String contentLengthHeader = headersString.stream().
-//                filter(h -> h.contains("Content-Length: ")).
-//                forEach();
-//
-
-        for (String header : headersArray) {
-            if (header.indexOf("Content-Length: ") != -1) {
-                String[] split = header.split(": ");
-                return Integer.parseInt(split[1]);
-            }
-        }
-
-        return 0;
-    }
 }

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static httpServer.http.Constants.CRLF;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -26,11 +27,11 @@ public class RequestBuilderTest {
         headers.put("Host", "localhost:5000");
         headers.put("Content-Length", "5");
         httpRequestExpected = new HTTPRequest("GET", "/", "HTTP/1.1", headers, "hello");
-        request = "GET / HTTP/1.1" + Constants.CRLF +
-                "Content-Length: 5" + Constants.CRLF +
-                "Host: localhost:5000" + Constants.CRLF +
-                "User-Agent: JUnit" + Constants.CRLF +
-                "Accept: */*" + Constants.CRLF + Constants.CRLF +
+        request = "GET / HTTP/1.1" + CRLF +
+                "Content-Length: 5" + CRLF +
+                "Host: localhost:5000" + CRLF +
+                "User-Agent: JUnit" + CRLF +
+                "Accept: */*" + CRLF + CRLF +
                 "hello";
     }
 

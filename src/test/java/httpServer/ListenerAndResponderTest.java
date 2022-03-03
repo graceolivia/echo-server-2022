@@ -1,5 +1,4 @@
 package httpServer;
-import httpServer.http.Constants;
 import httpServer.http.response.HTTPResponseBuilder;
 import httpServer.http.StatusCodes;
 import httpServer.outputManagement.ClientWriteableFactory;
@@ -28,10 +27,10 @@ public class ListenerAndResponderTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        String input = "Accept: */*" + CRLF +
+        String input = "GET / HTTP/1.1" + CRLF +
+                "Accept: */*" + CRLF +
                 "User-Agent: jUnit" + CRLF +
-                "Host: localhost:5000" + CRLF +
-                "GET / HTTP/1.1" + CRLF + CRLF;
+                "Host: localhost:5000" + CRLF + CRLF;
         socket = new Socket();
         routes = getRoutes();
         responseBuilder = new HTTPResponseBuilder();
@@ -56,11 +55,24 @@ public class ListenerAndResponderTest {
 
     @Test
     void testReadClientInputCallsPrintWriterPrint() throws IOException {
-        String expectedResult = "HTTP/1.1 " + StatusCodes.PAGE_NOT_FOUND.httpResponse + Constants.CRLF + "Content-Length: 0" + Constants.CRLF;
+        String expectedResult = "HTTP/1.1 " + StatusCodes.PAGE_NOT_FOUND.httpResponse + CRLF + "Content-Length: 0" + CRLF + "Content-Type: text/plain" + CRLF + CRLF;
 
         echoer.readClientInput(socket);
 
-        assertTrue(mockBufferedReader.readLineWasCalled);
+        assertTrue(mockBufferedReader.readWasCalled);
+        System.out.println("RESULT: " + mockPrintWriter.printWasCalledWith);
         assertEquals(expectedResult, mockPrintWriter.printWasCalledWith);
     }
+
+//    @Test
+//    void testReadClientInputCallsPrintWriterPrint() throws IOException {
+//        String expectedResult = "HTTP/1.1 " + StatusCodes.PAGE_NOT_FOUND.httpResponse + CRLF + "Content-Length: 0" + CRLF + "Content-Type: text/plain" + CRLF + CRLF;
+//
+//        echoer.readClientInput(socket);
+//
+//        assertTrue(mockBufferedReader.readWasCalled);
+//        System.out.println("RESULT: " + mockPrintWriter.printWasCalledWith);
+//        assertEquals(expectedResult, mockPrintWriter.printWasCalledWith);
+//    }
+
 }
