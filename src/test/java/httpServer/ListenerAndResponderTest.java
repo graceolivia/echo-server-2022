@@ -64,15 +64,12 @@ public class ListenerAndResponderTest {
         assertEquals(expectedResult, mockPrintWriter.printWasCalledWith);
     }
 
-//    @Test
-//    void testReadClientInputCallsPrintWriterPrint() throws IOException {
-//        String expectedResult = "HTTP/1.1 " + StatusCodes.PAGE_NOT_FOUND.httpResponse + CRLF + "Content-Length: 0" + CRLF + "Content-Type: text/plain" + CRLF + CRLF;
-//
-//        echoer.readClientInput(socket);
-//
-//        assertTrue(mockBufferedReader.readWasCalled);
-//        System.out.println("RESULT: " + mockPrintWriter.printWasCalledWith);
-//        assertEquals(expectedResult, mockPrintWriter.printWasCalledWith);
-//    }
+    @Test
+    void testKeepListeningCallsPrintWriterPrint() throws IOException {
+        Socket clientSocket = echoer.keepListening();
+
+        assertEquals(socket, clientSocket);
+        assert(mockServerSocket.acceptHasBeenCalled);
+    }
 
 }
