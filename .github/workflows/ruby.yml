@@ -49,13 +49,11 @@ jobs:
         run: cd http_server_spec
 #      - name: Run server
 #        run: ./gradlew run
-      - name: Run tests
-        run: rake test
-
-
-
-
-
+      - name: Run server + tests
+        run: |
+        ./gradlew run
+        rake test:f1
+        pkill -f '.*GradleDaemon.*'
 
 
 
