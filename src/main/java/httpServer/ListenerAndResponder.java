@@ -125,13 +125,13 @@ public class ListenerAndResponder implements ListenAndRespondable {
         return requestBuilder.build();
     }
 
-    private HTTPRequestBuilder discernHeaderTypeAndAddToRequestBuilder(String line, HTTPRequestBuilder HTTPRequestBuilder) {
+    private HTTPRequestBuilder discernHeaderTypeAndAddToRequestBuilder(String line, HTTPRequestBuilder httpRequestBuilder) {
         if (line.contains(": ")) {
-            HTTPRequestBuilder.buildHeaderLine(line);
+            httpRequestBuilder.buildHeaderLine(line);
         } else {
-            HTTPRequestBuilder.buildRequestLine(line);
+            httpRequestBuilder.buildRequestLine(line);
         }
-        return HTTPRequestBuilder;
+        return httpRequestBuilder;
     }
 
     private boolean checkIfReachedEndOfHeaders(StringBuilder requestScannedInSoFar) {

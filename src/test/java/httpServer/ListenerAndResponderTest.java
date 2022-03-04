@@ -59,17 +59,32 @@ public class ListenerAndResponderTest {
 
         echoer.readClientInput(socket);
 
-        assertTrue(mockBufferedReader.readWasCalled);
-        System.out.println("RESULT: " + mockPrintWriter.printWasCalledWith);
         assertEquals(expectedResult, mockPrintWriter.printWasCalledWith);
     }
 
     @Test
-    void testKeepListeningCallsPrintWriterPrint() throws IOException {
+    void testReadClientInputCallsMockBufferedReader() throws IOException {
+
+        echoer.readClientInput(socket);
+
+        assertTrue(mockBufferedReader.readWasCalled);
+    }
+
+
+    @Test
+    void testKeepListeningReturnsServerSocket() throws IOException {
         Socket clientSocket = echoer.keepListening();
 
         assertEquals(socket, clientSocket);
         assert(mockServerSocket.acceptHasBeenCalled);
+    }
+
+
+    @Test
+    void testReadClientInputCallsClose() throws IOException {
+        echoer.readClientInput(socket);
+        assertTrue(mockPrintWriter.closeWasCalled);
+
     }
 
 }
