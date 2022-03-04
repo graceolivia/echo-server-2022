@@ -51,9 +51,9 @@ jobs:
 #        run: ./gradlew run
       - name: Run server + tests
         run: |
-        ./gradlew run
-        rake test:f1
-        pkill -f '.*GradleDaemon.*'
+          ./gradlew run
+          rake test:f1
+          pkill -f '.*GradleDaemon.*'
 
 
 
