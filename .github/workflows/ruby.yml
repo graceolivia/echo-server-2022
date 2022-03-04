@@ -47,8 +47,8 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Go into testing directory
         run: cd http_server_spec
-      - name: Run server
-        run: ./gradlew run
+#      - name: Run server
+#        run: ./gradlew run
       - name: Run tests
         run: rake test
 
