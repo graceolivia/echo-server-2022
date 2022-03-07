@@ -25,12 +25,6 @@ public class HTTPRequest {
         this.headers = new HashMap<>();
     }
 
-    public int getContentLength() {
-        Set<String> set = headers.keySet();
-        System.out.println(String.join(",", set));
-        String contentLengthString = headers.get("Content-Length");
-        return Integer.valueOf(contentLengthString);
-    }
 
     @Override
     public boolean equals(Object obj) {

@@ -90,7 +90,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
         String[] metadata = headers.toString().split(CRLF);
 
         for (String metadataLine: metadata) {
-            requestBuilder = isRequestLine(metadataLine)? requestBuilder.buildRequestLine(metadataLine) : requestBuilder.buildHeaderLine(metadataLine);
+            requestBuilder = isRequestLine(metadataLine) ? requestBuilder.buildRequestLine(metadataLine) : requestBuilder.buildHeaderLine(metadataLine);
         }
         return requestBuilder;
 
@@ -130,6 +130,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
         }
         return httpRequestBuilder;
     }
+
     private boolean isRequestLine(String line) {
         if (line.contains(": ")) {
             return false;
