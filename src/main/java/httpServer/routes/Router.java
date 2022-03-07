@@ -24,7 +24,6 @@ public class Router {
     public HTTPResponse getResponse(HTTPRequest httpRequest) {
         responseBuilder = setStatusCodeLine(httpRequest, responseBuilder);
         responseBuilder = setBody(httpRequest, responseBuilder);
-        //responseBuilder.setBody("{}");
         responseBuilder = setHeaders(httpRequest, responseBuilder);
         HTTPResponse httpResponse =  responseBuilder.build();
         return httpResponse;
@@ -52,13 +51,9 @@ public class Router {
     }
 
     private HTTPResponseBuilder setBody(HTTPRequest httpRequest, HTTPResponseBuilder responseBuilder) {
-        System.err.println("SETBODY");
-        if (httpRequest.resource.equals("/json_response")) {
-            System.err.println("JASON");
-            responseBuilder = responseBuilder.setBody("{\"people\": [{\"craft\": \"ISS\", \"name\": \"Mark Vande Hei\"}, {\"craft\": \"ISS\", \"name\": \"Pyotr Dubrov\"}, {\"craft\": \"ISS\", \"name\": \"Anton Shkaplerov\"}, {\"craft\": \"Shenzhou 13\", \"name\": \"Zhai Zhigang\"}, {\"craft\": \"Shenzhou 13\", \"name\": \"Wang Yaping\"}, {\"craft\": \"Shenzhou 13\", \"name\": \"Ye Guangfu\"}, {\"craft\": \"ISS\", \"name\": \"Raja Chari\"}, {\"craft\": \"ISS\", \"name\": \"Tom Marshburn\"}, {\"craft\": \"ISS\", \"name\": \"Kayla Barron\"}, {\"craft\": \"ISS\", \"name\": \"Matthias Maurer\"}], \"message\": \"success\", \"number\": 10}");
-        } else if (httpRequest.resource.equals("/echo_body")) {
-            System.err.println("ECHO");
+        if (httpRequest.resource.equals("/echo_body")) {
             responseBuilder = responseBuilder.setBody(httpRequest.body);
+            return responseBuilder;
         }
         return responseBuilder;
 

@@ -25,7 +25,6 @@ public class HTTPRequest {
         this.headers = new HashMap<>();
     }
 
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
