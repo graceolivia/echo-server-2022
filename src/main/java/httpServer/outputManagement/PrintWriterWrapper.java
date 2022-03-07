@@ -1,4 +1,5 @@
 package httpServer.outputManagement;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -13,7 +14,12 @@ public class PrintWriterWrapper implements ClientWriteable {
         this.printer = new PrintWriter(clientSocket.getOutputStream(), true);
     }
 
-    public void println(String message) throws IOException {
-        printer.println(message);
+    public void print(String message) throws IOException {
+        printer.print(message);
+        printer.flush();
+    }
+
+    public void close() throws IOException {
+        printer.close();
     }
 }

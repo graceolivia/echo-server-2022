@@ -1,7 +1,8 @@
 package httpServer;
 
-import httpServer.http.HTTPRequest;
-import httpServer.http.RequestParser;
+import httpServer.http.request.HTTPRequest;
+import httpServer.http.request.HTTPRequestBuilder;
+import httpServer.http.response.HTTPResponse;
 import httpServer.routes.Router;
 import httpServer.http.StatusCodes;
 import httpServer.outputManagement.ClientWriteableFactory;
@@ -10,7 +11,6 @@ import httpServer.socketManagement.ServerSocketInterface;
 
 import java.io.IOException;
 import java.net.Socket;
-
 import static httpServer.http.Constants.CRLF;
 
 public class ListenerAndResponder implements ListenAndRespondable {
@@ -35,51 +35,111 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
     public Socket keepListening() throws IOException {
         Socket clientSocket = serverSocket.accept();
-        System.err.println("Connected to client.");
         return clientSocket;
     }
 
     public void readClientInput(Socket clientSocket) throws IOException {
-
         ClientReadable bufferedReader = clientReaderFactory.makeReader(clientSocket);
-
-        String httpRequest;
-        httpRequest = readAllLines(bufferedReader);
+        HTTPRequest httpRequest = storeHttpRequestInHttpRequestObject(bufferedReader);
         if (httpRequest == null) {
             StatusCodes statusCodes = StatusCodes.BAD_REQUEST;
             String responseText = statusCodes.httpResponse;
             printServerResponse(responseText, clientSocket);
         }
         if (!httpRequest.equals("")) {
-            HTTPRequest request = RequestParser.parse(httpRequest);
-            System.out.println(httpRequest);
-            String httpResponse = router.getResponse(request);
-            printServerResponse(httpResponse, clientSocket);
+            HTTPResponse httpResponse = router.getResponse(httpRequest);
+            String responseString = httpResponse.toString();
+            printServerResponse(responseString, clientSocket);
         }
+    }
+
+    private void printServerResponse(String httpResponse, Socket clientSocket) throws IOException {
+        ClientWriteable printer = clientWriterFactory.makePrinter(clientSocket);
+        System.out.println(httpResponse);
+        printer.print(httpResponse);
+        printer.close();
+    }
+
+    private HTTPRequest storeHttpRequestInHttpRequestObject(ClientReadable bufferedReader)  {
+
+        HTTPRequestBuilder requestBuilder = new HTTPRequestBuilder();
+        requestBuilder = readHeaders(bufferedReader, requestBuilder);
+        int bodyLength = requestBuilder.getContentLengthInt();
+        StringBuilder body = readBody(bufferedReader, bodyLength);
+        return returnHttpRequest(body, requestBuilder);
 
     }
 
-    private void printServerResponse(String message, Socket clientSocket) throws IOException {
-            ClientWriteable printer = clientWriterFactory.makePrinter(clientSocket);
-            System.out.println(message);
-            printer.println(message);
+    private HTTPRequestBuilder readHeaders(ClientReadable bufferedReader, HTTPRequestBuilder requestBuilder) {
 
-    }
+        String character;
+        StringBuilder headers = new StringBuilder();
 
-    private String readAllLines(ClientReadable bufferedReader)  {
-        String line;
-        StringBuilder stringBuilder = new StringBuilder();
         try {
-            while ((line = bufferedReader.readLine()) != null)
-            {
-                stringBuilder.append(line);
-                stringBuilder.append(CRLF);
-                if (line.equals("")) { break; }
+            while ((character = bufferedReader.read()) != null) {
+
+                headers.append(character);
+                if (atEndOfHeaders(headers)) {
+                    break;
+                }
             }
-            return stringBuilder.toString();
+
         } catch (IOException e) {
             e.printStackTrace();
-            return stringBuilder.toString();
         }
+        String[] metadata = headers.toString().split(CRLF);
+
+        for (String metadataLine: metadata) {
+            requestBuilder = isRequestLine(metadataLine) ? requestBuilder.buildRequestLine(metadataLine) : requestBuilder.buildHeaderLine(metadataLine);
+        }
+        return requestBuilder;
+
     }
+
+    private StringBuilder readBody(ClientReadable bufferedReader, int bodyLength) {
+        String character;
+        StringBuilder body = new StringBuilder();
+        if (bodyLength == 0) {
+            return body;
+        }
+        try {
+            while ((character = bufferedReader.read()) != null) {
+                body.append(character);
+                if (body.length() == bodyLength) {
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return body;
+    }
+
+    private HTTPRequest returnHttpRequest(StringBuilder body, HTTPRequestBuilder requestBuilder) {
+        if (body.length() != 0) {
+            requestBuilder.setBody(body.toString());
+        }
+        return requestBuilder.build();
+    }
+
+    private HTTPRequestBuilder discernHeaderTypeAndAddToRequestBuilder(String line, HTTPRequestBuilder httpRequestBuilder) {
+        if (line.contains(": ")) {
+            httpRequestBuilder.buildHeaderLine(line);
+        } else {
+            httpRequestBuilder.buildRequestLine(line);
+        }
+        return httpRequestBuilder;
+    }
+
+    private boolean isRequestLine(String line) {
+        if (line.contains(": ")) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean atEndOfHeaders(StringBuilder requestScannedInSoFar) {
+        return requestScannedInSoFar.toString().contains(CRLF + CRLF);
+    }
+
 }

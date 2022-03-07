@@ -1,11 +1,11 @@
 package httpServer;
-import httpServer.http.Constants;
-import httpServer.http.HTTPResponseWriter;
+import httpServer.http.response.HTTPResponseBuilder;
 import httpServer.http.StatusCodes;
 import httpServer.outputManagement.ClientWriteableFactory;
 import httpServer.routes.Router;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static httpServer.http.Constants.CRLF;
 
 
 import java.io.IOException;
@@ -22,18 +22,18 @@ public class ListenerAndResponderTest {
     MockServerSocketWrapper mockServerSocket;
     MockBufferedReaderWrapper mockBufferedReader;
     MockPrintWriterWrapper mockPrintWriter;
-    HTTPResponseWriter responseBuilder;
+    HTTPResponseBuilder responseBuilder;
     Map routes;
 
     @BeforeEach
     void setUp() throws IOException {
-        String input = "Accept: */*" + Constants.CRLF +
-                "User-Agent: jUnit" + Constants.CRLF +
-                "Host: localhost:5000" + Constants.CRLF +
-                "GET / HTTP/1.1" + Constants.CRLF + Constants.CRLF;
+        String input = "GET / HTTP/1.1" + CRLF +
+                "Accept: */*" + CRLF +
+                "User-Agent: jUnit" + CRLF +
+                "Host: localhost:5000" + CRLF + CRLF;
         socket = new Socket();
         routes = getRoutes();
-        responseBuilder = new HTTPResponseWriter();
+        responseBuilder = new HTTPResponseBuilder();
         Router router = new Router(routes, responseBuilder);
         mockServerSocket = new MockServerSocketWrapper(socket);
         mockPrintWriter =  new MockPrintWriterWrapper();
@@ -54,12 +54,37 @@ public class ListenerAndResponderTest {
     }
 
     @Test
-    void testReadClientInputCallsPrintWriterPrintLn() throws IOException {
-        String expectedResult = "HTTP/1.1 " + StatusCodes.PAGE_NOT_FOUND.httpResponse + Constants.CRLF + "Content-Length: 0" + Constants.CRLF;
+    void testReadClientInputCallsPrintWriterPrint() throws IOException {
+        String expectedResult = "HTTP/1.1 " + StatusCodes.PAGE_NOT_FOUND.httpResponse + CRLF + "Content-Length: 0" + CRLF + "Content-Type: text/plain" + CRLF + CRLF;
 
         echoer.readClientInput(socket);
 
-        assertTrue(mockBufferedReader.readLineWasCalled);
-        assertEquals(expectedResult, mockPrintWriter.printlnWasCalledWith);
+        assertEquals(expectedResult, mockPrintWriter.printWasCalledWith);
     }
+
+    @Test
+    void testReadClientInputCallsMockBufferedReader() throws IOException {
+
+        echoer.readClientInput(socket);
+
+        assertTrue(mockBufferedReader.readWasCalled);
+    }
+
+
+    @Test
+    void testKeepListeningReturnsServerSocket() throws IOException {
+        Socket clientSocket = echoer.keepListening();
+
+        assertEquals(socket, clientSocket);
+        assert(mockServerSocket.acceptHasBeenCalled);
+    }
+
+
+    @Test
+    void testReadClientInputCallsClose() throws IOException {
+        echoer.readClientInput(socket);
+        assertTrue(mockPrintWriter.closeWasCalled);
+
+    }
+
 }
