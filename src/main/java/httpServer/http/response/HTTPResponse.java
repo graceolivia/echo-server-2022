@@ -9,13 +9,17 @@ import static httpServer.http.Constants.CRLF;
 public class HTTPResponse {
 
     public String statusLine;
-    public Map<String, String> headers = new HashMap<>();
+    public Map<String, String> headers;
     public String body;
 
     public HTTPResponse(String statusLine, String body, Map<String, String> headers) {
         this.statusLine = statusLine;
         this.body = body;
         this.headers = headers;
+    }
+
+    public HTTPResponse() {
+        this.headers = new HashMap<>();
     }
 
     public String toString() {

@@ -78,7 +78,7 @@ public class HTTPResponseBuilderTest {
     @Test
     void testResponseBuilderCorrectlySetsContentTypeHeader() throws IOException {
         HTTPResponse response = responseBuilder
-                .setContentTypeHeader()
+                .setContentTypeHeader(request)
                 .build();
         assertEquals(response.headers.get("Content-Type"), "text/plain");
     }
@@ -90,7 +90,7 @@ public class HTTPResponseBuilderTest {
                 .setBody("hello\nhello again")
                 .makeAllowHeader(List.of(GET, OPTIONS, POST))
                 .setContentLengthHeader()
-                .setContentTypeHeader()
+                .setContentTypeHeader(request)
                 .build();
         assertEquals(response.statusLine, "HTTP/1.1 404 Not Found");
         assertEquals(response.headers.keySet(), Set.of("Allow", "Content-Length", "Content-Type"));

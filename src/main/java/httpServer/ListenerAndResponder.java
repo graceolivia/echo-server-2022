@@ -35,15 +35,12 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
     public Socket keepListening() throws IOException {
         Socket clientSocket = serverSocket.accept();
-        System.err.println("Connected to client.");
         return clientSocket;
     }
 
     public void readClientInput(Socket clientSocket) throws IOException {
-        System.err.println("Starting to read");
         ClientReadable bufferedReader = clientReaderFactory.makeReader(clientSocket);
-        HTTPRequest httpRequest;
-        httpRequest = readHeaderAndBodyAndReturnHttpRequest(bufferedReader);
+        HTTPRequest httpRequest = storeHttpRequestInHttpRequestObject(bufferedReader);
         if (httpRequest == null) {
             StatusCodes statusCodes = StatusCodes.BAD_REQUEST;
             String responseText = statusCodes.httpResponse;
@@ -54,7 +51,6 @@ public class ListenerAndResponder implements ListenAndRespondable {
             String responseString = httpResponse.toString();
             printServerResponse(responseString, clientSocket);
         }
-
     }
 
     private void printServerResponse(String httpResponse, Socket clientSocket) throws IOException {
@@ -64,7 +60,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
         printer.close();
     }
 
-    private HTTPRequest readHeaderAndBodyAndReturnHttpRequest(ClientReadable bufferedReader)  {
+    private HTTPRequest storeHttpRequestInHttpRequestObject(ClientReadable bufferedReader)  {
 
         HTTPRequestBuilder requestBuilder = new HTTPRequestBuilder();
         requestBuilder = readHeaders(bufferedReader, requestBuilder);
@@ -83,7 +79,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
             while ((character = bufferedReader.read()) != null) {
 
                 headers.append(character);
-                if (checkIfReachedEndOfHeaders(headers)) {
+                if (atEndOfHeaders(headers)) {
                     break;
                 }
             }
@@ -91,9 +87,10 @@ public class ListenerAndResponder implements ListenAndRespondable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String[] headersArray = headers.toString().split(CRLF);
-        for (String header: headersArray) {
-            requestBuilder = discernHeaderTypeAndAddToRequestBuilder(header, requestBuilder);
+        String[] metadata = headers.toString().split(CRLF);
+
+        for (String metadataLine: metadata) {
+            requestBuilder = isRequestLine(metadataLine)? requestBuilder.buildRequestLine(metadataLine) : requestBuilder.buildHeaderLine(metadataLine);
         }
         return requestBuilder;
 
@@ -133,8 +130,14 @@ public class ListenerAndResponder implements ListenAndRespondable {
         }
         return httpRequestBuilder;
     }
+    private boolean isRequestLine(String line) {
+        if (line.contains(": ")) {
+            return false;
+        }
+        return true;
+    }
 
-    private boolean checkIfReachedEndOfHeaders(StringBuilder requestScannedInSoFar) {
+    private boolean atEndOfHeaders(StringBuilder requestScannedInSoFar) {
         return requestScannedInSoFar.toString().contains(CRLF + CRLF);
     }
 

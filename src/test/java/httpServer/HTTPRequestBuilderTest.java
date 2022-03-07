@@ -13,7 +13,7 @@ import static httpServer.http.Constants.CRLF;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class RequestBuilderTest {
+public class HTTPRequestBuilderTest {
     HTTPRequestBuilder requestBuilder;
     Map<String, String> headers;
     HTTPRequest httpRequestExpected;
@@ -35,7 +35,7 @@ public class RequestBuilderTest {
     }
 
     @Test
-    void testRequestBuilderCorrectlyParsesStatusLine() throws IOException {
+    void testRequestBuilderCorrectlyParsesRequestLine() throws IOException {
         requestBuilder = requestBuilder.buildRequestLine("GET / HTTP/1.1");
 
         HTTPRequest httpParsed = requestBuilder.build();
