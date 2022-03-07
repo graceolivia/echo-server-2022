@@ -54,8 +54,13 @@ public class Router {
         if (httpRequest.resource.equals("/echo_body")) {
             responseBuilder = responseBuilder.setBody(httpRequest.body);
             return responseBuilder;
+        } else if (httpRequest.resource.equals("/json_response")) {
+            responseBuilder = responseBuilder.setBody("{\"squadName\": \"Super hero squad\"}");
+            return responseBuilder;
+        } else {
+            responseBuilder = responseBuilder.setBody("");
+            return responseBuilder;
         }
-        return responseBuilder;
 
     }
 

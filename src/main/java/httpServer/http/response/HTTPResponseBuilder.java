@@ -40,7 +40,11 @@ public class HTTPResponseBuilder {
     }
 
     public HTTPResponseBuilder setContentTypeHeader(HTTPRequest request) {
-        this.headers.put("Content-Type", "text/plain");
+        if (request.resource.equals("/json_response")) {
+            this.headers.put("Content-Type", "application/json");
+        } else {
+            this.headers.put("Content-Type", "text/plain");
+        }
         return this;
     }
 
