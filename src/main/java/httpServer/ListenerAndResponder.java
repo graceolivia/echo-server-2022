@@ -18,12 +18,14 @@ public class ListenerAndResponder implements ListenAndRespondable {
     ClientReadableFactory clientReaderFactory;
     ClientWriteableFactory clientWriterFactory;
     Router router;
+    RequestParserHelper requestParserHelper;
 
-    public ListenerAndResponder(ServerSocketInterface serverSocket, ClientReadableFactory clientReaderFactory, ClientWriteableFactory clientWriterFactory, Router router) throws IOException {
+    public ListenerAndResponder(ServerSocketInterface serverSocket, ClientReadableFactory clientReaderFactory, ClientWriteableFactory clientWriterFactory, Router router, RequestParserHelper requestParserHelper) throws IOException {
         this.serverSocket = serverSocket;
         this.clientWriterFactory = clientWriterFactory;
         this.clientReaderFactory = clientReaderFactory;
         this.router = router;
+        this.requestParserHelper = requestParserHelper;
     }
 
     public Socket startServer() throws IOException {

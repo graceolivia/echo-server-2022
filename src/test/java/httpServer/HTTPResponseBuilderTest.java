@@ -93,7 +93,7 @@ public class HTTPResponseBuilderTest {
         HTTPResponse response = responseBuilder
                 .setContentTypeHeader(jsonRequest)
                 .build();
-        assertEquals(response.headers.get("Content-Type"), "application/json");
+        assertEquals("application/json;charset=utf-8", response.headers.get("Content-Type"));
     }
 
     @Test

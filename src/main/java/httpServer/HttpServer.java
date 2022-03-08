@@ -19,7 +19,8 @@ public class HttpServer {
         ServerSocketInterface serverSocket = new ServerSocketWrapper();
         ClientWriteableFactory clientWriterFactory = new ClientWriterFactory();
         ClientReadableFactory clientReaderFactory = new ClientReaderFactory();
-        ListenAndRespondable echoer = new ListenerAndResponder(serverSocket, clientReaderFactory, clientWriterFactory, router);
+        RequestParserHelper requestParserHelper = new RequestParserHelper();
+        ListenAndRespondable echoer = new ListenerAndResponder(serverSocket, clientReaderFactory, clientWriterFactory, router, requestParserHelper);
         Socket clientSocket = echoer.startServer();
 
         try {
@@ -44,7 +45,7 @@ public class HttpServer {
         routes.put("/simple_get", new HTTPMethods[] {HTTPMethods.GET, HTTPMethods.OPTIONS, HTTPMethods.HEAD});
         routes.put("/head_request", new HTTPMethods[] {HTTPMethods.HEAD, HTTPMethods.OPTIONS});
         routes.put("/echo_body", new HTTPMethods[] {HTTPMethods.HEAD, HTTPMethods.OPTIONS, HTTPMethods.POST});
-        routes.put("/json_response", new HTTPMethods[] {HTTPMethods.GET, HTTPMethods.OPTIONS});
+        routes.put("/json_response", new HTTPMethods[] {HTTPMethods.GET, HTTPMethods.OPTIONS, HTTPMethods.HEAD});
         return routes;
     }
 }

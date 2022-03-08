@@ -38,9 +38,10 @@ public class ListenerAndResponderTest {
         mockServerSocket = new MockServerSocketWrapper(socket);
         mockPrintWriter =  new MockPrintWriterWrapper();
         mockBufferedReader = new MockBufferedReaderWrapper(input);
+        RequestParserHelper requestParserHelper = new RequestParserHelper();
         ClientWriteableFactory mockClientWriterFactory = new MockClientWriterFactory(mockPrintWriter);
         ClientReadableFactory mockClientReaderFactory = new MockClientReaderFactory(mockBufferedReader);
-        echoer = new ListenerAndResponder(mockServerSocket, mockClientReaderFactory, mockClientWriterFactory, router);
+        echoer = new ListenerAndResponder(mockServerSocket, mockClientReaderFactory, mockClientWriterFactory, router, requestParserHelper);
     }
 
     @Test
