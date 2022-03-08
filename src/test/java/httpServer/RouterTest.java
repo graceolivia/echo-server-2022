@@ -78,4 +78,13 @@ public class RouterTest {
         assertEquals(expectedResponse, returnedResponse);
     }
 
+    @Test
+    void testRouterReturns200AndBodyUponGetToJsonResponse() throws IOException {
+        Map<String, String> headers = new HashMap();
+        HTTPRequest request = new HTTPRequest("GET", "/json_response", "HTTP/1.1", headers, "");
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.CRLF +  "Content-Length: 33" + Constants.CRLF + "Content-Type: application/json;charset=utf-8" + Constants.CRLF + Constants.CRLF + "{\"key1\":\"value1\",\"key2\":\"value2\"}";
+        String returnedResponse = router.getResponse(request).toString();
+        assertEquals(expectedResponse, returnedResponse);
+    }
+
 }
