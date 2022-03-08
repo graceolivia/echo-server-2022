@@ -55,7 +55,7 @@ public class Router {
             responseBuilder = responseBuilder.setBody(httpRequest.body);
             return responseBuilder;
         } else if (httpRequest.resource.equals("/json_response")) {
-            responseBuilder = responseBuilder.setBody("{ key1: \'value1\', key2: \'value2\' }");
+            responseBuilder = responseBuilder.setBody("{\"key1\":\"value1\",\"key2\":\"value2\"}");
             return responseBuilder;
         } else {
             responseBuilder = responseBuilder.setBody("");
