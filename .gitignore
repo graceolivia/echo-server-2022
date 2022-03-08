@@ -51,3 +51,10 @@ build/*
 .gradle/
 java_pid21475.hprof.9m7e2y.b.ij/*
 java_pid21475.hprof
+http_server_spec/
+.idea/vcs.xml
+.idea/vcs.xml
+java_pid21475.hprof
+*.hprof
+/java_pid21475.hprof.9m7e2y.b.ij/
+
