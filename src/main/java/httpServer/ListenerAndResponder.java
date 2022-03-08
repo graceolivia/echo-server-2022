@@ -81,7 +81,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
             while ((character = bufferedReader.read()) != null) {
 
                 headers.append(character);
-                if (atEndOfHeaders(headers)) {
+                if (requestParserHelper.atEndOfHeaders(headers)) {
                     break;
                 }
             }
@@ -92,7 +92,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
         String[] metadata = headers.toString().split(CRLF);
 
         for (String metadataLine: metadata) {
-            requestBuilder = isRequestLine(metadataLine) ? requestBuilder.buildRequestLine(metadataLine) : requestBuilder.buildHeaderLine(metadataLine);
+            requestBuilder = requestParserHelper.isRequestLine(metadataLine) ? requestBuilder.buildRequestLine(metadataLine) : requestBuilder.buildHeaderLine(metadataLine);
         }
         return requestBuilder;
 
@@ -124,24 +124,5 @@ public class ListenerAndResponder implements ListenAndRespondable {
         return requestBuilder.build();
     }
 
-    private HTTPRequestBuilder discernHeaderTypeAndAddToRequestBuilder(String line, HTTPRequestBuilder httpRequestBuilder) {
-        if (line.contains(": ")) {
-            httpRequestBuilder.buildHeaderLine(line);
-        } else {
-            httpRequestBuilder.buildRequestLine(line);
-        }
-        return httpRequestBuilder;
-    }
-
-    private boolean isRequestLine(String line) {
-        if (line.contains(": ")) {
-            return false;
-        }
-        return true;
-    }
-
-    private boolean atEndOfHeaders(StringBuilder requestScannedInSoFar) {
-        return requestScannedInSoFar.toString().contains(CRLF + CRLF);
-    }
 
 }
