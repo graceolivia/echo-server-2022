@@ -41,7 +41,8 @@ jobs:
           echo "current working directory"
           pwd
           ls
-          gem update --system
+          echo "ls should have run"
+          gem update --system >/dev/null
           bundle install
       - name: Run server + tests
         run: |
