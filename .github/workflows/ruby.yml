@@ -24,8 +24,8 @@ jobs:
           arguments: build
       - name: Run server
         run: |
-        ./gradlew run runEngineWithMonitoring &
-        disown
+          ./gradlew run runEngineWithMonitoring &
+          disown
 
       - name: Set up Ruby
         # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
