@@ -2,7 +2,7 @@ package httpServer;
 
 import static httpServer.http.Constants.CRLF;
 
-public class RequestParserHelper {
+public class RequestParser {
 
     public boolean isRequestLine(String line) {
         if (line.contains(": ")) {
@@ -11,8 +11,8 @@ public class RequestParserHelper {
         return true;
     }
 
-    public boolean atEndOfHeaders(StringBuilder requestScannedInSoFar) {
-        return requestScannedInSoFar.toString().contains(CRLF + CRLF);
+    public boolean atEndOfHeaders(StringBuilder httpRequestStringBuilder) {
+        return httpRequestStringBuilder.toString().contains(CRLF + CRLF);
     }
 
 }

@@ -18,9 +18,9 @@ public class ListenerAndResponder implements ListenAndRespondable {
     ClientReadableFactory clientReaderFactory;
     ClientWriteableFactory clientWriterFactory;
     Router router;
-    RequestParserHelper requestParserHelper;
+    RequestParser requestParserHelper;
 
-    public ListenerAndResponder(ServerSocketInterface serverSocket, ClientReadableFactory clientReaderFactory, ClientWriteableFactory clientWriterFactory, Router router, RequestParserHelper requestParserHelper) throws IOException {
+    public ListenerAndResponder(ServerSocketInterface serverSocket, ClientReadableFactory clientReaderFactory, ClientWriteableFactory clientWriterFactory, Router router, RequestParser requestParserHelper) throws IOException {
         this.serverSocket = serverSocket;
         this.clientWriterFactory = clientWriterFactory;
         this.clientReaderFactory = clientReaderFactory;
@@ -65,23 +65,23 @@ public class ListenerAndResponder implements ListenAndRespondable {
     private HTTPRequest storeHttpRequestInHttpRequestObject(ClientReadable bufferedReader)  {
 
         HTTPRequestBuilder requestBuilder = new HTTPRequestBuilder();
-        requestBuilder = readHeaders(bufferedReader, requestBuilder);
+        requestBuilder = readStatusCodeAndHeaders(bufferedReader, requestBuilder);
         int bodyLength = requestBuilder.getContentLengthInt();
         StringBuilder body = readBody(bufferedReader, bodyLength);
         return returnHttpRequest(body, requestBuilder);
 
     }
 
-    private HTTPRequestBuilder readHeaders(ClientReadable bufferedReader, HTTPRequestBuilder requestBuilder) {
+    private HTTPRequestBuilder readStatusCodeAndHeaders(ClientReadable bufferedReader, HTTPRequestBuilder requestBuilder) {
 
         String character;
-        StringBuilder headers = new StringBuilder();
+        StringBuilder statusCodeAndHeaders = new StringBuilder();
 
         try {
             while ((character = bufferedReader.read()) != null) {
 
-                headers.append(character);
-                if (requestParserHelper.atEndOfHeaders(headers)) {
+                statusCodeAndHeaders.append(character);
+                if (requestParserHelper.atEndOfHeaders(statusCodeAndHeaders)) {
                     break;
                 }
             }
@@ -89,7 +89,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String[] metadata = headers.toString().split(CRLF);
+        String[] metadata = statusCodeAndHeaders.toString().split(CRLF);
 
         for (String metadataLine: metadata) {
             requestBuilder = requestParserHelper.isRequestLine(metadataLine) ? requestBuilder.buildRequestLine(metadataLine) : requestBuilder.buildHeaderLine(metadataLine);

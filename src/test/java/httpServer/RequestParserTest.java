@@ -9,14 +9,14 @@ import static httpServer.http.Constants.CRLF;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class RequestParserHelperTest {
+public class RequestParserTest {
 
-    RequestParserHelper requestParserHelper;
+    RequestParser requestParserHelper;
     StringBuilder stringBuilder;
 
     @BeforeEach
     void setUp() throws IOException {
-        requestParserHelper = new RequestParserHelper();
+        requestParserHelper = new RequestParser();
         stringBuilder = new StringBuilder();
     }
 
