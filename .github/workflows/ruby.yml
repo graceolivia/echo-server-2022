@@ -37,7 +37,9 @@ jobs:
         run: gem install bundler:1.17.2
       - name: Install gems
         working-directory: ./http_server_spec
-        run: bundle install
+        run: |
+        gem update --system
+        bundle install
       - name: Run server + tests
         run: |
           ./gradlew run & 
