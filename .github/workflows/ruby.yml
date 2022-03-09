@@ -41,17 +41,12 @@ jobs:
       - name: Install gems
         run: |
           cd http_server_spec
-          echo "current working directory"
-          pwd
-          ls
-          echo "ls should have run"
           gem update --system >/dev/null
           bundle install
       - name: Run server + tests
         run: |
-          cd http_server_spec  
-          gem update --system
-          bundle install
+          echo "CURRENT DIRECTORY"
+          pwd
           rake test:f1 
           pkill -f '.*GradleDaemon.*'
 
