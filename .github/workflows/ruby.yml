@@ -37,9 +37,10 @@ jobs:
         run: gem install bundler:1.17.2
       - name: Install gems
         run: |
+          cd http_server_spec
           echo "current working directory"
           pwd
-          cd http_server_spec
+          ls
           gem update --system
           bundle install
       - name: Run server + tests
