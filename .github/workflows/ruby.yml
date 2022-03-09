@@ -47,6 +47,7 @@ jobs:
       - name: Run server + tests
         run: |
           ./gradlew run & 
+          sleep 10s &
           cd http_server_spec  
           gem update --system
           bundle install
