@@ -49,6 +49,7 @@ jobs:
           echo "CURRENT DIRECTORY"
           pwd
           rake test:f1 
+          rake test:f2
           pkill -f '.*GradleDaemon.*'
 
 
