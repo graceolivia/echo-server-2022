@@ -38,12 +38,14 @@ jobs:
       - name: Install gems
         working-directory: ./http_server_spec
         run: |
+          cd http_server_spec
           gem update --system
           bundle install
       - name: Run server + tests
         run: |
+          cd .. 
           ./gradlew run & 
-          cd http_server_spec 
+          cd http_server_spec  
           gem update --system
           bundle install
           rake test:f1 
