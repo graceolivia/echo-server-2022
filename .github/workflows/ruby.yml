@@ -46,7 +46,6 @@ jobs:
           bundle install
       - name: Run server + tests
         run: |
-          cd .. 
           ./gradlew run & 
           cd http_server_spec  
           gem update --system
