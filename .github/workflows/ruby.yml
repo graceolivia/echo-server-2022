@@ -45,6 +45,7 @@ jobs:
           bundle install
       - name: Run server + tests
         run: |
+          cd http_server_spec
           echo "CURRENT DIRECTORY"
           pwd
           rake test:f1 
