@@ -1,13 +1,14 @@
 package httpServer;
 
+import httpServer.http.request.HTTPRequest;
+import httpServer.http.response.HTTPResponseBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 import static httpServer.http.Constants.CRLF;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RequestParserTest {
 
@@ -45,6 +46,26 @@ public class RequestParserTest {
             "User-Agent: JUnit" + CRLF +
             "Accept: */*" + CRLF + CRLF);
         assertTrue(requestParserHelper.atEndOfHeaders(stringBuilder));
+    }
+
+    @Test
+    void storeHttpRequestInHttpRequestObjectWorks() throws IOException {
+        ClientReadable mockBufferedReaderWrapper = new MockBufferedReaderWrapper("GET / HTTP/1.1" + CRLF +
+                "Content-Length: 2" + CRLF +
+                "Host: localhost:5000" + CRLF +
+                "User-Agent: JUnit" + CRLF +
+                "Accept: */*" + CRLF + CRLF +
+                "hi");
+        HTTPRequest request = requestParserHelper.storeHttpRequestInHttpRequestObject(mockBufferedReaderWrapper);
+        System.out.println(request);
+        assertEquals("GET", request.method);
+        assertEquals("/", request.resource);
+        assertEquals("HTTP/1.1", request.httpVersionNumber);
+        assertEquals("2", request.headers.get("Content-Length"));
+        assertEquals("localhost:5000", request.headers.get("Host"));
+        assertEquals("JUnit", request.headers.get("User-Agent"));
+        assertEquals("*/*", request.headers.get("Accept"));
+        assertEquals("hi", request.body);
     }
 
 

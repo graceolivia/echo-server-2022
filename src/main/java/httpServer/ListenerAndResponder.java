@@ -1,7 +1,6 @@
 package httpServer;
 
 import httpServer.http.request.HTTPRequest;
-import httpServer.http.request.HTTPRequestBuilder;
 import httpServer.http.response.HTTPResponse;
 import httpServer.routes.Router;
 import httpServer.http.StatusCodes;
@@ -11,7 +10,6 @@ import httpServer.socketManagement.ServerSocketInterface;
 
 import java.io.IOException;
 import java.net.Socket;
-import static httpServer.http.Constants.CRLF;
 
 public class ListenerAndResponder implements ListenAndRespondable {
     ServerSocketInterface serverSocket;
@@ -42,7 +40,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
     public void readClientInput(Socket clientSocket) throws IOException {
         ClientReadable bufferedReader = clientReaderFactory.makeReader(clientSocket);
-        HTTPRequest httpRequest = storeHttpRequestInHttpRequestObject(bufferedReader);
+        HTTPRequest httpRequest = requestParserHelper.storeHttpRequestInHttpRequestObject(bufferedReader);
         if (httpRequest == null) {
             StatusCodes statusCodes = StatusCodes.BAD_REQUEST;
             String responseText = statusCodes.httpResponse;
@@ -53,6 +51,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
             String responseString = httpResponse.toString();
             printServerResponse(responseString, clientSocket);
         }
+
     }
 
     private void printServerResponse(String httpResponse, Socket clientSocket) throws IOException {
@@ -60,68 +59,6 @@ public class ListenerAndResponder implements ListenAndRespondable {
         System.out.println(httpResponse);
         printer.print(httpResponse);
         printer.close();
-    }
-
-    private HTTPRequest storeHttpRequestInHttpRequestObject(ClientReadable bufferedReader)  {
-
-        HTTPRequestBuilder requestBuilder = new HTTPRequestBuilder();
-        requestBuilder = readStatusCodeAndHeaders(bufferedReader, requestBuilder);
-        int bodyLength = requestBuilder.getContentLengthInt();
-        StringBuilder body = readBody(bufferedReader, bodyLength);
-        return returnHttpRequest(body, requestBuilder);
-
-    }
-
-    private HTTPRequestBuilder readStatusCodeAndHeaders(ClientReadable bufferedReader, HTTPRequestBuilder requestBuilder) {
-
-        String character;
-        StringBuilder statusCodeAndHeaders = new StringBuilder();
-
-        try {
-            while ((character = bufferedReader.read()) != null) {
-
-                statusCodeAndHeaders.append(character);
-                if (requestParserHelper.atEndOfHeaders(statusCodeAndHeaders)) {
-                    break;
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String[] metadata = statusCodeAndHeaders.toString().split(CRLF);
-
-        for (String metadataLine: metadata) {
-            requestBuilder = requestParserHelper.isRequestLine(metadataLine) ? requestBuilder.buildRequestLine(metadataLine) : requestBuilder.buildHeaderLine(metadataLine);
-        }
-        return requestBuilder;
-
-    }
-
-    private StringBuilder readBody(ClientReadable bufferedReader, int bodyLength) {
-        String character;
-        StringBuilder body = new StringBuilder();
-        if (bodyLength == 0) {
-            return body;
-        }
-        try {
-            while ((character = bufferedReader.read()) != null) {
-                body.append(character);
-                if (body.length() == bodyLength) {
-                    break;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return body;
-    }
-
-    private HTTPRequest returnHttpRequest(StringBuilder body, HTTPRequestBuilder requestBuilder) {
-        if (body.length() != 0) {
-            requestBuilder.setBody(body.toString());
-        }
-        return requestBuilder.build();
     }
 
 }
