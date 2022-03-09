@@ -22,6 +22,8 @@ jobs:
         uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
         with:
           arguments: build
+      - name: Run server
+        run: ./gradlew run
 
 
       - name: Set up Ruby
@@ -46,8 +48,6 @@ jobs:
           bundle install
       - name: Run server + tests
         run: |
-          ./gradlew run & 
-          sleep 10s &
           cd http_server_spec  
           gem update --system
           bundle install
