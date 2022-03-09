@@ -11,19 +11,19 @@ import httpServer.socketManagement.ServerSocketInterface;
 import java.io.IOException;
 import java.net.Socket;
 
-public class ListenerAndResponder implements ListenAndRespondable {
+public class SocketListener implements SocketListenable {
     ServerSocketInterface serverSocket;
     ClientReadableFactory clientReaderFactory;
     ClientWriteableFactory clientWriterFactory;
     Router router;
-    RequestParser requestParserHelper;
+    RequestParser requestParser;
 
-    public ListenerAndResponder(ServerSocketInterface serverSocket, ClientReadableFactory clientReaderFactory, ClientWriteableFactory clientWriterFactory, Router router, RequestParser requestParserHelper) throws IOException {
+    public SocketListener(ServerSocketInterface serverSocket, ClientReadableFactory clientReaderFactory, ClientWriteableFactory clientWriterFactory, Router router, RequestParser requestParser) throws IOException {
         this.serverSocket = serverSocket;
         this.clientWriterFactory = clientWriterFactory;
         this.clientReaderFactory = clientReaderFactory;
         this.router = router;
-        this.requestParserHelper = requestParserHelper;
+        this.requestParser = requestParser;
     }
 
     public Socket startServer() throws IOException {
@@ -40,7 +40,7 @@ public class ListenerAndResponder implements ListenAndRespondable {
 
     public void readClientInput(Socket clientSocket) throws IOException {
         ClientReadable bufferedReader = clientReaderFactory.makeReader(clientSocket);
-        HTTPRequest httpRequest = requestParserHelper.storeHttpRequestInHttpRequestObject(bufferedReader);
+        HTTPRequest httpRequest = requestParser.storeHttpRequest(bufferedReader);
         if (httpRequest == null) {
             StatusCodes statusCodes = StatusCodes.BAD_REQUEST;
             String responseText = statusCodes.httpResponse;

@@ -19,8 +19,8 @@ public class HttpServer {
         ServerSocketInterface serverSocket = new ServerSocketWrapper();
         ClientWriteableFactory clientWriterFactory = new ClientWriterFactory();
         ClientReadableFactory clientReaderFactory = new ClientReaderFactory();
-        RequestParser requestParserHelper = new RequestParser();
-        ListenAndRespondable echoer = new ListenerAndResponder(serverSocket, clientReaderFactory, clientWriterFactory, router, requestParserHelper);
+        RequestParser requestParser = new RequestParser();
+        SocketListenable echoer = new SocketListener(serverSocket, clientReaderFactory, clientWriterFactory, router, requestParser);
         Socket clientSocket = echoer.startServer();
 
         try {

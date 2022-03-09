@@ -1,7 +1,6 @@
 package httpServer;
 
 import httpServer.http.request.HTTPRequest;
-import httpServer.http.response.HTTPResponseBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -56,8 +55,7 @@ public class RequestParserTest {
                 "User-Agent: JUnit" + CRLF +
                 "Accept: */*" + CRLF + CRLF +
                 "hi");
-        HTTPRequest request = requestParserHelper.storeHttpRequestInHttpRequestObject(mockBufferedReaderWrapper);
-        System.out.println(request);
+        HTTPRequest request = requestParserHelper.storeHttpRequest(mockBufferedReaderWrapper);
         assertEquals("GET", request.method);
         assertEquals("/", request.resource);
         assertEquals("HTTP/1.1", request.httpVersionNumber);

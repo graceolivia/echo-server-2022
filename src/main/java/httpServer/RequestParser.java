@@ -1,14 +1,9 @@
 package httpServer;
 
-import httpServer.http.StatusCodes;
 import httpServer.http.request.HTTPRequest;
 import httpServer.http.request.HTTPRequestBuilder;
-import httpServer.http.response.HTTPResponse;
-import httpServer.outputManagement.ClientWriteable;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.Socket;
 
 import static httpServer.http.Constants.CRLF;
 
@@ -25,26 +20,26 @@ public class RequestParser {
         return processedInput.toString().contains(CRLF + CRLF);
     }
 
-    public HTTPRequest storeHttpRequestInHttpRequestObject(ClientReadable bufferedReader)  {
+    public HTTPRequest storeHttpRequest(ClientReadable bufferedReader)  {
 
         HTTPRequestBuilder requestBuilder = new HTTPRequestBuilder();
-        requestBuilder = readStatusCodeAndHeaders(bufferedReader, requestBuilder);
+        requestBuilder = readMetadata(bufferedReader, requestBuilder);
         int bodyLength = requestBuilder.getContentLengthInt();
         StringBuilder body = readBody(bufferedReader, bodyLength);
         return returnHttpRequest(body, requestBuilder);
 
     }
 
-    private HTTPRequestBuilder readStatusCodeAndHeaders(ClientReadable bufferedReader, HTTPRequestBuilder requestBuilder) {
+    private HTTPRequestBuilder readMetadata(ClientReadable bufferedReader, HTTPRequestBuilder requestBuilder) {
 
         String character;
-        StringBuilder statusCodeAndHeaders = new StringBuilder();
+        StringBuilder metadataStringBuilder = new StringBuilder();
 
         try {
             while ((character = bufferedReader.read()) != null) {
 
-                statusCodeAndHeaders.append(character);
-                if (atEndOfHeaders(statusCodeAndHeaders)) {
+                metadataStringBuilder.append(character);
+                if (atEndOfHeaders(metadataStringBuilder)) {
                     break;
                 }
             }
@@ -52,7 +47,7 @@ public class RequestParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String[] metadata = statusCodeAndHeaders.toString().split(CRLF);
+        String[] metadata = metadataStringBuilder.toString().split(CRLF);
 
         for (String metadataLine: metadata) {
             requestBuilder = isRequestLine(metadataLine) ? requestBuilder.buildRequestLine(metadataLine) : requestBuilder.buildHeaderLine(metadataLine);

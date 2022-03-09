@@ -15,10 +15,10 @@ import java.util.Map;
 import static httpServer.HttpServer.getRoutes;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ListenerAndResponderTest {
+public class SocketListenerTest {
 
     Socket socket;
-    ListenerAndResponder echoer;
+    SocketListener echoer;
     MockServerSocketWrapper mockServerSocket;
     MockBufferedReaderWrapper mockBufferedReader;
     MockPrintWriterWrapper mockPrintWriter;
@@ -41,7 +41,7 @@ public class ListenerAndResponderTest {
         RequestParser requestParser = new RequestParser();
         ClientWriteableFactory mockClientWriterFactory = new MockClientWriterFactory(mockPrintWriter);
         ClientReadableFactory mockClientReaderFactory = new MockClientReaderFactory(mockBufferedReader);
-        echoer = new ListenerAndResponder(mockServerSocket, mockClientReaderFactory, mockClientWriterFactory, router, requestParser);
+        echoer = new SocketListener(mockServerSocket, mockClientReaderFactory, mockClientWriterFactory, router, requestParser);
     }
 
     @Test
