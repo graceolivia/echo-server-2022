@@ -38,8 +38,8 @@ jobs:
       - name: Install gems
         working-directory: ./http_server_spec
         run: |
-        gem update --system
-        bundle install
+          gem update --system
+          bundle install
       - name: Run server + tests
         run: |
           ./gradlew run & 
