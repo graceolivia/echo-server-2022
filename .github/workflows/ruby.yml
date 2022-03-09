@@ -41,7 +41,9 @@ jobs:
 #        run: ./gradlew run
       - name: Run server + tests
         run: |
-          ./gradlew run &
+          ./gradlew run & 
+          cd http_server_spec 
+          bundle install
           rake test:f1 
           pkill -f '.*GradleDaemon.*'
 
