@@ -24,7 +24,7 @@ jobs:
           arguments: build
       - name: Run server
         run: |
-          ./gradlew run runEngineWithMonitoring &
+          ./gradlew runEngineWithMonitoring &
           disown
 
       - name: Set up Ruby
