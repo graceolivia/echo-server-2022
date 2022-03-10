@@ -2,7 +2,7 @@ name: Ruby
 
 on:
   push:
-    branches: [ cdSetupBranch ]
+    branches: *
   pull_request:
     branches: [ master ]
 
@@ -34,12 +34,6 @@ jobs:
       - name: Install bundler
         working-directory: ./http_server_spec
         run: gem install bundler:1.17.2
-
-      - name: Clone repo
-      - uses: actions/checkout@v1
-        with:
-          repository: 8thlight/http_server_spec
-          token: ${{ secrets.KEY}}
 
       - name: Install gems
         run: |
