@@ -51,12 +51,18 @@ public class Router {
     }
 
     private HTTPResponseBuilder setBody(HTTPRequest httpRequest, HTTPResponseBuilder responseBuilder) {
-        if (httpRequest.resource.equals("/echo_body")) {
-            responseBuilder = responseBuilder.setBody(httpRequest.body);
-            return responseBuilder;
+        switch (httpRequest.resource) {
+          case "/echo_body":
+              responseBuilder = responseBuilder.setBody(httpRequest.body);
+              break;
+          case "/json_response":
+              responseBuilder = responseBuilder.setBody("{\"key1\":\"value1\",\"key2\":\"value2\"}");
+              break;
+          default:
+              responseBuilder = responseBuilder.setBody("");
+              break;
         }
         return responseBuilder;
-
     }
 
     private boolean isResourceValid(HTTPRequest httpRequest) {

@@ -84,6 +84,19 @@ public class HTTPResponseBuilderTest {
     }
 
     @Test
+    void testResponseBuilderCorrectlySetsContentTypeHeaderForJson() throws IOException {
+        HTTPRequest jsonRequest = new HTTPRequestBuilder()
+                .buildRequestLine("GET /json_response HTTP/1.1")
+                .buildHeaderLine("Host: localhost:5000")
+                .buildHeaderLine("Accept: */*")
+                .build();
+        HTTPResponse response = responseBuilder
+                .setContentTypeHeader(jsonRequest)
+                .build();
+        assertEquals("application/json;charset=utf-8", response.headers.get("Content-Type"));
+    }
+
+    @Test
     void testResponseBuilderCorrectlyBuildsHTTPResponse() throws IOException {
         HTTPResponse response = responseBuilder
                 .setStatusLine(PAGE_NOT_FOUND, request)

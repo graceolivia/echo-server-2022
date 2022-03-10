@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static httpServer.http.Constants.CRLF;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RouterTest {
@@ -28,7 +29,9 @@ public class RouterTest {
     void testRouterReturns200ForGetRequestToResourceWithGetAllowed() throws IOException {
         Map<String, String> headers = new HashMap();
         HTTPRequest request = new HTTPRequest("GET", "/simple_get", "HTTP/1.1", headers, null);
-        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.CRLF + "Content-Length: 0" + Constants.CRLF + "Content-Type: text/plain" + Constants.CRLF + Constants.CRLF;
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + CRLF +
+                "Content-Length: 0" + CRLF +
+                "Content-Type: text/plain" + CRLF + CRLF;
         String returnedResponse = router.getResponse(request).toString();
         assertEquals(expectedResponse, returnedResponse);
     }
@@ -37,7 +40,9 @@ public class RouterTest {
     void testRouterReturns404ForNonExistentResource() throws IOException {
         Map<String, String> headers = new HashMap();
         HTTPRequest request = new HTTPRequest("GET", "/anything_invalid", "HTTP/1.1", headers, null);
-        String expectedResponse = "HTTP/1.1 " + StatusCodes.PAGE_NOT_FOUND.httpResponse + Constants.CRLF + "Content-Length: 0" + Constants.CRLF + "Content-Type: text/plain" + Constants.CRLF + Constants.CRLF;
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.PAGE_NOT_FOUND.httpResponse + CRLF +
+                "Content-Length: 0" + CRLF +
+                "Content-Type: text/plain" + CRLF + CRLF;
         String returnedResponse = router.getResponse(request).toString();
         assertEquals(expectedResponse, returnedResponse);
     }
@@ -46,7 +51,10 @@ public class RouterTest {
     void testRouterReturns405ForInvalidMethodRequestToExistingResource() throws IOException {
         Map<String, String> headers = new HashMap();
         HTTPRequest request = new HTTPRequest("GET", "/head_request", "HTTP/1.1", headers, null);
-        String expectedResponse = "HTTP/1.1 " + StatusCodes.NOT_ACCEPTABLE.httpResponse +  Constants.CRLF +  "Content-Length: 0" + Constants.CRLF + "Allow: HEAD, OPTIONS" + Constants.CRLF + "Content-Type: text/plain" + Constants.CRLF + Constants.CRLF;;
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.NOT_ACCEPTABLE.httpResponse +  CRLF +
+                "Content-Length: 0" + CRLF +
+                "Allow: HEAD, OPTIONS" + CRLF +
+                "Content-Type: text/plain" + CRLF + CRLF;;
         String returnedResponse = router.getResponse(request).toString();
         assertEquals(expectedResponse, returnedResponse);
     }
@@ -55,7 +63,9 @@ public class RouterTest {
     void testRouterReturns200ForFirstAllowedRequestTypeToExistingResourceWithMultipleMethods() throws IOException {
         Map<String, String> headers = new HashMap();
         HTTPRequest request = new HTTPRequest("OPTIONS", "/head_request", "HTTP/1.1", headers, null);
-        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.CRLF +  "Content-Length: 0" + Constants.CRLF + "Content-Type: text/plain" + Constants.CRLF + Constants.CRLF;
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + CRLF +
+                "Content-Length: 0" + CRLF +
+                "Content-Type: text/plain" + CRLF + CRLF;
         String returnedResponse = router.getResponse(request).toString();
         assertEquals(expectedResponse, returnedResponse);
     }
@@ -64,7 +74,9 @@ public class RouterTest {
     void testRouterReturns200ForSecondAllowedRequestTypeToExistingResourceWithMultipleMethods() throws IOException {
         Map<String, String> headers = new HashMap();
         HTTPRequest request = new HTTPRequest("HEAD", "/head_request", "HTTP/1.1", headers, null);
-        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.CRLF +  "Content-Length: 0" + Constants.CRLF + "Content-Type: text/plain" + Constants.CRLF + Constants.CRLF;
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + CRLF +
+                "Content-Length: 0" + CRLF +
+                "Content-Type: text/plain" + CRLF + CRLF;
         String returnedResponse = router.getResponse(request).toString();
         assertEquals(expectedResponse, returnedResponse);
     }
@@ -73,7 +85,22 @@ public class RouterTest {
     void testRouterReturns200AndBodyUponPostToEchoBody() throws IOException {
         Map<String, String> headers = new HashMap();
         HTTPRequest request = new HTTPRequest("POST", "/echo_body", "HTTP/1.1", headers, "test");
-        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + Constants.CRLF +  "Content-Length: 4" + Constants.CRLF + "Content-Type: text/plain" + Constants.CRLF + Constants.CRLF + "test";
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + CRLF +
+                "Content-Length: 4" + CRLF +
+                "Content-Type: text/plain" + CRLF + CRLF +
+                "test";
+        String returnedResponse = router.getResponse(request).toString();
+        assertEquals(expectedResponse, returnedResponse);
+    }
+
+    @Test
+    void testRouterReturns200AndBodyUponGetToJsonResponse() throws IOException {
+        Map<String, String> headers = new HashMap();
+        HTTPRequest request = new HTTPRequest("GET", "/json_response", "HTTP/1.1", headers, "");
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + CRLF +
+                "Content-Length: 33" + CRLF +
+                "Content-Type: application/json;charset=utf-8" + CRLF + CRLF +
+                "{\"key1\":\"value1\",\"key2\":\"value2\"}";
         String returnedResponse = router.getResponse(request).toString();
         assertEquals(expectedResponse, returnedResponse);
     }

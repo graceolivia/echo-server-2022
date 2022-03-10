@@ -3,7 +3,7 @@ package httpServer;
 import java.io.IOException;
 import java.net.Socket;
 
-public interface ListenAndRespondable {
+public interface SocketListenable {
     public Socket startServer() throws IOException;
 
     public void readClientInput(Socket clientSocket) throws IOException;
