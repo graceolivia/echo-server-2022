@@ -9,16 +9,6 @@ import static httpServer.http.Constants.CRLF;
 
 public class RequestParser implements RequestParseable {
 
-    public boolean isRequestLine(String line) {
-        if (line.contains(": ")) {
-            return false;
-        }
-        return true;
-    }
-
-    public boolean atEndOfHeaders(StringBuilder processedInput) {
-        return processedInput.toString().contains(CRLF + CRLF);
-    }
 
     public HTTPRequest storeHttpRequest(ClientReadable bufferedReader)  {
 
@@ -81,5 +71,17 @@ public class RequestParser implements RequestParseable {
         }
         return requestBuilder.build();
     }
+
+    private boolean isRequestLine(String line) {
+        if (line.contains(": ")) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean atEndOfHeaders(StringBuilder processedInput) {
+        return processedInput.toString().contains(CRLF + CRLF);
+    }
+
 
 }

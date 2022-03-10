@@ -21,33 +21,6 @@ public class RequestParserTest {
     }
 
     @Test
-    void isRequestLineCorrectlyIdentifiesNonRequestLine() throws IOException {
-        assertFalse(requestParserHelper.isRequestLine("Content-Length: 0"));
-    }
-
-    @Test
-    void isRequestLineCorrectlyIdentifiesRequestLine() throws IOException {
-        assertTrue(requestParserHelper.isRequestLine("HTTP1.1 / GET"));
-    }
-
-    @Test
-    void correctlyTellEndOfHeadersIsNotReached() throws IOException {
-        stringBuilder.append("GET / HTTP/1.1" + CRLF +
-                "Content-Length:");
-        assertFalse(requestParserHelper.atEndOfHeaders(stringBuilder));
-    }
-
-    @Test
-    void correctlyTellEndOfHeadersIsReached() throws IOException {
-        stringBuilder.append("GET / HTTP/1.1" + CRLF +
-            "Content-Length: 0" + CRLF +
-            "Host: localhost:5000" + CRLF +
-            "User-Agent: JUnit" + CRLF +
-            "Accept: */*" + CRLF + CRLF);
-        assertTrue(requestParserHelper.atEndOfHeaders(stringBuilder));
-    }
-
-    @Test
     void storeHttpRequestWithBodyInHttpRequestObjectWorks() throws IOException {
         ClientReadable mockBufferedReaderWrapper = new MockBufferedReaderWrapper("GET / HTTP/1.1" + CRLF +
                 "Content-Length: 2" + CRLF +
