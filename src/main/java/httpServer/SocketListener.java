@@ -16,9 +16,9 @@ public class SocketListener implements SocketListenable {
     ClientReadableFactory clientReaderFactory;
     ClientWriteableFactory clientWriterFactory;
     Router router;
-    RequestParser requestParser;
+    RequestParseable requestParser;
 
-    public SocketListener(ServerSocketInterface serverSocket, ClientReadableFactory clientReaderFactory, ClientWriteableFactory clientWriterFactory, Router router, RequestParser requestParser) throws IOException {
+    public SocketListener(ServerSocketInterface serverSocket, ClientReadableFactory clientReaderFactory, ClientWriteableFactory clientWriterFactory, Router router, RequestParseable requestParser) throws IOException {
         this.serverSocket = serverSocket;
         this.clientWriterFactory = clientWriterFactory;
         this.clientReaderFactory = clientReaderFactory;

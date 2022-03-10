@@ -48,7 +48,7 @@ public class RequestParserTest {
     }
 
     @Test
-    void storeHttpRequestInHttpRequestObjectWorks() throws IOException {
+    void storeHttpRequestWithBodyInHttpRequestObjectWorks() throws IOException {
         ClientReadable mockBufferedReaderWrapper = new MockBufferedReaderWrapper("GET / HTTP/1.1" + CRLF +
                 "Content-Length: 2" + CRLF +
                 "Host: localhost:5000" + CRLF +
@@ -64,8 +64,42 @@ public class RequestParserTest {
         assertEquals("JUnit", request.headers.get("User-Agent"));
         assertEquals("*/*", request.headers.get("Accept"));
         assertEquals("hi", request.body);
+        assertEquals(4, request.headers.size());
     }
 
+    @Test
+    void storeHttpRequestInHttpRequestObjectWorks() throws IOException {
+        ClientReadable mockBufferedReaderWrapper = new MockBufferedReaderWrapper("GET / HTTP/1.1" + CRLF +
+                "Content-Length: 0" + CRLF +
+                "Host: localhost:5000" + CRLF +
+                "User-Agent: JUnit" + CRLF +
+                "Accept: */*" + CRLF + CRLF );
+        HTTPRequest request = requestParserHelper.storeHttpRequest(mockBufferedReaderWrapper);
+        assertEquals("GET", request.method);
+        assertEquals("/", request.resource);
+        assertEquals("HTTP/1.1", request.httpVersionNumber);
+        assertEquals("0", request.headers.get("Content-Length"));
+        assertEquals("localhost:5000", request.headers.get("Host"));
+        assertEquals("JUnit", request.headers.get("User-Agent"));
+        assertEquals("*/*", request.headers.get("Accept"));
+        assertEquals(null, request.body);
+        assertEquals(4, request.headers.size());
+    }
 
+    @Test
+    void storeHttpRequestThrowsErrorForBlankRequest() throws IOException {
+        ClientReadable mockBufferedReaderWrapper = new MockBufferedReaderWrapper("");
+        boolean thrown = false;
+
+        try {
+            requestParserHelper.storeHttpRequest(mockBufferedReaderWrapper);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            thrown = true;
+        }
+
+        assertTrue(thrown);
+
+
+    }
 
 }

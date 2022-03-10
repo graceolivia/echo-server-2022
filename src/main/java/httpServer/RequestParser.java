@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import static httpServer.http.Constants.CRLF;
 
-public class RequestParser {
+public class RequestParser implements RequestParseable {
 
     public boolean isRequestLine(String line) {
         if (line.contains(": ")) {
