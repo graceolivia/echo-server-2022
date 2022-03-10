@@ -20,7 +20,6 @@ jobs:
           distribution: 'temurin'
 
       - name: Download tests
-        uses: actions/checkout@v2
         env:
           GITHUB_TOKEN: ${{ secrets.KEY }}
         run: git pull git@github.com:8thlight/http_server_spec.git
