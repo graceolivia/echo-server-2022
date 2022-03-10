@@ -62,15 +62,16 @@ public class RequestParserTest {
     @Test
     void storeHttpRequestThrowsErrorForBlankRequest() throws IOException {
         ClientReadable mockBufferedReaderWrapper = new MockBufferedReaderWrapper("");
-        boolean thrown = false;
 
-        try {
+        Exception exception = assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
             requestParserHelper.storeHttpRequest(mockBufferedReaderWrapper);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            thrown = true;
-        }
+        });
 
-        assertTrue(thrown);
+        String expectedMessage = "Index 1 out of bounds for length 1";
+        String actualMessage = exception.getMessage();
+        System.out.println(actualMessage);
+
+        assertTrue(actualMessage.contains(expectedMessage));
 
 
     }

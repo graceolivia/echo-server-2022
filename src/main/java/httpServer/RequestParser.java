@@ -9,7 +9,6 @@ import static httpServer.http.Constants.CRLF;
 
 public class RequestParser implements RequestParseable {
 
-
     public HTTPRequest storeHttpRequest(ClientReadable bufferedReader)  {
 
         HTTPRequestBuilder requestBuilder = new HTTPRequestBuilder();
@@ -82,6 +81,5 @@ public class RequestParser implements RequestParseable {
     private boolean atEndOfHeaders(StringBuilder processedInput) {
         return processedInput.toString().contains(CRLF + CRLF);
     }
-
 
 }
