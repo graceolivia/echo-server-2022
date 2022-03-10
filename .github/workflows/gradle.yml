@@ -3,7 +3,8 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ cdSetupBranch ]
+    branches:
+      - "**"
   pull_request:
     branches: [ master ]
 
