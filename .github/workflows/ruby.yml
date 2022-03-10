@@ -38,7 +38,7 @@ jobs:
       - uses: actions/checkout@v1
         with:
           repository: 8thlight/http_server_spec
-          token: ${{ secrets.ACCESS_TOKEN }}
+          token: ${{ secrets.KEY}}
 
       - name: Install gems
         run: |
