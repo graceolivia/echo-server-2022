@@ -18,6 +18,8 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
+      - name: Download tests
+        run: git clone git@github.com:8thlight/http_server_spec.git
       - name: Build with Gradle
         uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
         with:
