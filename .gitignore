@@ -54,3 +54,24 @@ build/*
 java_pid21475.hprof
 *.hprof
 /java_pid21475.hprof.9m7e2y.b.ij/
+
+### Ruby ###
+*.gem
+*.rbc
+http_server_spec/.config
+http_server_spec/coverage/
+http_server_spec/InstalledFiles
+http_server_spec/pkg/
+http_server_spec/spec/reports/
+http_server_spec/spec/examples.txt
+http_server_spec/test/tmp/
+http_server_spec/test/version_tmp/
+http_server_spec/tmp/
+
+## Environment normalization:
+http_server_spec/.bundle/
+http_server_spec/vendor/bundle
+http_server_spec/lib/bundler/man/
+
+# unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
+.rvmrc
