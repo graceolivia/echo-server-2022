@@ -67,11 +67,15 @@ http_server_spec/spec/examples.txt
 http_server_spec/test/tmp/
 http_server_spec/test/version_tmp/
 http_server_spec/tmp/
+http_server_spec/vendor/bundle/
 
 ## Environment normalization:
 http_server_spec/.bundle/
-http_server_spec/vendor/bundle
+http_server_spec/vendor/
 http_server_spec/lib/bundler/man/
+http_server_spec/.idea/
+http_server_spec/.bundle/
+
 
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
 .rvmrc
