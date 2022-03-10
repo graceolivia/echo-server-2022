@@ -21,8 +21,8 @@ jobs:
 
       - name: Download tests
         uses: actions/checkout@v2
-        with:
-          repo-token: ${{ secrets.KEY }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.KEY }}
         run: git pull git@github.com:8thlight/http_server_spec.git
 
       - name: Build with Gradle
