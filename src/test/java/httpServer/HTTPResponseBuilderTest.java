@@ -103,10 +103,12 @@ public class HTTPResponseBuilderTest {
                 .setBody("hello\nhello again")
                 .makeAllowHeader(List.of(GET, OPTIONS, POST))
                 .setContentLengthHeader()
+                .setCorsHeader()
                 .setContentTypeHeader(request)
                 .build();
         assertEquals(response.statusLine, "HTTP/1.1 404 Not Found");
-        assertEquals(response.headers.keySet(), Set.of("Allow", "Content-Length", "Content-Type"));
+        assertEquals(response.headers.keySet(), Set.of("Access-Control-Allow-Origin", "Allow", "Content-Length", "Content-Type"));
+        assertEquals(response.headers.get("Access-Control-Allow-Origin"), "*");
         assertEquals(response.headers.get("Content-Length"), "17");
         assertEquals(response.headers.get("Allow"), "GET, OPTIONS, POST");
         assertEquals(response.headers.get("Content-Type"), "text/plain");
