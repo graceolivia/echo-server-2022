@@ -46,6 +46,7 @@ public class HttpServer {
         routes.put("/head_request", new HTTPMethods[] {HTTPMethods.HEAD, HTTPMethods.OPTIONS});
         routes.put("/echo_body", new HTTPMethods[] {HTTPMethods.HEAD, HTTPMethods.OPTIONS, HTTPMethods.POST});
         routes.put("/json_response", new HTTPMethods[] {HTTPMethods.GET, HTTPMethods.OPTIONS, HTTPMethods.HEAD});
+        routes.put("/react", new HTTPMethods[] {HTTPMethods.GET, HTTPMethods.OPTIONS, HTTPMethods.HEAD});
         return routes;
     }
 }
