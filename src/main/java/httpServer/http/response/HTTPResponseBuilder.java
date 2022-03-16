@@ -48,6 +48,11 @@ public class HTTPResponseBuilder {
         return this;
     }
 
+    public HTTPResponseBuilder setCorsHeader() {
+        this.headers.put("Access-Control-Allow-Origin", "*");
+        return this;
+    }
+
     public HTTPResponse build() {
         return new HTTPResponse(statusLine, body, headers);
     }
