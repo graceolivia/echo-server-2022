@@ -105,4 +105,17 @@ public class RouterTest {
         assertEquals(expectedResponse, returnedResponse);
     }
 
+    @Test
+    void testRouterReturns200AndBodyUponGetToReactRoute() throws IOException {
+        Map<String, String> headers = new HashMap();
+        HTTPRequest request = new HTTPRequest("GET", "/react", "HTTP/1.1", headers, "");
+        String expectedResponse = "HTTP/1.1 " + StatusCodes.OK.httpResponse + CRLF +
+                "Content-Length: 33" + CRLF +
+                "Content-Type: application/json;charset=utf-8" + CRLF + CRLF +
+                "{\"people\": [{\"craft\": \"ISS\", \"name\": \"Mark Vande Hei\"}, {\"craft\": \"ISS\", \"name\": \"Pyotr Dubrov\"}, {\"craft\": \"ISS\", \"name\": \"Anton Shkaplerov\"}, {\"craft\": \"Shenzhou 13\", \"name\": \"Zhai Zhigang\"}, {\"craft\": \"Shenzhou 13\", \"name\": \"Wang Yaping\"}, {\"craft\": \"Shenzhou 13\", \"name\": \"Ye Guangfu\"}, {\"craft\": \"ISS\", \"name\": \"Raja Chari\"}, {\"craft\": \"ISS\", \"name\": \"Tom Marshburn\"}, {\"craft\": \"ISS\", \"name\": \"Kayla Barron\"}, {\"craft\": \"ISS\", \"name\": \"Matthias Maurer\"}], \"message\": \"success\", \"number\": 10}";
+        String returnedResponse = router.getResponse(request).toString();
+        assertEquals(expectedResponse, returnedResponse);
+    }
+
+
 }
